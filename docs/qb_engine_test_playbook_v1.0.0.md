@@ -309,6 +309,32 @@ Tie-breaker: higher total wins.
 
 ---
 
+## Scoring Tests (v3.0)
+
+Playbook coverage mirroring `qb_engine/test_scoring.py`.
+
+### Test S1: Simple Lane, No Effects
+- Setup: One lane where YOU have a single card with known power; ENEMY has none. Effect engine returns base power (no buffs/debuffs).
+- Expected: `LaneScore.power_you` = card effective power, `power_enemy` = 0, `winner` = "Y", `lane_points` = power_you. `MatchScore.total_you` = lane_points, `total_enemy` = 0, `winner` = "Y", `margin` = total_you.
+
+### Test S2: Effects Change Lane Winner
+- Setup: Same lane holds a weaker YOU card and stronger ENEMY card; effect engine buffs/debuffs so YOU wins on effective power.
+- Expected: Lane winner determined by **effective** power. Lane totals reflect buffed/debuffed values; MatchScore aligns with that lane outcome.
+
+### Test S3: Draw Lane → Zero Points
+- Setup: Both sides have equal effective power in a lane.
+- Expected: `LaneScore.winner` = None, `lane_points` = 0. MatchScore adds 0 to both totals for this lane.
+
+### Test S4: Multi-Lane Match Aggregation
+- Setup: 3 lanes with mixed outcomes (YOU wins one, ENEMY wins one, third breaks the tie).
+- Expected: Each LaneScore matches constructed effective powers; `total_you` sums lane_points where winner == "Y"; `total_enemy` sums lane_points where winner == "E"; MatchScore winner and margin match those totals.
+
+### Test S5: Scoring is Pure and Non-Mutating
+- Setup: BoardState with cards placed; deep copy taken before scoring.
+- Expected: After `compute_match_score`, board equals the copy; no tiles/pawns/projections change. Confirms scoring layer is read-only.
+
+---
+
 # 5. HandState Test Suite
 
 ---

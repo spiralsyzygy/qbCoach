@@ -173,6 +173,61 @@ This ensures correct real-game behavior:
 
 ---
 
+## Scoring Layer (v3.0)
+
+Purpose: pure, read-only scoring that converts a fully resolved `BoardState` plus `EffectEngine` into lane-level and match-level results without mutating any engine state. Scoring uses **effective power** only; it never reads raw base power directly.
+
+### Data Models
+
+```python
+@dataclass
+class LaneScore:
+    lane_index: int
+    power_you: int
+    power_enemy: int
+    winner: Optional[Literal["Y", "E"]]
+    lane_points: int
+
+@dataclass
+class MatchScore:
+    lanes: List[LaneScore]
+    total_you: int
+    total_enemy: int
+    winner: Optional[Literal["Y", "E"]]
+    margin: int
+```
+
+- `lane_index`: 0/1/2 for top/mid/bot (engine lane indices).  
+- `power_you` / `power_enemy`: sum of **effective** power for each side’s cards in that lane.  
+- `winner` (lane): `"Y"` if you lead, `"E"` if enemy leads, `None` if tied.  
+- `lane_points`: winner’s lane power; `0` on draws.  
+- `total_you` / `total_enemy`: sum of `lane_points` for lanes won by that side.  
+- `winner` (match): `"Y"`, `"E"`, or `None` for a full match tie.  
+- `margin`: `total_you - total_enemy`.
+
+### API
+
+```python
+def compute_lane_power(board: BoardState, effect_engine, lane_index: int) -> LaneScore: ...
+def compute_match_score(board: BoardState, effect_engine) -> MatchScore: ...
+```
+
+- Both functions are **pure** and **read-only**.  
+- They rely on `EffectEngine.compute_effective_power` to obtain per-tile effective power.  
+- They do **not** mutate `BoardState`, `PawnDelta`, tiles, pawns, projections, or effects.
+
+### Relationship to Ruleset
+
+Aligned with `docs/qb_rules_v2.2.4.md` and `docs/scoring_design_spec.md`:
+
+- Lane power = sum of **effective** power in that lane.  
+- Lane winner = side with higher lane power; draws have no winner.  
+- Lane points = winner’s lane power; draws give 0.  
+- Match score = sum of lane points for lanes each side wins.  
+- Match winner/margin derived from `total_you` vs `total_enemy`.
+
+---
+
 # 8. LanePowerEvaluator v2.1 (Epic D)
 
 LanePowerEvaluator produces:

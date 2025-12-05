@@ -1,7 +1,18 @@
 # qb_engine/__init__.py
 """
 Queen's Blood Python Engine package.
-
-For now this just marks qb_engine as a Python package.
-We'll fill it out step by step.
 """
+
+from qb_engine.scoring import (
+    LaneScore,
+    MatchScore,
+    compute_lane_power,
+    compute_match_score,
+)
+
+__all__ = [
+    "LaneScore",
+    "MatchScore",
+    "compute_lane_power",
+    "compute_match_score",
+]

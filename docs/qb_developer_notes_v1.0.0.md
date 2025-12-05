@@ -1,16 +1,13 @@
-Here is the **official Developer Notes** document for your Queen’s Blood engine + knowledge base system.
-It is designed to support long-term maintainability, reproducibility, and onboarding for any future AI instance or human collaborator.
-
-Save as:
-
-**`qb_developer_notes_v1.0.0.md`**
-
----
-
-```md
 # Queen’s Blood – Developer Notes
 ### Version: v1.0.0
 _This document explains the architecture, design decisions, patch flow, and maintenance expectations for the Queen’s Blood Coaching Engine & Knowledge Base._
+
+---
+
+# Related Docs
+
+- `docs/workflow_primer.md` — development roles and the day-to-day loop.
+- `docs/roadmap.md` — current milestones and upcoming phases.
 
 ---
 

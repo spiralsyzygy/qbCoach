@@ -7,13 +7,13 @@ def main():
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.chdir(project_root)
 
-    # Where we store handoff snapshots
-    handoff_root = os.path.join(project_root, "stateCurrent_codex_handoff")
-    os.makedirs(handoff_root, exist_ok=True)
+    # Where we store local snapshot archives
+    snapshots_root = os.path.join(project_root, "stateCurrent_snapshots")
+    os.makedirs(snapshots_root, exist_ok=True)
 
     # Timestamped folder & zip name
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    snapshot_dir = os.path.join(handoff_root, f"qbCoach_snapshot_{stamp}")
+    snapshot_dir = os.path.join(snapshots_root, f"qbCoach_snapshot_{stamp}")
     os.makedirs(snapshot_dir, exist_ok=True)
 
     print(f"Creating snapshot at: {snapshot_dir}")
@@ -42,7 +42,7 @@ def main():
             shutil.copy2(src, dst)
 
     # Create a zip archive of the snapshot directory
-    zip_base = os.path.join(handoff_root, f"qbCoach_snapshot_{stamp}")
+    zip_base = os.path.join(snapshots_root, f"qbCoach_snapshot_{stamp}")
     print(f"Creating zip archive: {zip_base}.zip")
     shutil.make_archive(zip_base, "zip", snapshot_dir)
 
