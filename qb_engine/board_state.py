@@ -63,6 +63,10 @@ class BoardState:
     pawn_deltas: List[PawnDelta] = field(default_factory=list)
     effect_auras: List[EffectAura] = field(default_factory=list)
 
+    # ------------------------------------------------------------------ #
+    # Construction & visualization
+    # ------------------------------------------------------------------ #
+
     @staticmethod
     def create_initial_board() -> "BoardState":
         """
@@ -119,7 +123,9 @@ class BoardState:
                 rendered_row.append(base)
             print("  ".join(rendered_row))
 
-    # --- helpers for accessing tiles ---
+    # ------------------------------------------------------------------ #
+    # Tile access
+    # ------------------------------------------------------------------ #
 
     def tile_at(self, lane_index: int, col_index: int) -> Tile:
         return self.tiles[lane_index][col_index]
@@ -129,14 +135,18 @@ class BoardState:
         col_index = col_number - 1
         return self.tile_at(lane_index, col_index)
 
-    # --- placing cards ---
+    # ------------------------------------------------------------------ #
+    # Placing cards
+    # ------------------------------------------------------------------ #
 
     def place_card(self, lane_name: str, col_number: int, card: Card) -> None:
         tile = self.tile_at_name(lane_name, col_number)
         tile.card_id = card.id
         # owner/rank are derived from influence; we don't change them here.
 
-    # --- pawn delta helpers ---
+    # ------------------------------------------------------------------ #
+    # PawnDelta helpers
+    # ------------------------------------------------------------------ #
 
     def add_pawn_delta_for_you(
         self,
@@ -188,7 +198,9 @@ class BoardState:
                     tile.owner = "N"
                     tile.rank = 0
 
-    # --- effect aura helpers ---
+    # ------------------------------------------------------------------ #
+    # Effect aura helpers
+    # ------------------------------------------------------------------ #
 
     def add_effect_aura(
         self,
@@ -218,3 +230,48 @@ class BoardState:
             for aura in self.effect_auras
             if aura.lane_index == lane_index and aura.col_index == col_index
         ]
+
+    # ------------------------------------------------------------------ #
+    # Card-side detection (for effect scopes)
+    # ------------------------------------------------------------------ #
+
+    def get_card_side(self, card_id: str) -> str | None:
+        """
+        Returns:
+          "Y" if the card with this id is on a Y-owned tile,
+          "E" if on an enemy tile,
+          "N" if only found on neutral tiles,
+          None if not found on the board.
+
+        If multiple tiles hold the same card_id, we only care about which
+        side (Y/E) it belongs to at all.
+        """
+        found_neutral = False
+
+        num_lanes = len(self.tiles)
+        num_cols = len(self.tiles[0]) if num_lanes > 0 else 0
+
+        for lane in range(num_lanes):
+            for col in range(num_cols):
+                tile = self.tile_at(lane, col)
+                if tile.card_id == card_id:
+                    if tile.owner == "Y":
+                        return "Y"
+                    if tile.owner == "E":
+                        return "E"
+                    found_neutral = True
+
+        if found_neutral:
+            return "N"
+
+        return None
+
+    # ------------------------------------------------------------------ #
+    # Effective power helper
+    # ------------------------------------------------------------------ #
+
+    def effective_power_at(self, lane: int, col: int, effect_engine) -> int:
+        """
+        Convenience wrapper around EffectEngine.compute_effective_power.
+        """
+        return effect_engine.compute_effective_power(self, lane, col)
