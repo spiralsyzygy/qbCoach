@@ -8,6 +8,7 @@ from typing import Dict, List, Literal, Optional
 
 from qb_engine.board_state import BoardState
 from qb_engine.card_hydrator import CardHydrator
+from qb_engine.effect_aura import EffectAura
 from qb_engine.models import Card
 
 
@@ -28,6 +29,8 @@ EffectOpType = Literal["modify_power"]
 
 @dataclass
 class EffectOp:
+    """A single operation that mutates stats on cards within an effect scope."""
+
     type: EffectOpType
     stat: Literal["power"]
     amount: int
@@ -35,6 +38,8 @@ class EffectOp:
 
 @dataclass
 class EffectDef:
+    """Structured definition of a card effect loaded from qb_effects_v1.json."""
+
     id: str
     description: str
     trigger: Trigger
@@ -55,6 +60,7 @@ class EffectEngine:
     def __init__(self, registry_path: Path, card_hydrator: CardHydrator) -> None:
         self._card_hydrator = card_hydrator
         self._effects: Dict[str, EffectDef] = self._load_registry(registry_path)
+        self._debug = False
 
     # --------------------------------------------------------------------- #
     # Registry loading
@@ -104,6 +110,11 @@ class EffectEngine:
             return None
         return self._effects.get(effect_id)
 
+    def set_debug(self, enabled: bool) -> None:
+        """Toggle debug logging for effect resolution."""
+
+        self._debug = enabled
+
     # --------------------------------------------------------------------- #
     # Public API
     # --------------------------------------------------------------------- #
@@ -133,11 +144,23 @@ class EffectEngine:
         # Gather all effect definitions that apply to this tile/card
         effect_defs = self._effects_applying_to_tile(board, lane, col, card)
 
+        if self._debug:
+            self._debug_log(
+                f"Tile ({lane}, {col}) base_power={base_power}"
+                f" applicable_effects={[e.id for e in effect_defs]}"
+            )
+
         delta_power = 0
         for effect_def in effect_defs:
             for op in effect_def.operations:
                 if op.type == "modify_power" and op.stat == "power":
                     delta_power += op.amount
+
+                    if self._debug:
+                        self._debug_log(
+                            f"Applying {effect_def.id} modify_power amount={op.amount}"
+                            f" -> delta_power={delta_power}"
+                        )
 
         return base_power + delta_power
 
@@ -186,7 +209,7 @@ class EffectEngine:
         board: BoardState,
         lane: int,
         col: int,
-        aura,
+        aura: EffectAura,
         target_card: Card,
     ) -> bool:
         """
@@ -221,3 +244,10 @@ class EffectEngine:
             return False
 
         return False
+
+    def _debug_log(self, message: str) -> None:
+        """Internal helper for consistent debug logging hooks."""
+
+        # Replace with logging.debug if/when a logger is wired in.
+        # print(message)
+        _ = message  # satisfy linters when debug printing is disabled
