@@ -80,5 +80,330 @@
         "amount": -4
       }
     ]
+  },
+
+  "026_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "029_on_play_enemy_affected_tiles_minus3": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 3.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+
+  "030_on_destroy_all_affected_tiles_minus3": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+
+  "034_on_play_all_affected_tiles_minus2": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 2.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -2
+      }
+    ]
+  },
+
+  "041_on_destroy_all_affected_tiles_minus4": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+
+  "045_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "055_on_play_all_affected_tiles_minus6": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 6.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -6
+      }
+    ]
+  },
+
+  "062_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "070_on_play_enemy_affected_tiles_minus4": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+
+  "072_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "073_on_destroy_enemy_affected_tiles_minus1": {
+    "description": "When destroyed, lower the power of enemy cards on affected tiles by 1.",
+    "trigger": "on_destroy",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "083_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "087_on_play_enemy_affected_tiles_minus8": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 8.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -8
+      }
+    ]
+  },
+
+  "097_on_play_all_affected_tiles_minus3": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 3.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+
+  "101_on_destroy_enemy_affected_tiles_minus5": {
+    "description": "When destroyed, lower the power of enemy cards on affected tiles by 5.",
+    "trigger": "on_destroy",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+
+  "102_while_in_play_enemy_affected_tiles_minus3": {
+    "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+
+  "104_on_play_enemy_affected_tiles_minus5": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 5.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+
+  "115_while_in_play_all_affected_tiles_minus1": {
+    "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "117_on_play_all_affected_tiles_minus4": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+
+  "119_on_play_all_affected_tiles_minus5": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 5.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+
+  "126_on_play_ally_affected_tiles_minus4": {
+    "description": "When played, lower the power of allied cards affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+
+  "133_on_play_ally_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied cards affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+
+  "149_on_destroy_all_affected_tiles_minus5": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+
+  "151_on_play_enemy_affected_tiles_minus4": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+
+  "155_on_play_all_affected_tiles_minus1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
   }
 }

@@ -423,7 +423,8 @@
       [".", ".", "X", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "026_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "027",
@@ -472,7 +473,8 @@
       [".", "P", "P", "X", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 3."
+      "effect": "When played, lower the power of enemy cards on affected tiles by 3."
+      ,"effect_id": "029_on_play_enemy_affected_tiles_minus3"
   },
   {
     "id": "030",
@@ -488,7 +490,8 @@
       [".", "X", "P", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3."
+      "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3."
+      ,"effect_id": "030_on_destroy_all_affected_tiles_minus3"
   },
   {
     "id": "031",
@@ -552,7 +555,8 @@
       [".", ".", "P", "X", "."],
       [".", ".", ".", "X", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 2."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 2."
+      ,"effect_id": "034_on_play_all_affected_tiles_minus2"
   },
   {
     "id": "035",
@@ -665,7 +669,8 @@
       [".", "E", "X", "E", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+      "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+      ,"effect_id": "041_on_destroy_all_affected_tiles_minus4"
   },
   {
     "id": "042",
@@ -729,7 +734,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", "X", "X", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "045_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "046",
@@ -889,7 +895,8 @@
       [".", ".", ".", "X", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 6."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 6."
+      ,"effect_id": "055_on_play_all_affected_tiles_minus6"
   },
   {
     "id": "056",
@@ -1001,7 +1008,8 @@
       [".", "E", "X", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "062_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "063",
@@ -1129,7 +1137,8 @@
       [".", ".", "X", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 4"
+      "effect": "When played, lower the power of enemy cards on affected tiles by 4"
+      ,"effect_id": "070_on_play_enemy_affected_tiles_minus4"
   },
   {
     "id": "071",
@@ -1161,7 +1170,8 @@
       [".", ".", "X", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "072_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "073",
@@ -1177,7 +1187,8 @@
       [".", ".", ".", "E", "."],
       [".", ".", ".", "E", "."]
     ],
-    "effect": "When destroyed, lower the power of enemy cards on affected tiles by 1."
+      "effect": "When destroyed, lower the power of enemy cards on affected tiles by 1."
+      ,"effect_id": "073_on_destroy_enemy_affected_tiles_minus1"
   },
   {
     "id": "074",
@@ -1337,7 +1348,8 @@
       [".", "E", "E", "E", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "083_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "084",
@@ -1401,7 +1413,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 8."
+      "effect": "When played, lower the power of enemy cards on affected tiles by 8."
+      ,"effect_id": "087_on_play_enemy_affected_tiles_minus8"
   },
   {
     "id": "088",
@@ -1561,7 +1574,8 @@
       [".", "X", ".", "X", "."],
       ["X", ".", ".", ".", "X"]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+      ,"effect_id": "097_on_play_all_affected_tiles_minus3"
   },
   {
     "id": "098",
@@ -1625,7 +1639,8 @@
       [".", "X", "X", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When destroyed, lower the power of enemy cards on affected tiles by 5."
+      "effect": "When destroyed, lower the power of enemy cards on affected tiles by 5."
+      ,"effect_id": "101_on_destroy_enemy_affected_tiles_minus5"
   },
   {
     "id": "102",
@@ -1641,7 +1656,8 @@
       [".", ".", ".", ".", "."],
       ["E", ".", "X", ".", "E"]
     ],
-    "effect": "Lower the power of enemy cards on affected tiles by 3 while this card is in play."
+      "effect": "Lower the power of enemy cards on affected tiles by 3 while this card is in play."
+      ,"effect_id": "102_while_in_play_enemy_affected_tiles_minus3"
   },
   {
     "id": "103",
@@ -1673,7 +1689,8 @@
       [".", ".", "P", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 5."
+      "effect": "When played, lower the power of enemy cards on affected tiles by 5."
+      ,"effect_id": "104_on_play_enemy_affected_tiles_minus5"
   },
   {
     "id": "105",
@@ -1849,7 +1866,8 @@
       [".", "X", "X", "X", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+      "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+      ,"effect_id": "115_while_in_play_all_affected_tiles_minus1"
   },
   {
     "id": "116",
@@ -1881,7 +1899,8 @@
       [".", "X", ".", "X", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 4."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 4."
+      ,"effect_id": "117_on_play_all_affected_tiles_minus4"
   },
   {
     "id": "118",
@@ -1913,7 +1932,8 @@
       ["X", ".", ".", ".", "."],
       [".", ".", ".", ".", "X"]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 5."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 5."
+      ,"effect_id": "119_on_play_all_affected_tiles_minus5"
   },
   {
     "id": "120",
@@ -2025,7 +2045,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", "X", ".", "."]
     ],
-    "effect": "When played, lower the power of allied cards affected tiles by 4."
+      "effect": "When played, lower the power of allied cards affected tiles by 4."
+      ,"effect_id": "126_on_play_ally_affected_tiles_minus4"
   },
   {
     "id": "127",
@@ -2137,7 +2158,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied cards affected tiles by 1."
+      "effect": "When played, lower the power of allied cards affected tiles by 1."
+      ,"effect_id": "133_on_play_ally_affected_tiles_minus1"
   },
   {
     "id": "134",
@@ -2393,7 +2415,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5."
+      "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5."
+      ,"effect_id": "149_on_destroy_all_affected_tiles_minus5"
   },
   {
     "id": "150",
@@ -2425,7 +2448,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 4."
+      "effect": "When played, lower the power of enemy cards on affected tiles by 4."
+      ,"effect_id": "151_on_play_enemy_affected_tiles_minus4"
   },
   {
     "id": "152",
@@ -2489,7 +2513,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+      ,"effect_id": "155_on_play_all_affected_tiles_minus1"
   },
   {
     "id": "156",
