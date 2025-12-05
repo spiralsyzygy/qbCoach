@@ -33,7 +33,12 @@ class CardHydrator:
             self.db = json.load(f)
 
         # Build an index by card id for quick lookup
-        self.index: Dict[str, dict] = {entry["id"]: entry for entry in self.db}
+        self.index: Dict[str, dict] = {
+            entry["id"]: entry
+            for entry in self.db
+            if isinstance(entry, dict) and "id" in entry
+        }
+
 
     def get_card(self, card_id: str) -> Card:
         """
@@ -58,6 +63,7 @@ class CardHydrator:
             pattern=data.get("pattern"),
             grid=data["grid"],
             effect=data.get("effect"),
+            effect_id=data.get("effect_id"), # <-- NEW
         )
 
         self.cache[card_id] = card

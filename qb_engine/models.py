@@ -16,9 +16,10 @@ class Card:
     category: str
     cost: int
     power: int
-    pattern: Optional[str]
+    pattern: str
     grid: List[List[str]]
-    effect: Optional[str]
+    effect: Optional[str] = None
+    effect_id: Optional[str] = None  # <-- NEW
 
     def __str__(self) -> str:
         """

@@ -1,5 +1,11 @@
 [
   {
+  "_meta": {
+    "db_version": "2.0.1",
+    "notes": "Added effect_id for 003,006,020,022,027,037"
+  }
+  },
+  {
     "id": "001",
     "name": "Security Officer",
     "category": "Regular",
@@ -45,7 +51,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 4."
+    "effect": "When played, lower the power of enemy cards on affected tiles by 4.",
+    "effect_id": "003_on_play_enemy_affected_tiles_minus4"
   },
   {
     "id": "004",
@@ -93,7 +100,8 @@
       [".", ".", "P", "X", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3.",
+    "effect_id": "006_on_play_all_affected_tiles_minus3"
   },
   {
     "id": "007",
@@ -317,7 +325,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When played, lower the power of enemy cards on affected tiles by 3."
+    "effect": "When played, lower the power of enemy cards on affected tiles by 3.",
+    "effect_id": "020_on_play_enemy_affected_tiles_minus3"
   },
   {
     "id": "021",
@@ -349,7 +358,8 @@
       [".", ".", ".", ".", "."],
       [".", ".", ".", ".", "E"]
     ],
-    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3.",
+    "effect_id": "022_on_play_all_affected_tiles_minus3"
   },
   {
     "id": "023",
@@ -429,7 +439,8 @@
       [".", ".", "X", "E", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+    "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.",
+    "effect_id": "027_while_in_play_all_affected_tiles_minus1"
   },
   {
     "id": "028",
@@ -589,7 +600,8 @@
       [".", ".", "P", ".", "."],
       [".", ".", ".", ".", "."]
     ],
-    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4.",
+    "effect_id": "037_on_destroy_all_affected_tiles_minus4"
   },
   {
     "id": "038",
