@@ -1,0 +1,2626 @@
+[
+  {
+    "id": "001",
+    "name": "Security Officer",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "002",
+    "name": "Riot Trooper",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B3P,C1P,C2P,C4P,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "003",
+    "name": "Grenadier",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "A3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "E"],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "004",
+    "name": "J-Unit Sweeper",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B2P,B4P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "005",
+    "name": "Queen Bee",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "C1P,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "006",
+    "name": "Toxirat",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B4X,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "007",
+    "name": "Levrikon",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "008",
+    "name": "Grasslands Wolf",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "009",
+    "name": "Mu",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B2P,B3P,C4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "010",
+    "name": "Mandragora",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add Mandragora Minion to your hand."
+  },
+  {
+    "id": "011",
+    "name": "Elphadunk",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "012",
+    "name": "Cactuar",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,B5E,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", "E", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "013",
+    "name": "Crystalline Crab",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2X,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "014",
+    "name": "Quetzalcoatl",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2P,B4P,C1P,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "015",
+    "name": "Zu",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B2P,B4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "016",
+    "name": "Devil Rider",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "D3P,E2P,E3P,E4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      ["P", ".", ".", ".", "."],
+      ["P", "P", "W", ".", "."],
+      ["P", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "017",
+    "name": "Screamer",
+    "category": "Regular",
+    "cost": 3,
+    "power": 1,
+    "pattern": "B2P,B3P,B4P,C2P,C4P,D2P,D3P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "018",
+    "name": "Flan",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "D2P,D3P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", ".", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "019",
+    "name": "Crawler",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "C2P,C4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "020",
+    "name": "Archdragon",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "B3X,D2P,D4P",
+    "grid": [
+      [".", "P", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "021",
+    "name": "Ogre",
+    "category": "Regular",
+    "cost": 2,
+    "power": 5,
+    "pattern": "B1P,B5P,C1P,C5P",
+    "grid": [
+      [".", ".", "P", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "022",
+    "name": "Deathwheel",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1E,A5E",
+    "grid": [
+      [".", ".", ".", ".", "E"],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "E"]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "023",
+    "name": "Fleetwing",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "D2P,D4P,E1P,E5P",
+    "grid": [
+      ["P", ".", ".", ".", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", ".", "."],
+      ["P", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "024",
+    "name": "Zemzelett",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B4P,C2P,C4P,D3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "025",
+    "name": "Ignilisk",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3X,C5X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "026",
+    "name": "Capparwire",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "B3P,C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "027",
+    "name": "Mindflayer",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B2X,B4E,C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "X", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "028",
+    "name": "Scrutineye",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "C1P,C2E,C4E,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "029",
+    "name": "Hell Rider II",
+    "category": "Regular",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B3X,B4X,C4P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", "P", "P", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "030",
+    "name": "Flametrooper",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "C2P,C4P,D2X,D3X,D4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "X", "P", ".", "."],
+      [".", "X", "W", ".", "."],
+      [".", "X", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "031",
+    "name": "Spearhawk",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C4X,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "032",
+    "name": "Sea Devil",
+    "category": "Regular",
+    "cost": 3,
+    "power": 1,
+    "pattern": "B3P,C2P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When allied cards are played from hand, raise this card's power by 1"
+  },
+  {
+    "id": "033",
+    "name": "Shoalopod",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B2P,B3P,C2X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", "P", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 4 while this card is in play."
+  },
+  {
+    "id": "034",
+    "name": "Crown Lance",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B4X,B5X,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", "X", "."],
+      [".", ".", ".", "X", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "035",
+    "name": "Tonberry King",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When allied cards are destroyed, raise this card's power by 2."
+  },
+  {
+    "id": "036",
+    "name": "Sandhog Pie",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3X,C2X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, raise the power of allied cards on affected tiles by 3."
+  },
+  {
+    "id": "037",
+    "name": "Bloatfloat",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A3E,B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", ".", "E"],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "038",
+    "name": "Bagnadrana",
+    "category": "Regular",
+    "cost": 3,
+    "power": 2,
+    "pattern": "B3P,B4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When enemy cards are played from hand, raise this card's power by 1."
+  },
+  {
+    "id": "039",
+    "name": "Cockatrice",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, destroy allied and enemy cards on affected tiles."
+  },
+  {
+    "id": "040",
+    "name": "Heatseeker",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, add Heatseeker Minion to your hand."
+  },
+  {
+    "id": "041",
+    "name": "Bomb",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B2E,B3X,B4E,C2X,C4X,D2E,D3X,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", "X", "E", "."],
+      [".", "X", "W", "X", "."],
+      [".", "E", "X", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "042",
+    "name": "Thug",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B1P,B3P,B5P,D3P",
+    "grid": [
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "P", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "043",
+    "name": "Death Claw",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When enemy cards are destroyed, raise this card's power by 1."
+  },
+  {
+    "id": "044",
+    "name": "Landworm",
+    "category": "Regular",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B3P,B4P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When enemy cards are destroyed, raise this card's power by 1."
+  },
+  {
+    "id": "045",
+    "name": "Sandspitter",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B1X,B5X,C1X,C5X",
+    "grid": [
+      [".", ".", "X", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", "X", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "046",
+    "name": "Chimera",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 2 for each enfeebled enemy card."
+  },
+  {
+    "id": "047",
+    "name": "Joker",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B1P,B5P,C1P,C5P",
+    "grid": [
+      [".", ".", "P", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."]
+    ],
+    "effect": "When allied and enemy cards are destroyed, raise this card's power by 1."
+  },
+  {
+    "id": "048",
+    "name": "Amphidex",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C1X,C2E",
+    "grid": [
+      [".", ".", "X", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3."
+  },
+  {
+    "id": "049",
+    "name": "Frightflower",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "050",
+    "name": "Gagighandi",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B3P,B4E,B5E,C4P,C5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", "E", "E", ".", "."]
+    ],
+    "effect": "When first enhanced, lower the power of enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "051",
+    "name": "Insectoid Chimera",
+    "category": "Regular",
+    "cost": 0,
+    "power": 2,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Destroy an allied card and replace it."
+  },
+  {
+    "id": "052",
+    "name": "Gigantoad",
+    "category": "Regular",
+    "cost": 0,
+    "power": 3,
+    "pattern": "B3P,C2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Destroy an allied card and replace it."
+  },
+  {
+    "id": "053",
+    "name": "Maloceros",
+    "category": "Regular",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B1P,B3P,B5P,D3P",
+    "grid": [
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "P", "."]
+    ],
+    "effect": "When you win the lane, receive a score bonus of 10."
+  },
+  {
+    "id": "054",
+    "name": "Gramhorn",
+    "category": "Regular",
+    "cost": 0,
+    "power": 3,
+    "pattern": "B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Destroy an allied card and replace it."
+  },
+  {
+    "id": "055",
+    "name": "Great Malboro",
+    "category": "Regular",
+    "cost": 3,
+    "power": 3,
+    "pattern": "B2X,B3X,B4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 6."
+  },
+  {
+    "id": "056",
+    "name": "Grangalan",
+    "category": "Regular",
+    "cost": 3,
+    "power": 3,
+    "pattern": "B2P,B3P,C2P,C4P,D3P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."],
+      [".", "P", "W", "P", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add Grangalan Junior to your hand."
+  },
+  {
+    "id": "057",
+    "name": "Amalgam",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed add Resurrected Amalgam to your hand."
+  },
+  {
+    "id": "058",
+    "name": "Skeeskee",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When allied cards are destroyed, raise this card's power by 1."
+  },
+  {
+    "id": "059",
+    "name": "Griffon",
+    "category": "Regular",
+    "cost": 0,
+    "power": 1,
+    "pattern": "B2E,B3P,C2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "E", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "060",
+    "name": "Basilisk",
+    "category": "Regular",
+    "cost": 3,
+    "power": 2,
+    "pattern": "B2P,B4X,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, destroy enemy cards on affected tiles."
+  },
+  {
+    "id": "061",
+    "name": "Reapertail",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "B1E,B2E,B3P,C2P",
+    "grid": [
+      [".", ".", ".", "E", "."],
+      [".", ".", ".", "E", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enfeebled, lower the power of enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "062",
+    "name": "Jabberwock",
+    "category": "Regular",
+    "cost": 2,
+    "power": 6,
+    "pattern": "C2X,C4X,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", "X", ".", "."],
+      [".", "E", "W", ".", "."],
+      [".", "E", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "063",
+    "name": "Desert Sahagin",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "B3P,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enfeebled, raise the power of allied cards on affected tiles by 4."
+  },
+  {
+    "id": "064",
+    "name": "Cavestalker",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B2X,B3E,B4X,C1P,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", "W", "E", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": "When first enfeebled, lower the power of enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "065",
+    "name": "Stone Golem",
+    "category": "Regular",
+    "cost": 1,
+    "power": 4,
+    "pattern": "B3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "E", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enhanced, lower the power of enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "066",
+    "name": "Two Face",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When enfeebled, lower their power by 4."
+  },
+  {
+    "id": "067",
+    "name": "Gi Specter",
+    "category": "Regular",
+    "cost": 0,
+    "power": 2,
+    "pattern": "B4X,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "068",
+    "name": "Valron",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2P,B4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 2 for each other enfeebled allied card."
+  },
+  {
+    "id": "069",
+    "name": "Disgorgon",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2P,B4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, raise position ranks by 2."
+  },
+  {
+    "id": "070",
+    "name": "Dragon",
+    "category": "Regular",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B3X,C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 4"
+  },
+  {
+    "id": "071",
+    "name": "Twin Brain",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "C1P,C5P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": "When played, raise position ranks by 2."
+  },
+  {
+    "id": "072",
+    "name": "Black Bat",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3X,C2X,C4X,D3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", "X", "W", "X", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "073",
+    "name": "Bahba Velamyu",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B1E,B2E,B3X,B4E,B5E,C2P,D3P",
+    "grid": [
+      [".", ".", ".", "E", "."],
+      [".", ".", "P", "X", "."],
+      [".", "P", "W", "X", "."],
+      [".", ".", ".", "E", "."],
+      [".", ".", ".", "E", "."]
+    ],
+    "effect": "When destroyed, lower the power of enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "074",
+    "name": "Rictus",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 1 for each other enfeebled and enemy card."
+  },
+  {
+    "id": "075",
+    "name": "Adjudicator",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card."
+  },
+  {
+    "id": "076",
+    "name": "Yin & Yang",
+    "category": "Regular",
+    "cost": 0,
+    "power": 3,
+    "pattern": "B3P,C1E,C5E,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", "E", ".", "."]
+    ],
+    "effect": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "077",
+    "name": "Diabolic Variant",
+    "category": "Regular",
+    "cost": 0,
+    "power": 2,
+    "pattern": "B3P,C2E,C4E,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "078",
+    "name": "Special Forces Operator",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C1X,C5X",
+    "grid": [
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "079",
+    "name": "2-C SOLDIER Operator",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B1P,B3P,C1X",
+    "grid": [
+      [".", ".", "X", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "080",
+    "name": "Kelzmelzer",
+    "category": "Regular",
+    "cost": 0,
+    "power": 3,
+    "pattern": "B1E,B3P,B5E,C2P,C4P",
+    "grid": [
+      [".", ".", "P", "E", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", "E", "."]
+    ],
+    "effect": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "081",
+    "name": "Panthera Protector",
+    "category": "Regular",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2P,B3X,C2P,D2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "The first time this card is enhanced raise the power of allied cards on affected tiles by 4."
+  },
+  {
+    "id": "082",
+    "name": "Hecteyes",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1E,A3E,A5E,C1E,C5E,E1E,E3E,E5E",
+    "grid": [
+      ["E", ".", "E", ".", "E"],
+      [".", ".", ".", ".", "."],
+      ["E", ".", "W", ".", "E"],
+      [".", ".", ".", ".", "."],
+      ["E", ".", "E", ".", "E"]
+    ],
+    "effect": "When destroyed, raise the power of allied cards on affected tiles by 3."
+  },
+  {
+    "id": "083",
+    "name": "Floating Death",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2E,B3E,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", "E", "E", "."],
+      [".", "E", "W", "E", "."],
+      [".", "E", "E", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "084",
+    "name": "Ironclad",
+    "category": "Regular",
+    "cost": 3,
+    "power": 1,
+    "pattern": "B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 3 for each enhanced enemy card."
+  },
+  {
+    "id": "085",
+    "name": "Moss-Grown Adamantoise",
+    "category": "Regular",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B2P,B4P,C2P,C4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", "P", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, raise positions ranks by 3."
+  },
+  {
+    "id": "086",
+    "name": "Cloud",
+    "category": "Legend",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2E,B3X,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", "E", "E", "."],
+      [".", "E", "W", "X", "."],
+      [".", "E", "E", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2."
+  },
+  {
+    "id": "087",
+    "name": "Barret",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "A3X,B3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", ".", "X"],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 8."
+  },
+  {
+    "id": "088",
+    "name": "Tifa",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C4P,C5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": "When you win the lane, receive a score bonus of 5."
+  },
+  {
+    "id": "089",
+    "name": "Aerith",
+    "category": "Legend",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B3X,D3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "X", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "090",
+    "name": "Red XIII",
+    "category": "Legend",
+    "cost": 1,
+    "power": 3,
+    "pattern": "A1E,A3E,A5E,B3P,C1E,C2P,C5E,E1E,E3E,E5E",
+    "grid": [
+      ["E", ".", "E", ".", "E"],
+      [".", ".", "P", ".", "."],
+      ["E", ".", "W", "P", "E"],
+      [".", ".", ".", ".", "."],
+      ["E", ".", "E", ".", "E"]
+    ],
+    "effect": "When first enfeebled, lower the power of enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "091",
+    "name": "Yuffie",
+    "category": "Legend",
+    "cost": 0,
+    "power": 1,
+    "pattern": "B2E,B3X,B4E,C2X,C4X,D2E,D3X,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", "X", ".", "E"],
+      [".", "X", "W", ".", "X"],
+      [".", "E", "X", ".", "E"],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "092",
+    "name": "Cait Sith",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add Moogle to your hand."
+  },
+  {
+    "id": "093",
+    "name": "Cid",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C1P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add the Tiny Bronco to your hand."
+  },
+  {
+    "id": "094",
+    "name": "Vincent",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, add Galian Beast to your hand."
+  },
+  {
+    "id": "095",
+    "name": "Ifrit",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 2 for each other enhanced allied card."
+  },
+  {
+    "id": "096",
+    "name": "Shiva",
+    "category": "Legend",
+    "cost": 2,
+    "power": 3,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, spawn Diamond Dust in each of your empty positions."
+  },
+  {
+    "id": "097",
+    "name": "Ramuh",
+    "category": "Legend",
+    "cost": 3,
+    "power": 3,
+    "pattern": "A1X,A5X,B2X,B4X,D2X,D4X,E1X,E5X",
+    "grid": [
+      ["X", ".", ".", ".", "X"],
+      [".", "X", ".", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", "X", ".", "X", "."],
+      ["X", ".", ".", ".", "X"]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "098",
+    "name": "Titan",
+    "category": "Legend",
+    "cost": 2,
+    "power": 5,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, raise positions ranks by 2."
+  },
+  {
+    "id": "099",
+    "name": "Kujata",
+    "category": "Legend",
+    "cost": 3,
+    "power": 6,
+    "pattern": "B2X,B4X,D3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enhanced, lower the power of enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "100",
+    "name": "Odin",
+    "category": "Legend",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B2P,B4P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 2 for each enhanced enemy card while this card is in play."
+  },
+  {
+    "id": "101",
+    "name": "Phoenix",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B2X,B4X,C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "X", "X", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "X", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "102",
+    "name": "Leviathan",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "A1E,A3X,A5E,C1X,C5X,E1E,E3X,E5E",
+    "grid": [
+      ["E", ".", "X", ".", "E"],
+      [".", ".", ".", ".", "."],
+      ["X", ".", "W", ".", "X"],
+      [".", ".", ".", ".", "."],
+      ["E", ".", "X", ".", "E"]
+    ],
+    "effect": "Lower the power of enemy cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "103",
+    "name": "Alexander",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 3 for each other enfeebled allied card while this card is in play."
+  },
+  {
+    "id": "104",
+    "name": "Bahamut",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "A3X,B3X,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "X", "X"],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "105",
+    "name": "Bahamut Arisen",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, for each of your empty position, spawn an Elementals matching the number of Pawns there."
+  },
+  {
+    "id": "106",
+    "name": "Gilgamesh",
+    "category": "Legend",
+    "cost": 0,
+    "power": 3,
+    "pattern": "A1E,A5E,E1E,E5E",
+    "grid": [
+      ["E", ".", ".", ".", "E"],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      ["E", ".", ".", ".", "E"]
+    ],
+    "effect": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "107",
+    "name": "Chocobo & Moogle",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 1 for each other enhanced allied card."
+  },
+  {
+    "id": "108",
+    "name": "Fat Chocobo",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "A3P,B2P,B4P,C1P,C5P,D2P,D4P,E3P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", "P", ".", "P", "."],
+      ["P", ".", "W", ".", "P"],
+      [".", "P", ".", "P", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": "Creates a surfeit of positions around it when played."
+  },
+  {
+    "id": "109",
+    "name": "Posh Chocobo",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When you win the lane, receive a score bonus of 3."
+  },
+  {
+    "id": "110",
+    "name": "Moogle Trio",
+    "category": "Legend",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B2P,B4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add both Moogle Mage and Moogle Bard to your hand."
+  },
+  {
+    "id": "111",
+    "name": "Magic Pot",
+    "category": "Legend",
+    "cost": 3,
+    "power": 1,
+    "pattern": "B2E,B4E,D2E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "E", ".", "E", "."],
+      [".", ".", "W", ".", "."],
+      [".", "E", ".", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "112",
+    "name": "Materia Guardian",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "A1E,A5E,B1E,B3P,B5E,C1P,C2P,C4P,C5P,D1E,D5E,E1E,E5E",
+    "grid": [
+      ["E", "E", "P", "E", "E"],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      ["E", "E", "P", "E", "E"]
+    ],
+    "effect": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 6."
+  },
+  {
+    "id": "113",
+    "name": "Midgardsormr",
+    "category": "Legend",
+    "cost": 3,
+    "power": 6,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When allied and enemy cards are destroyed, raise this card's power by 1."
+  },
+  {
+    "id": "114",
+    "name": "Mythril Golem",
+    "category": "Legend",
+    "cost": 3,
+    "power": 8,
+    "pattern": "C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "115",
+    "name": "",
+    "category": "Legend",
+    "cost": 3,
+    "power": 2,
+    "pattern": "B2X,B3X,B4X,C2X,C4X,D2X,D3X,D4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "X", "X", "X", "."],
+      [".", "X", "W", "X", "."],
+      [".", "X", "X", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "116",
+    "name": "Grasptropod",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "A1E,A2E,A4E,A5E,B2P,B4P,D2P,D4P,E1E,E2E,E4E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."], 
+      [".", ".", ".", ".", "."], 
+      [".", ".", "W", ".", "."], 
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "117",
+    "name": "Custom Valkyrie",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B2X,B4X,D2X,D4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "X", ".", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", "X", ".", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "118",
+    "name": "Gigatrice",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B1X,B5X,C1P,C2P,C4P,C5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, destroy enemy cards on affected tiles."
+  },
+  {
+    "id": "119",
+    "name": "Dyne",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "A2X,A4X,B1X,B5X",
+    "grid": [
+      [".", ".", ".", ".", "X"],
+      ["X", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      ["X", ".", ".", ".", "."],
+      [".", ".", ".", ".", "X"]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "120",
+    "name": "Anuran Suppressor",
+    "category": "Legend",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B3P,B5P,C5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."]
+    ],
+    "effect": "When enemy cards are destroyed, raise this card's power by 2."
+  },
+  {
+    "id": "121",
+    "name": "Specimen H1024",
+    "category": "Legend",
+    "cost": 3,
+    "power": 6,
+    "pattern": "A1E,A3E,B2P,A5E,C1E,C2P,C4P,C5E,D3P,E1E,E3E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "122",
+    "name": "Crimson Mare Mk. II",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B2P,B3E,B4P,C2X,C4X,D3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "123",
+    "name": "Gi Nattak",
+    "category": "Legend",
+    "cost": 0,
+    "power": 1,
+    "pattern": "C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power."
+  },
+  {
+    "id": "124",
+    "name": "Forgotten Specimen",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B1P,B2P,D4E,D5E",
+    "grid": [
+      [".", ".", ".", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", "E", "."],
+      [".", ".", ".", "E", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "125",
+    "name": "Don Corneo & Abzu",
+    "category": "Legend",
+    "cost": 2,
+    "power": 4,
+    "pattern": null, 
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add both Cacneo and Donberry to your hand."
+  },
+  {
+    "id": "126",
+    "name": "Red Dragon",
+    "category": "Legend",
+    "cost": 3,
+    "power": 6,
+    "pattern": "A3X,B2X,B4X,C1X,C5X",
+    "grid": [
+      [".", ".", "X", ".", "."],
+      [".", ".", "X", "X", "."],
+      [".", ".", "W", ".", "X"],
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied cards affected tiles by 4."
+  },
+  {
+    "id": "127",
+    "name": "Demon Gate",
+    "category": "Legend",
+    "cost": 3,
+    "power": 5,
+    "pattern": "B2X,B3X,B4X,D2X,D3X,D4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of enemy cards on affected tiles by 9."
+  },
+  {
+    "id": "128",
+    "name": "Reno",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C4P,C5E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "129",
+    "name": "Rude",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C1E,C2P,D2E",
+    "grid": [
+      [".", ".", "E", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "130",
+    "name": "Elena",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99."
+  },
+  {
+    "id": "131",
+    "name": "Tseng",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A3E,B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", ".", "E"],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When first enhanced, raise the power of allied cards on affected tiles by 4."
+  },
+  {
+    "id": "132",
+    "name": "Rufus",
+    "category": "Legend",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B1P,B2P,B4P,B5P,D1P,D2P,D4P,D5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "133",
+    "name": "Roche",
+    "category": "Legend",
+    "cost": 2,
+    "power": 5,
+    "pattern": "A1E,A3E,A5E,B2E,B3X,B4E,C1E,C2X,C4X,C5E,D2E,D3X,D4E,E1E,E3E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied cards affected tiles by 1."
+  },
+  {
+    "id": "134",
+    "name": "J-Squad",
+    "category": "Legend",
+    "cost": 3,
+    "power": 2,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, for each of your empty position, spawn a Hype Johnnys matching the number of Pawns there."
+  },
+  {
+    "id": "135",
+    "name": "Chocobo Jockey",
+    "category": "Legend",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When you win the lane, receive a score bonus of 10."
+  },
+  {
+    "id": "136",
+    "name": "Space Ranger",
+    "category": "Legend",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3P,C1P,C2P",
+    "grid": [
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 1 for each enhanced enemy card while this card is in play."
+  },
+  {
+    "id": "137",
+    "name": "Haunted Hotel",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A2E,A4E,B2E,B4E,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "138",
+    "name": "Skywheel",
+    "category": "Legend",
+    "cost": 3,
+    "power": 2,
+    "pattern": "A2P,A4P,B1P,B5P,D1P,D5P,E2P,E4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "139",
+    "name": "Loveless",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2E,B3E,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, raise the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "140",
+    "name": "Saucer Squad",
+    "category": "Legend",
+    "cost": 2,
+    "power": 3,
+    "pattern": "B1P,B3P,B5P,C2P,C4P",
+    "grid": [
+      [".", ".", "P", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "141",
+    "name": "Dio",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 1 for each other enhanced allied and enemy card."
+  },
+  {
+    "id": "142",
+    "name": "Ultimate Party Animal",
+    "category": "Legend",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "If this card is in play when the round ends, the lower of each lane's score is added to the victor's."
+  },
+  {
+    "id": "143",
+    "name": "Sephiroth",
+    "category": "Legend",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B3P,C2X,C4X,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, destroy enemy cards on affected tiles."
+  },
+  {
+    "id": "144",
+    "name": "Emerald Witch",
+    "category": "Legend",
+    "cost": 2,
+    "power": 2,
+    "pattern": "A3E,B2E,B3P,B4E,C1E,C2P,C4P,C5E,D2E,D3P,D4E,E3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "145",
+    "name": "Shadowblood Queen",
+    "category": "Legend",
+    "cost": 3,
+    "power": 3,
+    "pattern": "B2P,B4P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise power by 3 for each other enfeebled allied and enemy card while this card is in play."
+  },
+  {
+    "id": "146",
+    "name": "Mandragora Minion",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "147",
+    "name": "Heatseeker Minion",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": ""
+  },
+  {
+    "id": "148",
+    "name": "Grangalan Junior",
+    "category": "Token",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B2P,B4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", ".", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, add Baby Grangalan to your hand."
+  },
+  {
+    "id": "149",
+    "name": "Baby Grangalan",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2X,B3X,B4X,C2X,C4X,D2X,D3X,D4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5."
+  },
+  {
+    "id": "150",
+    "name": "Resurrected Amalgam",
+    "category": "Token",
+    "cost": 1,
+    "power": 2,
+    "pattern": "C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "151",
+    "name": "Moogle Mage",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1X",
+    "grid": [
+      ["X", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "152",
+    "name": "Moogle Bard",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,B4E,B5E,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "E", "E", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "153",
+    "name": "Moogle",
+    "category": "Token",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B3P,B4P,C2E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "E", ".", "."],
+      [".", "P", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "154",
+    "name": "The Tiny Bronco",
+    "category": "Token",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B3P,B5P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", "P", "."]
+    ],
+    "effect": "When played, raise position ranks by 2."
+  },
+  {
+    "id": "155",
+    "name": "Galian Beast",
+    "category": "Token",
+    "cost": 2,
+    "power": 4,
+    "pattern": "A2E,A3E,A4E,B1E,B5E,C1E,C5E,D1E,D5E,E2E,E3E,E4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "156",
+    "name": "Elementals I (1 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2E,B3E,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, raise the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "157",
+    "name": "Elementals II (2 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2E,B3E,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "158",
+    "name": "Elementals III (3 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B2E,B3E,B4E,C2E,C4E,D2E,D3E,D4E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When destroyed, raise the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "159",
+    "name": "Hype Johnnys I (1 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1E,A3E,A5E,C1E,C5E,E1E,E3E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "160",
+    "name": "Hype Johnnys II (2 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1E,A3E,A5E,C1E,C5E,E1E,E3E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "161",
+    "name": "Hype Johnnys III (3 Pawn)",
+    "category": "Token",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A1E,A3E,A5E,C1E,C5E,E1E,E3E,E5E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "162",
+    "name": "Cacneo",
+    "category": "Token",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B1E,B2P,B3P,B4P,B5E",
+    "grid": [
+      [".", ".", "P", "E", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", "P", "E", "."]
+    ],
+    "effect": "Raise the power of allied cards on affected tiles by 3 while this card is in play."
+  },
+  {
+    "id": "163",
+    "name": "Donberry",
+    "category": "Token",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When played, destroy enemy cards on affected tiles."
+  },
+  {
+    "id": "164",
+    "name": "Diamond Dust",
+    "category": "Token",
+    "cost": 1,
+    "power": 2,
+    "pattern": null,
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect": "When spawned, if this replaced 2 Pawns, this gains 2 power. If this replaced 3, this gains 4 power instead."
+  }
+]
