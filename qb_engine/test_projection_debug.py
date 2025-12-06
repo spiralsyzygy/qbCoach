@@ -24,9 +24,9 @@ def test_projection_targets_for_security_officer():
     proj_result = compute_projection_targets(lane_index, col_index, card)
 
     expected_targets = [
-        (2, 0, "P"),  # BOT-1
-        (1, 1, "P"),  # MID-2
         (0, 0, "P"),  # TOP-1
+        (1, 1, "P"),  # MID-2
+        (2, 0, "P"),  # BOT-1
     ]
     assert proj_result.targets == expected_targets
     assert proj_result.root_lane_index == lane_index

@@ -48,32 +48,38 @@ class GameState:
         self.player_hand = Hand(hydrator)
         self.enemy_hand = Hand(hydrator)
 
-        # Opening hands: draw 3 if not provided
+        # Opening hands: draw 5 if not provided
         if player_hand_ids is not None:
             self.player_hand.from_card_ids(player_hand_ids)
         else:
-            self.player_hand.from_card_ids(self.player_deck.draw_n(3))
+            self.player_hand.from_card_ids(self.player_deck.draw_n(5))
 
         if enemy_hand_ids is not None:
             self.enemy_hand.from_card_ids(enemy_hand_ids)
         else:
-            self.enemy_hand.from_card_ids(self.enemy_deck.draw_n(3))
+            self.enemy_hand.from_card_ids(self.enemy_deck.draw_n(5))
 
         self.turn = 1
         self.side_to_act: Literal["Y", "E"] = "Y"
+        self.consecutive_passes: int = 0
+        self._mulligan_used = {"Y": False, "E": False}
 
     # ------------------------------------------------------------------ #
     # Turn mechanics
     # ------------------------------------------------------------------ #
 
     def draw_start_of_turn(self) -> None:
-        """Side to act draws one card."""
+        """Side to act draws one card; skipped on turn 1."""
+        if self.turn == 1:
+            return
         if self.side_to_act == "Y":
             card_id = self.player_deck.draw()
-            self.player_hand.add_card(card_id)
+            if card_id is not None:
+                self.player_hand.add_card(card_id)
         else:
             card_id = self.enemy_deck.draw()
-            self.enemy_hand.add_card(card_id)
+            if card_id is not None:
+                self.enemy_hand.add_card(card_id)
 
     def play_card_from_hand(self, side: Literal["Y", "E"], hand_index: int, lane: int, col: int) -> None:
         """
@@ -116,13 +122,43 @@ class GameState:
         # Ensure influence recompute after projections
         self.board.recompute_influence_from_deltas()
 
+        # Any successful play resets pass counter
+        self.consecutive_passes = 0
+
     def cleanup(self) -> None:
         """Placeholder for destruction/effect cleanup; currently just recomputes influence."""
         self.board.recompute_influence_from_deltas()
 
+    def mulligan(self, side: Literal["Y", "E"], indices_to_replace: list[int]) -> None:
+        """
+        Perform a single mulligan for the given side before turn 1.
+        """
+        if self.turn != 1:
+            raise ValueError("Mulligan allowed only before the first turn begins.")
+        if self._mulligan_used[side]:
+            raise ValueError("Mulligan already used for this side.")
+
+        hand = self.player_hand if side == "Y" else self.enemy_hand
+        deck = self.player_deck if side == "Y" else self.enemy_deck
+
+        current_ids = hand.as_card_ids()
+        new_ids = deck.mulligan(current_ids, indices_to_replace)
+        hand.sync_from_ids(new_ids)
+        self._mulligan_used[side] = True
+
+    def pass_turn(self) -> None:
+        """Player passes without playing; used for game-end detection."""
+        self.consecutive_passes += 1
+        self.end_turn()
+
     def end_turn(self) -> None:
         self.side_to_act = "E" if self.side_to_act == "Y" else "Y"
         self.turn += 1
+
+    def is_game_over(self) -> bool:
+        """Game ends if board full or two consecutive passes."""
+        board_full = all(tile.card_id for row in self.board.tiles for tile in row)
+        return board_full or self.consecutive_passes >= 2
 
     # ------------------------------------------------------------------ #
     # Cloning
@@ -146,6 +182,8 @@ class GameState:
 
         clone.turn = self.turn
         clone.side_to_act = self.side_to_act
+        clone.consecutive_passes = self.consecutive_passes
+        clone._mulligan_used = dict(self._mulligan_used)
 
         clone.rng = random.Random()
         clone.rng.setstate(self.rng.getstate())

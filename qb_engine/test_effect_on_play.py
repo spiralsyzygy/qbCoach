@@ -42,16 +42,16 @@ def test_archdragon_on_play_applies_enemy_debuff():
     archdragon = hydrator.get_card("020")
     target = hydrator.get_card("001")  # base power 1
 
-    target_tile = board.tile_at(2, 1)  # BOT-2
+    target_tile = board.tile_at(0, 1)  # TOP-2 (aligned with pattern X)
     target_tile.owner = "E"
     target_tile.rank = 1
     target_tile.card_id = target.id
 
     board.place_card("MID", 1, archdragon, effect_engine=engine)
 
-    effective = board.effective_power_at(2, 1, engine)
+    effective = board.effective_power_at(0, 1, engine)
     assert effective == target.power - 3
-    assert board.direct_effects[(2, 1)]
+    assert board.direct_effects[(0, 1)]
 
 
 def test_toxirat_on_play_applies_to_all_affected_tiles():
@@ -61,20 +61,20 @@ def test_toxirat_on_play_applies_to_all_affected_tiles():
     target_a = hydrator.get_card("001")
     target_b = hydrator.get_card("001")
 
-    top1 = board.tile_at(0, 0)
-    top1.card_id = target_a.id
+    bot1 = board.tile_at(2, 0)  # BOT-1 (P)
+    bot1.card_id = target_a.id
 
-    top2 = board.tile_at(0, 1)
-    top2.owner = "E"  # show scope ignores side for all_affected_tiles
-    top2.rank = 1
-    top2.card_id = target_b.id
+    bot2 = board.tile_at(2, 1)  # BOT-2 (X)
+    bot2.owner = "E"  # show scope ignores side for all_affected_tiles
+    bot2.rank = 1
+    bot2.card_id = target_b.id
 
     board.place_card("MID", 1, toxirat, effect_engine=engine)
 
-    assert board.effective_power_at(0, 0, engine) == target_a.power - 3
-    assert board.effective_power_at(0, 1, engine) == target_b.power - 3
-    assert (0, 0) in board.direct_effects
-    assert (0, 1) in board.direct_effects
+    assert board.effective_power_at(2, 0, engine) == target_a.power - 3
+    assert board.effective_power_at(2, 1, engine) == target_b.power - 3
+    assert (2, 0) in board.direct_effects
+    assert (2, 1) in board.direct_effects
 
 
 if __name__ == "__main__":

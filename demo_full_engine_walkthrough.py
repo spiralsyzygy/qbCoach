@@ -31,8 +31,8 @@ def header(title: str) -> None:
 
 
 def card_ids_for_demo(hydrator: CardHydrator) -> list[str]:
-    # Grab a deterministic set of 10 IDs (skips _meta)
-    return sorted(cid for cid in hydrator.index.keys() if cid != "_meta")[:10]
+    # Grab a deterministic set of 15 IDs (skips _meta)
+    return sorted(cid for cid in hydrator.index.keys() if cid != "_meta")[:15]
 
 
 def describe_hand(label: str, hand) -> None:

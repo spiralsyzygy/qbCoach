@@ -541,7 +541,15 @@ If engine outputs anything else → lane scoring bug.
 
 ---
 
-# 8. Document Status
+# 8. Turn/Deck Flow (Rules-aligned quick checks)
+
+- Deck size = 15; opening hand = 5 for each side; mulligan once pre-turn-1 to redraw to 5.
+- Start-of-turn draw is skipped on turn 1; empty deck draws do not crash (no card drawn).
+- Pass mechanic: two consecutive passes end the game; any successful play resets the pass chain.
+
+---
+
+# 9. Document Status
 
 - Version: **1.0.0**  
 - Intended as the regression suite used after applying all Phase 1 patches  

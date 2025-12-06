@@ -35,9 +35,9 @@ def test_apply_effects_for_p_only_card_adds_no_auras():
     proj = compute_projection_targets(lane_index, col_index, card)
 
     expected_targets = [
-        (2, 0, "P"),
-        (1, 1, "P"),
         (0, 0, "P"),
+        (1, 1, "P"),
+        (2, 0, "P"),
     ]
     assert proj.targets == expected_targets
 

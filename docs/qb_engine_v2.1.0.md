@@ -36,6 +36,11 @@ The engine consists of the following functional modules:
 
 All modules must operate deterministically and must honor the strict rules defined in `qb_rules`.
 
+**Core turn/hand/deck rules (alignment note):**
+- Deck size 15 per side; opening hand 5 cards; mulligan once before turn 1 to redraw to 5.
+- Turn 1 draw is skipped; draws begin on turn 2. Empty-deck draws do not crash (no card drawn).
+- Game end: all tiles filled or two consecutive passes.
+
 ---
 
 # 3. JSON Card Hydration (Epic A)

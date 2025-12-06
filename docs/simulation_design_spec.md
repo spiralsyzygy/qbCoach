@@ -72,6 +72,17 @@ Phase C must use a **dedicated RNG object**, never global randomness.
 
 ---
 
+# **3A. Core Turn/Deck Constraints (Rules-Aligned)**
+
+- Deck size: 15 cards per player.
+- Opening hand: draw 5 cards; mulligan allowed once before turn 1 (replace any subset, redraw to 5).
+- Turn 1: skip the start-of-turn draw; draws begin on turn 2.
+- Draw on empty deck: no crash, simply no card drawn.
+- Game end: all 15 tiles occupied **or** two consecutive passes.
+- Hand size: variable; no auto-end on empty deck.
+
+---
+
 # **4. Deck Model Specification**
 
 ### **4.1 Deck Responsibilities**
@@ -92,7 +103,7 @@ deck = Deck(card_ids: List[str], seed: Optional[int] = None)
 
 Rules:
 
-1. `card_ids` must be exactly length-10 for standard QB decks.
+1. `card_ids` must be exactly length-15 for standard QB decks.
 2. No hydration occurs in the Deck.
 3. Deck stores the seed and instantiates its own RNG.
 
@@ -107,15 +118,15 @@ Rules:
 ### **4.4 Draw Semantics**
 
 ```python
-card_id = deck.draw()
-card_ids = deck.draw_n(n)
+card_id = deck.draw()      # Optional[str]; None if empty
+card_ids = deck.draw_n(n)  # stops early if deck is empty
 ```
 
 Rules:
 
 * draw returns the next item in the shuffled sequence
-* drawing beyond end of deck is an **error** (QB has no reshuffle rules)
-* draw_n returns list preserving order
+* drawing beyond end of deck does **not** error; returns None
+* draw_n returns list preserving order (may be shorter than n)
 
 ### **4.5 Mulligan Specification**
 
@@ -212,7 +223,9 @@ Requirements:
 
   * two decks
   * optionally initial hands
-* Must support opening-hand draw of 3 cards for each side (QB rule standard)
+* Must support opening-hand draw of **5** cards for each side
+* Turn 1 start-of-turn draw is **skipped**; draws begin on turn 2
+* Mulligan: before turn 1, each side may replace any subset of the opening 5 cards once, drawing back to 5
 
 ### **6.4 Cloning**
 
@@ -244,7 +257,9 @@ state.draw_start_of_turn()
 
 Rules:
 
-* Side-to-act draws 1 card from its deck.
+* Turn 1 draw is skipped.
+* From turn 2 onward, side-to-act draws 1 card from its deck.
+* If the deck is empty, no card is drawn and play continues.
 * Card is added to corresponding Hand.
 
 ### **7.2 Play Phase**
@@ -282,6 +297,8 @@ state.play_card_from_hand(side, hand_index, lane, col)
 
 * Advance `side_to_act`
 * Increment `turn`
+* Track consecutive passes; two consecutive passes end the game
+* Game also ends if all 15 tiles are occupied
 
 ---
 

@@ -12,8 +12,8 @@ class Deck:
     """
 
     def __init__(self, card_ids: List[str], seed: Optional[int] = None):
-        if len(card_ids) != 10:
-            raise ValueError("Deck must contain exactly 10 card IDs.")
+        if len(card_ids) != 15:
+            raise ValueError("Deck must contain exactly 15 card IDs.")
 
         self._seed = 0 if seed is None else seed
         self._rng = random.Random(self._seed)
@@ -29,10 +29,10 @@ class Deck:
         self._rng.shuffle(self._order)
         self._draw_pointer = 0
 
-    def draw(self) -> str:
-        """Draw the next card ID; raises if deck is exhausted."""
+    def draw(self) -> Optional[str]:
+        """Draw the next card ID; returns None if deck is exhausted."""
         if self._draw_pointer >= len(self._order):
-            raise RuntimeError("Cannot draw: deck is empty.")
+            return None
 
         card_id = self._order[self._draw_pointer]
         self._draw_pointer += 1
@@ -40,7 +40,13 @@ class Deck:
 
     def draw_n(self, n: int) -> List[str]:
         """Draw n cards in order."""
-        return [self.draw() for _ in range(n)]
+        drawn: List[str] = []
+        for _ in range(n):
+            card = self.draw()
+            if card is None:
+                break
+            drawn.append(card)
+        return drawn
 
     def cards_remaining(self) -> int:
         return len(self._order) - self._draw_pointer
