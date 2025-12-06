@@ -19,8 +19,8 @@ It is not about rules or legality or effects — those already exist.
 This layer consumes deterministic state from:
 
 * Simulation Layer (Phase C)
-* Enemy Observation Layer (Phase D) 
-* Scoring Layer (v3.0) 
+* Enemy Observation Layer (Phase D)
+* Scoring Layer (v3.0)
 
 and produces a structured, deterministic prediction model for the **Coaching Layer (Phase F)**.
 
@@ -111,7 +111,7 @@ class InferredEnemyDeck:
 
 ### Semantics:
 
-* Each deck is a **candidate 10-card deck** consistent with observations.
+* Each deck is a **candidate 15-card deck** consistent with observations.
 * Weights sum to **1.0**.
 * In known-deck mode (Phase D), this becomes trivial:
 
@@ -174,7 +174,7 @@ Compute:
 4. Weight each hand by:
 
 ```
-Probability(hand | deck) = 
+Probability(hand | deck) =
     1 / (number of possible hands for that deck)
 weighted by deck weight
 ```
@@ -247,11 +247,11 @@ The PredictionEngine shall expose the following methods:
 2. Otherwise construct deck candidates:
 
    * Identify **required cards** = all observed non-token enemy card_ids.
-   * Generate candidate decks of size 10 satisfying:
+   * Generate candidate decks of size 15 satisfying:
 
      * all required cards appear
      * duplicates <= 3
-     * total cards = 10
+     * total cards = 15
    * Limit total candidates to threshold (default max 200)
 
      * If more → prune using cost distribution similarity to required cards.
@@ -310,7 +310,7 @@ Steps:
 4. Apply effects (EffectEngine)
 5. Cleanup destruction (Phase C semantics)
 6. Compute match score (rules-level) using scoring_engine
-7. Compute evaluation_scalar (engine-level) using LanePowerEvaluator (v2.1) described in `qb_engine_v2.1.0.md` 
+7. Compute evaluation_scalar (engine-level) using LanePowerEvaluator (v2.1) described in `qb_engine_v2.1.0.md`
 8. Return all.
 
 ---
@@ -421,7 +421,7 @@ with the following test groups.
 * Observed enemy played: `["003", "020"]`
 * Generate candidate decks.
 * Assert every candidate contains these cards.
-* Assert no candidate exceeds 10 cards or 3 copies of any ID.
+* Assert no candidate exceeds 15 cards or 3 copies of any ID.
 
 ### **test_infer_enemy_decks_pruned_under_cap**
 
@@ -434,9 +434,9 @@ with the following test groups.
 
 ### **test_infer_enemy_hand_simple_known_deck**
 
-* Turn = 1, no plays yet, known deck of 10 cards.
+* Turn = 1, no plays yet, known deck of 15 cards.
 * Hand size = 5.
-* Expect `C(10,5)` equally weighted hypotheses.
+* Expect `C(15,5)` equally weighted hypotheses.
 
 ### **test_infer_enemy_hand_after_plays**
 
@@ -449,8 +449,9 @@ with the following test groups.
 
 ### **test_enumerate_enemy_moves_respects_legality**
 
-* If tile is not legal (enemy tile, neutral tile, occupied tile), move must not be included.
-* If rank >= card.cost on YOU-owned tile, move included.
+* For each candidate move, PredictionEngine must delegate legality to `LegalityChecker` with side = ENEMY.
+* If `LegalityChecker` reports the tile is **not legal for ENEMY** (e.g. YOU-owned tile, neutral tile without sufficient enemy rank, occupied tile, or cost > visible rank), the move must **not** be included.
+* If `LegalityChecker` reports the tile **is legal for ENEMY** (empty ENEMY-owned tile with visible rank ≥ card.cost and all other rules satisfied), the move **must** be included.
 
 ---
 
@@ -519,67 +520,12 @@ Phase E is complete when:
    * Correctly weighted
    * Compatible with Phase F
 
----
-
-# **CODex-READY IMPLEMENTATION PROMPT**
-
-Paste the following into VS Code to implement Phase E:
-
----
-
-```text
-You are Codex, editing the local deterministic qbCoach engine.
-
-Use the authoritative Phase E spec in docs/prediction_design_spec.md.
-
-Task:
-Implement the entire Prediction Engine (Epic E).
-
-Create:
-    qb_engine/prediction.py
-
-Implement the following data models:
-    - InferredEnemyDeck
-    - HandHypothesis
-    - EnemyHandBelief
-    - EnemyMoveOutcome
-    - ThreatMap
-    - PredictionEngine
-
-PredictionEngine must implement:
-    - infer_enemy_decks(...)
-    - infer_enemy_hand(...)
-    - enumerate_enemy_moves(...)
-    - simulate_enemy_move(...)
-    - compute_threat_map(...)
-    - full_enemy_prediction(...)
-
-Requirements:
-    - Deterministic only (no RNG use)
-    - Clone-safe (never mutate passed-in GameState)
-    - Use LegalityChecker, ProjectionEngine, EffectEngine, ScoringEngine
-    - Hydrate all card data from JSON DB
-    - Enforce 10-card deck, <=3 copies per card
-    - Limit candidate deck count to 200 using pruning rules
-    - Use weighted probabilities for hand inference
-    - Produce ThreatMap outputs as defined
-    - Do NOT modify existing engine modules
-
-Add new tests:
-    qb_engine/test_prediction.py
-Tests must cover deck inference, hand inference, move enumeration,
-simulation integrity, and threat map aggregation.
-
-Ensure all tests (old + new) pass.
-```
-
----
 
 # **Integration Guidance Summary**
 
 * New file: `qb_engine/prediction.py`
 * Update `qb_engine/__init__.py` exports
-* Add `docs/prediction_design_spec.md` (this file)
+* Add `docs/prediction_design_spec_phase_D.md` (this file)
 * Add `qb_engine/test_prediction.py`
 * No changes to Phase A–D modules
 * PredictionEngine receives external instances:
