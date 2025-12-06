@@ -525,7 +525,7 @@ Phase E is complete when:
 
 * New file: `qb_engine/prediction.py`
 * Update `qb_engine/__init__.py` exports
-* Add `docs/prediction_design_spec_phase_D.md` (this file)
+* Add `docs/prediction_design_spec_phase_E.md` (this file)
 * Add `qb_engine/test_prediction.py`
 * No changes to Phase A–D modules
 * PredictionEngine receives external instances:

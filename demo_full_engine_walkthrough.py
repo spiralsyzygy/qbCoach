@@ -1,13 +1,13 @@
 """
 demo_full_engine_walkthrough.py
 
-Deterministic Phase C walkthrough:
-- Seeded Deck/Hand/GameState wiring
-- Opening draws + start-of-turn draw
+Deterministic walkthrough:
+- Seeded Deck/Hand/GameState wiring (15-card decks, 5-card openers, mulligan)
+- Turn-1 draw skip, projection/effects, influence recompute
 - Play from hand (YOU), mirrored play (ENEMY)
-- Projection/effects application and influence recompute
 - Effective power overlays via EffectEngine
 - Lane + match scoring via compute_match_score
+- Phase E snapshot via PredictionEngine
 """
 
 from __future__ import annotations
@@ -18,7 +18,9 @@ from qb_engine.card_hydrator import CardHydrator
 from qb_engine.deck import Deck
 from qb_engine.effect_engine import EffectEngine
 from qb_engine.game_state import GameState
+from qb_engine.enemy_observation import EnemyObservation
 from qb_engine.legality import is_legal_placement
+from qb_engine.prediction import PredictionEngine
 from qb_engine.scoring import compute_match_score
 
 LANE_NAMES = ["TOP", "MID", "BOT"]
@@ -93,7 +95,7 @@ def main() -> None:
     project_root = Path(__file__).resolve().parent
     data_dir = project_root / "data"
 
-    header("Phase C demo — deterministic engine walkthrough")
+    header("Phase C/E demo — deterministic engine walkthrough")
     print(f"Project root: {project_root}")
 
     hydrator = CardHydrator(str(data_dir / "qb_DB_Complete_v2.json"))
@@ -104,7 +106,7 @@ def main() -> None:
     player_deck = Deck(demo_ids, seed=123)
     enemy_deck = Deck(demo_ids, seed=456)
 
-    # Initialize GameState (auto-draws 3-card opening hands)
+    # Initialize GameState (auto-draws 5-card opening hands)
     state = GameState(
         player_deck=player_deck,
         enemy_deck=enemy_deck,
@@ -112,6 +114,7 @@ def main() -> None:
         effect_engine=effect_engine,
         seed=999,
     )
+    obs = EnemyObservation(known_enemy_deck_ids=demo_ids)
 
     header("Step 1 — Opening hands and initial board")
     describe_hand("YOU", state.player_hand)
@@ -120,6 +123,10 @@ def main() -> None:
     describe_deck("ENEMY", state.enemy_deck)
     print("Initial board:")
     state.board.print_board()
+
+    header("Step 1b — Optional mulligan for YOU (replace first two cards)")
+    state.mulligan("Y", [0, 1])
+    describe_hand("YOU", state.player_hand)
 
     # ------------------------------------------------------------------ #
     # Turn 1: YOU
@@ -132,12 +139,19 @@ def main() -> None:
     header("Step 3 — YOU play first legal card from hand")
     you_play = find_first_play(state.board, "Y", state.player_hand)
     if you_play is None:
-        print("No legal placement found for YOU; stopping demo.")
-        return
+        # Ensure a legal placement by injecting a cheap card if needed for the demo
+        fallback_card = hydrator.get_card("001")
+        state.player_hand.cards.append(fallback_card)
+        print("Injected fallback card 001 to hand for demo legality.")
+        you_play = find_first_play(state.board, "Y", state.player_hand)
+        if you_play is None:
+            print("No legal placement found for YOU; stopping demo.")
+            return
     hand_idx_y, lane_y, col_y = you_play
     print(f"Placing YOU card hand[{hand_idx_y}] at {LANE_NAMES[lane_y]}-{col_y + 1}")
     state.play_card_from_hand("Y", hand_index=hand_idx_y, lane=lane_y, col=col_y)
     describe_board(state.board, effect_engine)
+    obs.update_from_game_state(state)
 
     # ------------------------------------------------------------------ #
     # Turn 2: ENEMY
@@ -160,12 +174,23 @@ def main() -> None:
     print(f"Placing ENEMY card hand[{hand_idx_e}] at {LANE_NAMES[lane_e]}-{col_e + 1}")
     state.play_card_from_hand("E", hand_index=hand_idx_e, lane=lane_e, col=col_e)
     describe_board(state.board, effect_engine)
+    obs.update_from_game_state(state)
 
     # ------------------------------------------------------------------ #
     # Scoring
     # ------------------------------------------------------------------ #
     header("Step 7 — Scoring summary (lane scores + match total)")
     describe_match_score(state.board, effect_engine)
+
+    # ------------------------------------------------------------------ #
+    # Prediction snapshot (Phase E)
+    # ------------------------------------------------------------------ #
+    header("Step 8 — Enemy prediction snapshot (deterministic 1-ply)")
+    predictor = PredictionEngine(hydrator=hydrator, effect_engine=effect_engine)
+    threat = predictor.full_enemy_prediction(state, obs.state)
+    print(f"Enemy best-case margin: {threat.best_enemy_score}")
+    print(f"Enemy expected margin: {threat.expected_enemy_score}")
+    print(f"Possible enemy outcomes evaluated: {len(threat.outcomes)}")
 
 
 if __name__ == "__main__":
