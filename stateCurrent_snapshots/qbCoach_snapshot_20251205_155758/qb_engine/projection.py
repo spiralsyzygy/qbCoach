@@ -17,24 +17,6 @@ LANE_INDEX_TO_NAME = {
 }
 
 
-def _pattern_index_to_offsets(p_row_index: int, p_col_index: int) -> tuple[int, int]:
-    """
-    Convert pattern grid indices to board offsets.
-
-    Pattern grid convention (to avoid collision with board columns):
-      - Columns are letters E,D,C,B,A (left→right) in the JSON grid indices 0..4.
-      - Rows are numbers 1..5 (top→bottom) in the JSON grid indices 0..4.
-      - W is always at (col=C, row=3) => indices (2, 2).
-
-    Returned offsets are relative to the placement tile on the board:
-      row_offset: -2..+2 added to the lane index (top/bot)
-      col_offset: -2..+2 added to the board column index (left/right)
-    """
-    row_offset = p_row_index - 2  # numbers 1..5 top→bottom -> -2..+2
-    col_offset = p_col_index - 2  # letters E..A left→right -> -2..+2
-    return row_offset, col_offset
-
-
 @dataclass
 class ProjectionResult:
     """
@@ -63,9 +45,9 @@ def compute_projection_targets(
 
     Uses the mapping from the rules:
 
-        rowOffset = pRowIndex - 2   # pattern rows 1..5 (top→bottom), W at row 3
-        colOffset = pColIndex - 2   # pattern cols E..A (left→right), W at col C
-        lane'     = lane + rowOffset
+        rowOffset = pRowIndex - 2
+        colOffset = pColIndex - 2
+        lane'     = lane - rowOffset
         col'      = col  + colOffset
 
     Only cells with "P", "E", or "X" in card.grid are returned.
@@ -80,9 +62,10 @@ def compute_projection_targets(
             if cell not in ("P", "E", "X"):
                 continue
 
-            row_offset, col_offset = _pattern_index_to_offsets(p_row_index, p_col_index)
+            row_offset = p_row_index - 2
+            col_offset = p_col_index - 2
 
-            lane_prime = root_lane_index + row_offset
+            lane_prime = root_lane_index - row_offset
             col_prime = root_col_index + col_offset
 
             # Keep only tiles that land on the 3x5 board
@@ -114,9 +97,10 @@ def compute_projection_targets_for_enemy(
             if cell not in ("P", "E", "X"):
                 continue
 
-            row_offset, col_offset = _pattern_index_to_offsets(p_row_index, p_col_index)
+            row_offset = p_row_index - 2
+            col_offset = p_col_index - 2
 
-            lane_prime = root_lane_index + row_offset
+            lane_prime = root_lane_index - row_offset
             col_prime = root_col_index - col_offset  # mirrored horizontally
 
             if 0 <= lane_prime < 3 and 0 <= col_prime < 5:

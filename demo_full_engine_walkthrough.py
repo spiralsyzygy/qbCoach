@@ -1,34 +1,27 @@
 """
 demo_full_engine_walkthrough.py
 
-Smallest reproducible example of scoring in the live engine.
-Walks through: hydrate cards, show legality, place YOU card with projections,
-place ENEMY card with mirrored projections, show effective power overlays, and
-compute lane + match scoring. Intended as a quick-start blueprint and
-debugging harness.
+Deterministic Phase C walkthrough:
+- Seeded Deck/Hand/GameState wiring
+- Opening draws + start-of-turn draw
+- Play from hand (YOU), mirrored play (ENEMY)
+- Projection/effects application and influence recompute
+- Effective power overlays via EffectEngine
+- Lane + match scoring via compute_match_score
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from qb_engine.board_state import BoardState, LANE_NAME_TO_INDEX
 from qb_engine.card_hydrator import CardHydrator
+from qb_engine.deck import Deck
 from qb_engine.effect_engine import EffectEngine
+from qb_engine.game_state import GameState
 from qb_engine.legality import is_legal_placement
-from qb_engine.projection import (
-    apply_effects_for_enemy,
-    apply_effects_for_you,
-    apply_pawns_for_enemy,
-    apply_pawns_for_you,
-    compute_projection_targets,
-    compute_projection_targets_for_enemy,
-)
 from qb_engine.scoring import compute_match_score
 
-
-# Invert the lane name mapping so we can go index -> name
-LANE_INDEX_TO_NAME = {v: k for k, v in LANE_NAME_TO_INDEX.items()}
+LANE_NAMES = ["TOP", "MID", "BOT"]
 
 
 def header(title: str) -> None:
@@ -37,164 +30,34 @@ def header(title: str) -> None:
     print("=" * 80)
 
 
-def find_first_legal_placement(board: BoardState, card) -> tuple[int, int] | None:
-    """
-    Scan the board for the first legal placement for YOU using the current legality rules.
-    Returns (lane_index, col_index) or None if nothing is legal.
-    """
-    for lane_index in range(3):
-        for col_index in range(5):
-            if is_legal_placement(board, lane_index, col_index, card):
-                return lane_index, col_index
-    return None
+def card_ids_for_demo(hydrator: CardHydrator) -> list[str]:
+    # Grab a deterministic set of 10 IDs (skips _meta)
+    return sorted(cid for cid in hydrator.index.keys() if cid != "_meta")[:10]
 
 
-def describe_board(board: BoardState, effect_engine: EffectEngine | None = None) -> None:
-    """
-    Print the board; if effect_engine is supplied, include auras and effective power.
-    """
-    if effect_engine is None:
-        board.print_board()
-    else:
-        board.print_board_with_effects_and_power(effect_engine)
+def describe_hand(label: str, hand) -> None:
+    ids = hand.as_card_ids()
+    print(f"{label} hand ({len(ids)} cards): {ids}")
 
 
-def main() -> None:
-    # ------------------------------------------------------------------ #
-    # 0. Wiring: locate data files, hydrate cards, construct effect engine
-    # ------------------------------------------------------------------ #
-    project_root = Path(__file__).resolve().parent
-    data_dir = project_root / "data"
+def describe_deck(label: str, deck: Deck) -> None:
+    print(f"{label} deck remaining: {deck.cards_remaining()}")
 
-    cards_path = data_dir / "qb_DB_Complete_v2.json"
-    effects_path = data_dir / "qb_effects_v1.json"
 
-    hydrator = CardHydrator(str(cards_path))
-    effect_engine = EffectEngine(effects_path, hydrator)
+def describe_board(board, effect_engine) -> None:
+    board.print_board_with_effects_and_power(effect_engine)
 
-    # Choose a simple "P-only" card for YOU and a second card for ENEMY.
-    # Swap IDs as desired for exploration.
-    you_card = hydrator.get_card("001")  # Security Officer (simple pattern)
-    enemy_card = hydrator.get_card("003")  # Grenadier (used in effect tests)
 
-    # ------------------------------------------------------------------ #
-    # 1. Initial board
-    # ------------------------------------------------------------------ #
-    board = BoardState.create_initial_board()
-
-    header("Step 1 — Initial board (ownership / ranks only)")
-    describe_board(board)
-
-    # ------------------------------------------------------------------ #
-    # 2. Show legal placements for your card
-    # ------------------------------------------------------------------ #
-    header(f"Step 2 — Legal placements for YOU card {you_card.id} ({you_card.name})")
-
-    legal = []
-    for lane_index in range(3):
-        for col_index in range(5):
-            if is_legal_placement(board, lane_index, col_index, you_card):
-                lane_name = LANE_INDEX_TO_NAME[lane_index]
-                col_number = col_index + 1
-                legal.append((lane_index, col_index))
-                print(f"  • {lane_name} {col_number}")
-
-    if not legal:
-        print("No legal placements found for this card on the initial board.")
-        return
-
-    # For demo purposes, pick the first legal tile
-    lane_index_y, col_index_y = legal[0]
-    lane_name_y = LANE_INDEX_TO_NAME[lane_index_y]
-    col_number_y = col_index_y + 1
-
-    print(
-        f"\nChoosing first legal placement for YOU: "
-        f"{lane_name_y} {col_number_y} for {you_card.id} ({you_card.name})"
-    )
-
-    # ------------------------------------------------------------------ #
-    # 3. Play your card: place + projection + effects
-    # ------------------------------------------------------------------ #
-    header("Step 3 — Applying your play (place card + projection + effects)")
-
-    # Place the card (also applies any on_play effects via EffectEngine)
-    board.place_card(lane_name_y, col_number_y, you_card, effect_engine)
-
-    print("Board after placing your card (no projection yet):")
-    describe_board(board)
-
-    # Compute and apply pawn/effect projections for YOU
-    proj_you = compute_projection_targets(lane_index_y, col_index_y, you_card)
-    apply_pawns_for_you(board, proj_you, you_card)
-    apply_effects_for_you(board, proj_you, you_card)
-
-    print("\nBoard after your pawn/effect projections and influence recompute:")
-    describe_board(board)
-
-    # ------------------------------------------------------------------ #
-    # 4. Enemy plays a card with mirrored projection
-    # ------------------------------------------------------------------ #
-    header(
-        f"Step 4 — Enemy play: place ENEMY card {enemy_card.id} ({enemy_card.name})"
-    )
-
-    # For the demo, place enemy card on their right-side column in MID lane.
-    # (This ignores enemy-side legality checks; it's just to exercise projection.)
-    lane_index_e = 1  # MID
-    col_index_e = 4  # column 5 (enemy's home side)
-    lane_name_e = LANE_INDEX_TO_NAME[lane_index_e]
-    col_number_e = col_index_e + 1
-
-    print(
-        f"Placing ENEMY card at {lane_name_e} {col_number_e} "
-        f"({enemy_card.id} {enemy_card.name})"
-    )
-
-    board.place_card(lane_name_e, col_number_e, enemy_card, effect_engine)
-
-    print("Board after enemy card placement (no projection yet):")
-    describe_board(board)
-
-    # Compute mirrored projection for enemy and apply pawn/effect changes
-    proj_enemy = compute_projection_targets_for_enemy(
-        lane_index_e, col_index_e, enemy_card
-    )
-    apply_pawns_for_enemy(board, proj_enemy, enemy_card)
-    apply_effects_for_enemy(board, proj_enemy, enemy_card)
-
-    print("\nBoard after enemy pawn/effect projections and influence recompute:")
-    describe_board(board)
-
-    # ------------------------------------------------------------------ #
-    # 5. Show auras and EFFECTIVE power using EffectEngine
-    # ------------------------------------------------------------------ #
-    header("Step 5 — Board with auras and EFFECTIVE power per occupied tile")
-
-    print(
-        "Conventions:\n"
-        "  • Empty tiles: [Y1] / [N0] / [E1] (with ★ if they have any auras)\n"
-        "  • Occupied tiles: [CARD_ID:effective_power] (★ if the tile has auras)\n"
-    )
-    describe_board(board, effect_engine=effect_engine)
-
-    # ------------------------------------------------------------------ #
-    # 6. Scoring: lane scores + match score
-    # ------------------------------------------------------------------ #
-    header("Step 6 — Scoring summary (lane scores + match total)")
-
+def describe_match_score(board, effect_engine) -> None:
     match_score = compute_match_score(board, effect_engine)
-
     for lane_score in match_score.lanes:
-        lane_name = LANE_INDEX_TO_NAME[lane_score.lane_index]
+        lane_name = LANE_NAMES[lane_score.lane_index]
         print(
-            f"{lane_name}: "
-            f"you={lane_score.power_you}, "
+            f"{lane_name}: you={lane_score.power_you}, "
             f"enemy={lane_score.power_enemy}, "
             f"winner={lane_score.winner}, "
             f"lane_points={lane_score.lane_points}"
         )
-
     print(
         "\nMATCH TOTAL:"
         f"\n  YOU   = {match_score.total_you}"
@@ -202,6 +65,107 @@ def main() -> None:
         f"\n  WINNER= {match_score.winner}"
         f"\n  MARGIN= {match_score.margin}"
     )
+
+
+def find_first_play(board, side: str, hand):
+    """
+    Find the first playable (hand_index, lane, col) for the given side across the hand.
+    Returns None if no play exists.
+    """
+    for h_idx, card in enumerate(hand.cards):
+        for lane in range(3):
+            for col in range(5):
+                tile = board.tile_at(lane, col)
+                if side == "Y":
+                    if is_legal_placement(board, lane, col, card):
+                        return h_idx, lane, col
+                else:
+                    if (
+                        tile.card_id is None
+                        and tile.owner == "E"
+                        and tile.rank >= card.cost
+                    ):
+                        return h_idx, lane, col
+    return None
+
+
+def main() -> None:
+    project_root = Path(__file__).resolve().parent
+    data_dir = project_root / "data"
+
+    header("Phase C demo — deterministic engine walkthrough")
+    print(f"Project root: {project_root}")
+
+    hydrator = CardHydrator(str(data_dir / "qb_DB_Complete_v2.json"))
+    effect_engine = EffectEngine(data_dir / "qb_effects_v1.json", hydrator)
+
+    # Build seeded decks so the walkthrough is reproducible
+    demo_ids = card_ids_for_demo(hydrator)
+    player_deck = Deck(demo_ids, seed=123)
+    enemy_deck = Deck(demo_ids, seed=456)
+
+    # Initialize GameState (auto-draws 3-card opening hands)
+    state = GameState(
+        player_deck=player_deck,
+        enemy_deck=enemy_deck,
+        hydrator=hydrator,
+        effect_engine=effect_engine,
+        seed=999,
+    )
+
+    header("Step 1 — Opening hands and initial board")
+    describe_hand("YOU", state.player_hand)
+    describe_hand("ENEMY", state.enemy_hand)
+    describe_deck("YOU", state.player_deck)
+    describe_deck("ENEMY", state.enemy_deck)
+    print("Initial board:")
+    state.board.print_board()
+
+    # ------------------------------------------------------------------ #
+    # Turn 1: YOU
+    # ------------------------------------------------------------------ #
+    header("Step 2 — Start of YOUR turn: draw 1")
+    state.draw_start_of_turn()
+    describe_hand("YOU", state.player_hand)
+    describe_deck("YOU", state.player_deck)
+
+    header("Step 3 — YOU play first legal card from hand")
+    you_play = find_first_play(state.board, "Y", state.player_hand)
+    if you_play is None:
+        print("No legal placement found for YOU; stopping demo.")
+        return
+    hand_idx_y, lane_y, col_y = you_play
+    print(f"Placing YOU card hand[{hand_idx_y}] at {LANE_NAMES[lane_y]}-{col_y + 1}")
+    state.play_card_from_hand("Y", hand_index=hand_idx_y, lane=lane_y, col=col_y)
+    describe_board(state.board, effect_engine)
+
+    # ------------------------------------------------------------------ #
+    # Turn 2: ENEMY
+    # ------------------------------------------------------------------ #
+    header("Step 4 — End YOUR turn → switch to ENEMY")
+    state.end_turn()
+    print(f"Turn: {state.turn}, side_to_act: {state.side_to_act}")
+
+    header("Step 5 — Start of ENEMY turn: draw 1")
+    state.draw_start_of_turn()
+    describe_hand("ENEMY", state.enemy_hand)
+    describe_deck("ENEMY", state.enemy_deck)
+
+    header("Step 6 — ENEMY plays first legal card (mirrored projection)")
+    enemy_play = find_first_play(state.board, "E", state.enemy_hand)
+    if enemy_play is None:
+        print("No legal placement found for ENEMY; stopping demo before scoring.")
+        return
+    hand_idx_e, lane_e, col_e = enemy_play
+    print(f"Placing ENEMY card hand[{hand_idx_e}] at {LANE_NAMES[lane_e]}-{col_e + 1}")
+    state.play_card_from_hand("E", hand_index=hand_idx_e, lane=lane_e, col=col_e)
+    describe_board(state.board, effect_engine)
+
+    # ------------------------------------------------------------------ #
+    # Scoring
+    # ------------------------------------------------------------------ #
+    header("Step 7 — Scoring summary (lane scores + match total)")
+    describe_match_score(state.board, effect_engine)
 
 
 if __name__ == "__main__":

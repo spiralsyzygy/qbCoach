@@ -29,9 +29,9 @@ def test_apply_pawn_projections_for_security_officer():
     proj = compute_projection_targets(lane_index, col_index, card)
 
     expected_targets = [
-        (0, 0, "P"),  # TOP-1 (pattern col C, row 2)
-        (1, 1, "P"),  # MID-2 (pattern col B, row 3)
-        (2, 0, "P"),  # BOT-1 (pattern col C, row 4)
+        (2, 0, "P"),  # BOT-1
+        (1, 1, "P"),  # MID-2
+        (0, 0, "P"),  # TOP-1
     ]
     assert proj.targets == expected_targets
 

@@ -117,17 +117,13 @@ Pattern grid is indexed as:
 
 ```
 
-Cols:    E, D, C, B, A  (left → right)
-Rows:    1, 2, 3, 4, 5  (top → bottom)
-Card W:  at (C,3)  // column C, row 3
+Rows:    E, D, C, B, A  (top → bottom)
+Cols:    1, 2, 3, 4, 5  (left → right)
+Card W:  at (C,3)
 
 ```
 
 Mapping to board described in Rules §8.2.
-
-**Coordinate disambiguation:** Pattern grid uses lettered columns (E→A) and numbered rows (1→5).
-The game board uses lane names (TOP/MID/BOT) and numbered columns (1–5 left→right). Always
-refer to pattern coordinates as `COLROW` (e.g., C2) and board positions as `LANE-COL` (e.g., TOP-1).
 
 ## 6.2 Projection Types
 

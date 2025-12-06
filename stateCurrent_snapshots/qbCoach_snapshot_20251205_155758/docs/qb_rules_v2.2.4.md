@@ -141,8 +141,8 @@ tiles, and how those changes interact with destruction.
 
 Each card has a 5×5 pattern grid relative to its placement tile:
 
-* Columns: **E, D, C, B, A** (left → right, relative to the card)
-* Rows: **1–5** (top → bottom)
+* Rows: **E, D, C, B, A** (top → bottom, relative to the card)
+* Columns: **1–5** (left → right)
 * The placement tile **W** is always at grid coordinate **(C,3)**.
 
 Pattern entries:
@@ -161,18 +161,14 @@ Let `(pRow, pCol)` be a pattern coordinate, with C = row index 2 and column 3
 = index 2. Then:
 
 ```text
-  rowOffset = pRowIndex − 2   # numbers 1..5 (top→bottom) become offsets −2..+2 relative to W at row 3
-  colOffset = pColIndex − 2   # letters E,D,C,B,A (left→right) become offsets −2..+2 with W at column C
+rowOffset = pRowIndex − 2
+colOffset = pColIndex − 2
 
-  lane' = lane + rowOffset
-  col'  = col  + colOffset
+lane' = lane − rowOffset
+col'  = col  + colOffset
 ```
 
 The projection applies only if `(lane', col')` lies within the 3×5 board.
-
-**Coordinate disambiguation:** Pattern grid uses lettered columns (E→A) and numbered rows (1→5).
-The game board uses lane names (TOP/MID/BOT) and numbered columns (1–5 left→right). Keep these
-two systems distinct in code, logs, and docs to avoid numeric label collisions.
 
 From a rules perspective, this mapping defines the relative positions of P/E/X
 tiles around W. The engine may mirror or transform coordinates for enemy
