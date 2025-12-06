@@ -126,13 +126,17 @@ def main() -> None:
     state.board.print_board()
 
     header("Step 1b — Optional mulligan for YOU (replace first two cards)")
-    state.mulligan("Y", [0, 1])
+    state.apply_opening_mulligan("Y", indices=[0, 1])
     describe_hand("YOU", state.player_hand)
+
+    header("Step 1c — Enemy mulligan (placeholder heuristic: cost >= 4)")
+    state.perform_default_enemy_mulligan()
+    describe_hand("ENEMY", state.enemy_hand)
 
     # ------------------------------------------------------------------ #
     # Turn 1: YOU
     # ------------------------------------------------------------------ #
-    header("Step 2 — Start of YOUR turn: draw 1")
+    header("Step 2 — Start of YOUR turn (first-turn draw is skipped)")
     state.draw_start_of_turn()
     describe_hand("YOU", state.player_hand)
     describe_deck("YOU", state.player_deck)
@@ -161,7 +165,7 @@ def main() -> None:
     state.end_turn()
     print(f"Turn: {state.turn}, side_to_act: {state.side_to_act}")
 
-    header("Step 5 — Start of ENEMY turn: draw 1")
+    header("Step 5 — Start of ENEMY turn (first-turn draw is skipped)")
     state.draw_start_of_turn()
     describe_hand("ENEMY", state.enemy_hand)
     describe_deck("ENEMY", state.enemy_deck)

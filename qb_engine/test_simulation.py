@@ -108,18 +108,28 @@ def test_draw_start_of_turn_increases_hand_and_consumes_deck():
     state = _make_state()
 
     assert len(state.player_hand.cards) == 5
-    before = state.player_deck.cards_remaining()
+    player_before = state.player_deck.cards_remaining()
+    enemy_before = state.enemy_deck.cards_remaining()
 
-    state.draw_start_of_turn()  # turn 1 -> skipped
+    state.draw_start_of_turn()  # YOUR turn 1 -> skipped
     assert len(state.player_hand.cards) == 5
-    assert state.player_deck.cards_remaining() == before
+    assert state.player_deck.cards_remaining() == player_before
 
-    # Still player turn; draw again after advancing turn count manually
-    state.end_turn()  # side_to_act -> E, turn 2
-    state.end_turn()  # side_to_act -> Y, turn 3
-    state.draw_start_of_turn()
+    # Advance to ENEMY first turn (no draw) then back to YOUR second turn
+    state.end_turn()  # side_to_act -> E, Y turn recorded
+    state.draw_start_of_turn()  # ENEMY turn 1 -> skipped
+    assert len(state.enemy_hand.cards) == 5
+    assert state.enemy_deck.cards_remaining() == enemy_before
+
+    state.end_turn()  # side_to_act -> Y, E turn recorded
+    state.draw_start_of_turn()  # YOUR turn 2 -> draw 1
     assert len(state.player_hand.cards) == 6
-    assert state.player_deck.cards_remaining() == before - 1
+    assert state.player_deck.cards_remaining() == player_before - 1
+
+    state.end_turn()  # side_to_act -> E
+    state.draw_start_of_turn()  # ENEMY turn 2 -> draw 1
+    assert len(state.enemy_hand.cards) == 6
+    assert state.enemy_deck.cards_remaining() == enemy_before - 1
 
 
 def test_play_card_from_hand_for_you_and_enemy():
@@ -208,6 +218,23 @@ def test_mulligan_and_hand_count():
     assert new_hand != original_hand
     with pytest.raises(ValueError):
         state.mulligan("Y", [0])  # only once
+
+
+def test_enemy_mulligan_path_symmetry():
+    hydrator = _make_hydrator()
+    effect_engine = _make_effect_engine(hydrator)
+    ids = _first_card_ids(hydrator)
+    state = GameState(
+        player_deck=Deck(ids, seed=32),
+        enemy_deck=Deck(ids, seed=33),
+        hydrator=hydrator,
+        effect_engine=effect_engine,
+        seed=32,
+    )
+    state.apply_opening_mulligan("E", indices=[0])
+    assert len(state.enemy_hand.cards) == 5
+    with pytest.raises(ValueError):
+        state.mulligan("E", [0])  # only once per side
 
 
 def test_pass_and_game_end_detection():

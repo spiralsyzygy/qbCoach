@@ -63,14 +63,16 @@ class GameState:
         self.side_to_act: Literal["Y", "E"] = "Y"
         self.consecutive_passes: int = 0
         self._mulligan_used = {"Y": False, "E": False}
+        # Track per-side turn counts to handle first-turn draw skips.
+        self._turns_taken = {"Y": 0, "E": 0}
 
     # ------------------------------------------------------------------ #
     # Turn mechanics
     # ------------------------------------------------------------------ #
 
     def draw_start_of_turn(self) -> None:
-        """Side to act draws one card; skipped on turn 1."""
-        if self.turn == 1:
+        """Side to act draws one card; skipped on that side's first turn."""
+        if self._turns_taken[self.side_to_act] == 0:
             return
         if self.side_to_act == "Y":
             card_id = self.player_deck.draw()
@@ -131,10 +133,10 @@ class GameState:
 
     def mulligan(self, side: Literal["Y", "E"], indices_to_replace: list[int]) -> None:
         """
-        Perform a single mulligan for the given side before turn 1.
+        Perform a single mulligan for the given side before their first turn.
         """
-        if self.turn != 1:
-            raise ValueError("Mulligan allowed only before the first turn begins.")
+        if self._turns_taken[side] > 0:
+            raise ValueError("Mulligan allowed only before the side's first turn begins.")
         if self._mulligan_used[side]:
             raise ValueError("Mulligan already used for this side.")
 
@@ -146,13 +148,39 @@ class GameState:
         hand.sync_from_ids(new_ids)
         self._mulligan_used[side] = True
 
+    def suggest_opening_mulligan_indices(self, side: Literal["Y", "E"]) -> list[int]:
+        """
+        Deterministic placeholder mulligan heuristic.
+        Currently mulligans cards with cost >= 4 (expensive openers).
+        """
+        hand = self.player_hand if side == "Y" else self.enemy_hand
+        return [idx for idx, card in enumerate(hand.cards) if card.cost >= 4]
+
+    def apply_opening_mulligan(self, side: Literal["Y", "E"], indices: Optional[list[int]] = None) -> None:
+        """
+        Apply an opening mulligan for the side using provided indices or a suggested heuristic.
+        No-op if the suggested/explicit index list is empty.
+        """
+        indices_to_replace = self.suggest_opening_mulligan_indices(side) if indices is None else indices
+        if not indices_to_replace:
+            return
+        self.mulligan(side, indices_to_replace)
+
+    def perform_default_enemy_mulligan(self) -> None:
+        """
+        Convenience hook to run the enemy's opening mulligan through the same path as the player.
+        """
+        self.apply_opening_mulligan("E")
+
     def pass_turn(self) -> None:
         """Player passes without playing; used for game-end detection."""
         self.consecutive_passes += 1
         self.end_turn()
 
     def end_turn(self) -> None:
-        self.side_to_act = "E" if self.side_to_act == "Y" else "Y"
+        acting_side = self.side_to_act
+        self._turns_taken[acting_side] += 1
+        self.side_to_act = "E" if acting_side == "Y" else "Y"
         self.turn += 1
 
     def is_game_over(self) -> bool:
@@ -184,6 +212,7 @@ class GameState:
         clone.side_to_act = self.side_to_act
         clone.consecutive_passes = self.consecutive_passes
         clone._mulligan_used = dict(self._mulligan_used)
+        clone._turns_taken = dict(self._turns_taken)
 
         clone.rng = random.Random()
         clone.rng.setstate(self.rng.getstate())

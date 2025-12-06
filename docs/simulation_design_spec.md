@@ -75,8 +75,8 @@ Phase C must use a **dedicated RNG object**, never global randomness.
 # **3A. Core Turn/Deck Constraints (Rules-Aligned)**
 
 - Deck size: 15 cards per player.
-- Opening hand: draw 5 cards; mulligan allowed once before turn 1 (replace any subset, redraw to 5).
-- Turn 1: skip the start-of-turn draw; draws begin on turn 2.
+- Opening hand: draw 5 cards; mulligan allowed once before each side's first turn (replace any subset, redraw to 5).
+- Each side's first turn: skip the start-of-turn draw; draws begin on that side's second turn.
 - Draw on empty deck: no crash, simply no card drawn.
 - Game end: all 15 tiles occupied **or** two consecutive passes.
 - Hand size: variable; no auto-end on empty deck.
@@ -224,8 +224,8 @@ Requirements:
   * two decks
   * optionally initial hands
 * Must support opening-hand draw of **5** cards for each side
-* Turn 1 start-of-turn draw is **skipped**; draws begin on turn 2
-* Mulligan: before turn 1, each side may replace any subset of the opening 5 cards once, drawing back to 5
+* Each side skips its own first start-of-turn draw; draws begin on that side's second turn
+* Mulligan: before a side takes its first turn, it may replace any subset of the opening 5 cards once, drawing back to 5
 
 ### **6.4 Cloning**
 
@@ -257,8 +257,8 @@ state.draw_start_of_turn()
 
 Rules:
 
-* Turn 1 draw is skipped.
-* From turn 2 onward, side-to-act draws 1 card from its deck.
+* For each side, the first start-of-turn draw is skipped.
+* From the second turn onward for that side, side-to-act draws 1 card from its deck.
 * If the deck is empty, no card is drawn and play continues.
 * Card is added to corresponding Hand.
 

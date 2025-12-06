@@ -109,9 +109,9 @@ ENEMY and NEUTRAL tiles are always illegal as placement targets.
 
 - Deck size: **15** cards per player.
 - Opening draw: each player draws **5** cards.
-- Mulligan: before turn 1, each player may replace any subset of those 5 cards once, drawing back to 5.
+- Mulligan: before their first turn, each player may replace any subset of those 5 cards once, drawing back to 5.
 - Turn order: P1 starts; turns alternate.
-- Start-of-turn draw: draw **1 card**, except **skip on turn 1**. If the deck is empty, no card is drawn but the game continues.
+- Start-of-turn draw: draw **1 card**, except **skip on that side’s first turn**. If the deck is empty, no card is drawn but the game continues.
 - Hand size: variable; no hard cap and the game does not end on empty deck.
 - Passing: a player may pass their turn; the game ends if both players pass consecutively.
 - Game end: either all 15 tiles are occupied or there are two consecutive passes.
