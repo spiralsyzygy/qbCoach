@@ -18,6 +18,7 @@ from qb_engine.card_hydrator import CardHydrator
 from qb_engine.deck import Deck
 from qb_engine.effect_engine import EffectEngine
 from qb_engine.game_state import GameState
+from qb_engine.coaching import CoachingEngine
 from qb_engine.enemy_observation import EnemyObservation
 from qb_engine.legality import is_legal_placement
 from qb_engine.prediction import PredictionEngine
@@ -191,6 +192,33 @@ def main() -> None:
     print(f"Enemy best-case margin: {threat.best_enemy_score}")
     print(f"Enemy expected margin: {threat.expected_enemy_score}")
     print(f"Possible enemy outcomes evaluated: {len(threat.outcomes)}")
+
+    # ------------------------------------------------------------------ #
+    # Coaching recommendation (Phase F)
+    # ------------------------------------------------------------------ #
+    header("Step 9 — Coaching recommendation (top moves for YOU)")
+    coach = CoachingEngine(hydrator=hydrator, prediction_engine=predictor)
+    reco_state = state.clone()
+    if reco_state.side_to_act != "Y":
+        reco_state.end_turn()  # advance to YOUR turn for recommendation
+    reco = coach.recommend_moves(reco_state, obs)
+    print(f"Position margin (you-enemy): {reco.position.you_margin}")
+    if not reco.moves:
+        print(reco.primary_message)
+        return
+    top_moves = reco.moves[: reco.top_n]
+    for mv in top_moves:
+        lane_name = LANE_NAMES[mv.move.lane_index]
+        print(
+            f"Move: {mv.move.card_id} -> {lane_name}-{mv.move.col_index + 1} | "
+            f"expected margin: {mv.you_margin_after_enemy_expected:.1f} | "
+            f"tags: {', '.join(mv.explanation_tags)}"
+        )
+    print(f"Primary message: {reco.primary_message}")
+    if reco.secondary_messages:
+        print("Secondary:")
+        for line in reco.secondary_messages:
+            print(f"  - {line}")
 
 
 if __name__ == "__main__":

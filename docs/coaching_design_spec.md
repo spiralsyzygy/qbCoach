@@ -168,6 +168,17 @@ Semantics:
 * `enemy_threat_after_move` is optional and may be omitted in heavily-pruned modes.
 * `explanation_*` fields are **deterministically** generated from numeric and
   structural features (lane winners, margins, tile occupancy, etc.).
+* The tag `wins_lane_X` is a **lane-local** signal: it may be present even if the
+  overall margin worsens.
+* The tag `improves_margin` MUST only be added if
+  `you_margin_after_enemy_expected > baseline_you_margin + MARGIN_EPSILON` for this
+  position.
+* The tag `worsens_margin` MUST only be added if
+  `you_margin_after_enemy_expected < baseline_you_margin - MARGIN_EPSILON` for this
+  position.
+* `baseline_you_margin` is the `you_margin` from `evaluate_position` computed on the
+  original pre-move GameState. `MARGIN_EPSILON` is a small constant (e.g. 0.1) to
+  avoid tagging noise from tiny numeric differences.
 
 ---
 
@@ -278,9 +289,12 @@ Behavior:
    * Convert ThreatMap scores into `you_margin_after_enemy_best` and
      `you_margin_after_enemy_expected`.
      Otherwise, set these fields equal to `you_margin_after_move`.
-6. Generate `explanation_tags` and `explanation_lines` from differences between
+6. Compute `baseline_you_margin` by calling `evaluate_position` on the original
+   state (if not already cached by the caller).
+7. Generate `explanation_tags` and `explanation_lines` from differences between
    pre-move and post-move evaluation (e.g. lane winners changed, margin improved
-   or worsened, key threats blocked).
+   or worsened, key threats blocked), applying the `improves_margin` / `worsens_margin`
+   rules defined in the MoveEvaluation semantics.
 
 This method must **not** mutate the original `state` or `enemy_obs`.
 
@@ -443,6 +457,94 @@ Phase F is complete when:
 ---
 
 # 8. Codex-Ready Implementation Prompt
+
+---
+
+# 9. GPT / UI Integration Guidance (Informative)
+
+This section does not add new engine behavior; it describes how a GPT or UI
+layer should consume `CoachingRecommendation` deterministically.
+
+## 9.1 Recommended call pattern
+
+For a given board state and hands that you want to analyze:
+
+1. Construct or obtain a `GameState` representing the current position.
+
+2. Construct or obtain an `EnemyObservation` with all factual enemy data.
+
+3. Instantiate a shared `PredictionEngine` and `CoachingEngine` (or mock them
+   in tests / GPT workflows).
+
+4. Call:
+
+   ```python
+   reco = coaching_engine.recommend_moves(state, enemy_obs, top_n=3)
+   ```
+
+5. Serialize `reco` to a JSON-like structure for the GPT / UI layer. At minimum:
+
+   ```json
+   {
+     "position": {
+       "you_margin": 0.0,
+       "enemy_best_margin": 2.0,
+       "enemy_expected_margin": -8.7,
+       "is_clearly_winning": false,
+       "is_clearly_losing": false,
+       "is_even": true
+     },
+     "moves": [
+       {
+         "card_id": "009",
+         "lane_index": 1,
+         "col_index": 0,
+         "you_margin_after_enemy_expected": 3.3,
+         "quality_rank": 1,
+         "quality_label": "best",
+         "explanation_tags": ["wins_lane_1", "improves_margin"],
+         "explanation_lines": [
+           "Secures MID lane",
+           "Improves overall margin"
+         ]
+       },
+       ...
+     ],
+     "top_n": 3,
+     "primary_message": "Top move improves margin",
+     "secondary_messages": [
+       "Secures MID lane",
+       "Improves overall margin",
+       "Position is even; small advantages matter."
+     ]
+   }
+   ```
+
+## 9.2 How a GPT should speak about recommendations
+
+A GPT consuming this output should:
+
+* Treat `quality_rank` and `quality_label` as the **authoritative ranking**.
+* Base its natural language on:
+
+  * lane winners, lane points, and `you_margin` from `position`;
+  * `you_margin_after_enemy_expected` and tags from the top few moves.
+* Never invent rules or card text; if a rule is not encoded in the engine,
+  the GPT must not assert it.
+* Use tags to drive language, for example:
+
+  * `wins_lane_X` → "This move secures lane X."
+  * `improves_margin` → "This move improves your overall position."
+  * `worsens_margin` → "This move weakens your position overall, even if it
+    wins the lane."
+
+The GPT layer may add stylistic flourishes, but all factual claims about
+position, margins, and lane status must be traceable back to
+`CoachingRecommendation` fields.
+
+---
+
+# 10. Codex-Ready Implementation Prompt
 
 ```text
 You are Codex, editing the local deterministic qbCoach engine.

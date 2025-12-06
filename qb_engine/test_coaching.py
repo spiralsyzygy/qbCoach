@@ -113,7 +113,7 @@ def test_rank_moves_sorts_by_expected_margin():
     engine = CoachingEngine()
 
     # Patch evaluate_move to return deterministic margins
-    def fake_eval_move(_, __, move):
+    def fake_eval_move(_, __, move, baseline_eval=None):
         return MoveEvaluation(
             move=move,
             you_margin_after_move=0,
@@ -156,3 +156,19 @@ def test_recommend_moves_handles_no_legal_moves():
     reco = engine.recommend_moves(state, obs)
     assert reco.moves == []
     assert "No legal moves" in reco.primary_message
+
+
+def test_margin_tags_respect_expected_margin():
+    state = _make_state(ids=["001"] * 15)
+    obs = EnemyObservation()
+    move = CoachingEngine().enumerate_you_moves(state)[0]
+
+    engine_improve = CoachingEngine(prediction_engine=FakePrediction(best=0.0, expected=-0.5))
+    me_improve = engine_improve.evaluate_move(state, obs, move, use_enemy_prediction=True)
+    assert "improves_margin" in me_improve.explanation_tags
+    assert "worsens_margin" not in me_improve.explanation_tags
+
+    engine_worsen = CoachingEngine(prediction_engine=FakePrediction(best=0.0, expected=2.0))
+    me_worsen = engine_worsen.evaluate_move(state, obs, move, use_enemy_prediction=True)
+    assert "worsens_margin" in me_worsen.explanation_tags
+    assert "improves_margin" not in me_worsen.explanation_tags

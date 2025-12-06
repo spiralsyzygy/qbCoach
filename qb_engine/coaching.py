@@ -14,6 +14,7 @@ from qb_engine.scoring import MatchScore, compute_match_score
 CLEAR_MARGIN = 5.0
 BEST_LABEL_DELTA = 0.5
 GOOD_LABEL_DELTA = 2.0
+MARGIN_EPSILON = 0.1
 
 
 @dataclass
@@ -163,9 +164,11 @@ class CoachingEngine:
         enemy_obs: EnemyObservation,
         move: MoveCandidate,
         use_enemy_prediction: bool = True,
+        baseline_eval: Optional[PositionEvaluation] = None,
     ) -> MoveEvaluation:
         # Pre-eval for explanations
-        pre_eval = self.evaluate_position(state, enemy_obs)
+        pre_eval = baseline_eval or self.evaluate_position(state, enemy_obs)
+        baseline_you_margin = pre_eval.you_margin
 
         # Clone and apply
         clone = state.clone()
@@ -208,12 +211,12 @@ class CoachingEngine:
                     f"Loses {lane_name[after.lane_index]} lane advantage"
                 )
 
-        if you_margin_after_move > pre_eval.you_margin:
+        if you_margin_after_enemy_expected > baseline_you_margin + MARGIN_EPSILON:
             explanation_tags.append("improves_margin")
-            explanation_lines.append("Improves overall margin")
-        elif you_margin_after_move < pre_eval.you_margin:
+            explanation_lines.append("Improves overall margin (after enemy reply)")
+        elif you_margin_after_enemy_expected < baseline_you_margin - MARGIN_EPSILON:
             explanation_tags.append("worsens_margin")
-            explanation_lines.append("Worsens overall margin")
+            explanation_lines.append("Worsens overall margin (after enemy reply)")
 
         return MoveEvaluation(
             move=move,
@@ -237,7 +240,8 @@ class CoachingEngine:
         enemy_obs: EnemyObservation,
         moves: List[MoveCandidate],
     ) -> List[MoveEvaluation]:
-        evals = [self.evaluate_move(state, enemy_obs, m) for m in moves]
+        baseline = self.evaluate_position(state, enemy_obs)
+        evals = [self.evaluate_move(state, enemy_obs, m, baseline_eval=baseline) for m in moves]
 
         evals.sort(
             key=lambda m: (
@@ -303,4 +307,3 @@ class CoachingEngine:
             primary_message=primary,
             secondary_messages=secondary,
         )
-
