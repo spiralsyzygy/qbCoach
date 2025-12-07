@@ -20,7 +20,7 @@ from qb_engine.effect_engine import EffectEngine
 def _make_state(ids=None, seed=1):
     hydrator = CardHydrator()
     ids = ids or [str(i).zfill(3) for i in range(1, 16)]
-    effect_engine = EffectEngine(Path("data/qb_effects_v1.json"), hydrator)
+    effect_engine = EffectEngine(Path("data/qb_effects_v1.1.json"), hydrator)
     return GameState(
         player_deck=Deck(ids, seed=seed),
         enemy_deck=Deck(ids, seed=seed + 1),

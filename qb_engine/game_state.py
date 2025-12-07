@@ -110,7 +110,20 @@ class GameState:
         lane_name = LANE_INDEX_TO_NAME[lane]
         col_number = col + 1
 
+        # Handle replace_ally pre-destruction
+        effect_def = self.effect_engine.get_effect_for_card(card)
+        replaced_ally_power = 0
+        if effect_def and any(op.type == "replace_ally" for op in effect_def.operations):
+            tile = self.board.tile_at(lane, col)
+            occupant_id = tile.card_id
+            if occupant_id and self.board.get_card_side(occupant_id) == side:
+                replaced_ally_power = self.effect_engine.compute_effective_power(self.board, lane, col)
+                self.effect_engine._destroy_cards(self.board, [(lane, col)])
+
         self.board.place_card(lane_name, col_number, card, self.effect_engine)
+
+        # Event-based scaling on card played
+        self.effect_engine.handle_card_played(self.board, lane, col, card)
 
         if side == "Y":
             proj = compute_projection_targets(lane, col, card)
@@ -123,6 +136,9 @@ class GameState:
 
         # Ensure influence recompute after projections
         self.board.recompute_influence_from_deltas()
+
+        # Handle stateful on_play effects (hands/tokens and replace follow-ups)
+        self._apply_stateful_on_play_effects(card, side, replaced_ally_power=replaced_ally_power)
 
         # Any successful play resets pass counter
         self.consecutive_passes = 0
@@ -218,3 +234,48 @@ class GameState:
         clone.rng.setstate(self.rng.getstate())
 
         return clone
+
+    # ------------------------------------------------------------------ #
+    # Stateful effect helpers
+    # ------------------------------------------------------------------ #
+
+    def _hand_for_side(self, side: Literal["Y", "E"]) -> Hand:
+        return self.player_hand if side == "Y" else self.enemy_hand
+
+    def _apply_stateful_on_play_effects(self, card: Card, side: Literal["Y", "E"], replaced_ally_power: int = 0) -> None:
+        """
+        Apply on_play effects that mutate hand/board state beyond power deltas.
+        """
+        effect_def = self.effect_engine.get_effect_for_card(card)
+        if effect_def is None or effect_def.trigger != "on_play":
+            return
+
+        hand = self._hand_for_side(side)
+
+        for op in effect_def.operations:
+            if op.type == "add_to_hand" and op.card_ids:
+                for cid in op.card_ids:
+                    try:
+                        hand.add_card(cid)
+                    except KeyError:
+                        # Skip unknown card ids to keep simulation deterministic
+                        continue
+            elif op.type == "spawn_token":
+                token_id = op.raw.get("token_id") if op.raw else None
+                if token_id is None:
+                    continue
+                per_pawns = bool(op.raw.get("per_pawns")) if op.raw else False
+                # For each empty tile owned by the side, add token(s) to hand.
+                for row in self.board.tiles:
+                    for tile in row:
+                        if tile.owner != side or tile.card_id is not None:
+                            continue
+                        count = tile.rank if per_pawns else 1
+                        for _ in range(max(0, count)):
+                            try:
+                                hand.add_card(token_id)
+                            except KeyError:
+                                continue
+            elif op.type == "replace_ally":
+                # Follow-up effects handled in effect engine using replaced_ally_power.
+                continue

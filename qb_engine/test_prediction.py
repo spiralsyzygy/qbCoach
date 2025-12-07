@@ -17,7 +17,7 @@ from qb_engine.scoring import compute_match_score
 
 def _make_engine():
     hydrator = CardHydrator()
-    effect_engine = EffectEngine(Path("data/qb_effects_v1.json"), hydrator)
+    effect_engine = EffectEngine(Path("data/qb_effects_v1.1.json"), hydrator)
     return hydrator, effect_engine
 
 

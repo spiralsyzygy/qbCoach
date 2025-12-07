@@ -66,7 +66,7 @@ class PredictionEngine:
     ):
         self.hydrator = hydrator or CardHydrator()
         self.effect_engine = effect_engine or EffectEngine(
-            Path("data/qb_effects_v1.json"), self.hydrator
+            Path("data/qb_effects_v1.1.json"), self.hydrator
         )  # type: ignore[name-defined]
         self.max_decks = max_decks
         self.max_hands = max_hands

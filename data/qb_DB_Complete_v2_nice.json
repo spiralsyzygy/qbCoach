@@ -1,0 +1,210 @@
+[
+  {
+    "_meta": {
+        "db_version": "2.0.1",
+        "notes": "Added effect_id for 003,006,020,022,027,037"
+    }
+  },
+  {
+    "id": "001",
+    "name": "Security Officer",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2P,C4P,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ]
+  },
+  {
+    "id": "003",
+    "name": "Grenadier",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "A3E",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "E"],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_op_enemies_-4",
+    "effect_description": "When played, lower the power of enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "006",
+    "name": "Toxirat",
+    "category": "Regular",
+    "cost": 2,
+    "power": 2,
+    "pattern": "B4X,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "P", "X", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_op_all_-3",
+    "effect_description": "When played, lower the power of allied and enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "010",
+    "name": "Mandragora",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "on_play_add_hand_mandragora_minion",
+    "effect_description": "When played, add Mandragora Minion to your hand."
+  },
+  {
+    "id": "013",
+    "name": "Crystalline Crab",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "B3P,C2X,D3P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_wip_allies_raise_2",
+    "effect_description": "Raise the power of allied cards on affected tiles by 2 while this card is in play."
+  },
+  {
+    "id": "020",
+    "name": "Archdragon",
+    "category": "Regular",
+    "cost": 1,
+    "power": 3,
+    "pattern": "B3X,D2P,D4P",
+    "grid": [
+      [".", "P", ".", ".", "."],
+      [".", ".", "W", "X", "."],
+      [".", "P", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_op_enemies_-3",
+    "effect_description": "When played, lower the power of enemy cards on affected tiles by 3."
+  },
+  {
+    "id": "027",
+    "name": "Mindflayer",
+    "category": "Regular",
+    "cost": 2,
+    "power": 1,
+    "pattern": "B2X,B4E,C2X,C4X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", "X", "."],
+      [".", ".", "W", ".", "."],
+      [".", ".", "X", "E", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_wip_all_-1",
+    "effect_description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play."
+  },
+  {
+    "id": "037",
+    "name": "Bloatfloat",
+    "category": "Regular",
+    "cost": 1,
+    "power": 1,
+    "pattern": "A3E,B3P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", "P", "W", ".", "E"],
+      [".", ".", "P", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_od_all_-4",
+    "effect_description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4."
+  },
+  {
+    "id": "050",
+    "name": "Gagighandi",
+    "category": "Regular",
+    "cost": 2,
+    "power": 4,
+    "pattern": "B3P,B4E,B5E,C4P,C5P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", "W", "P", "."],
+      [".", ".", ".", "P", "."],
+      [".", "E", "E", ".", "."]
+    ],
+    "effect_id": "thr_first_enhanced_enemies_-2",
+    "effect_description": "When first enhanced, lower the power of enemy cards on affected tiles by 2."
+  },
+  {
+    "id": "072",
+    "name": "Black Bat",
+    "category": "Regular",
+    "cost": 1,
+    "power": 2,
+    "pattern": "B3X,C2X,C4X,D3X",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "X", ".", "."],
+      [".", "X", "W", "X", "."],
+      [".", ".", "X", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "aur_op_all_-1",
+    "effect_description": "When played, lower the power of allied and enemy cards on affected tiles by 1."
+  },
+  {
+    "id": "085",
+    "name": "Moss-Grown Adamantoise",
+    "category": "Regular",
+    "cost": 3,
+    "power": 4,
+    "pattern": "B2P,B4P,C2P,C4P,D2P,D4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", "P", "P", "P", "."],
+      [".", ".", "W", ".", "."],
+      [".", "P", "P", "P", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "on_play_raise_positions_rank_3",
+    "effect_description": "When played, raise positions ranks by 3."
+  },
+  {
+    "id": "098",
+    "name": "Titan",
+    "category": "Legend",
+    "cost": 2,
+    "power": 5,
+    "pattern": "B3P,C2P,C4P",
+    "grid": [
+      [".", ".", ".", ".", "."],
+      [".", ".", "P", ".", "."],
+      [".", "P", "W", "P", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."]
+    ],
+    "effect_id": "on_play_raise_positions_rank_2",
+    "effect_description": "When played, raise positions ranks by 2."
+  }
+]

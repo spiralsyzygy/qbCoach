@@ -11,7 +11,7 @@ from qb_engine.game_state import GameState
 def _make_state_with_enemy_card(card_id: str, turn: int = 1):
     # Minimal GameState with a specific enemy card on the board at MID-5
     hydrator = CardHydrator()
-    effect_engine = EffectEngine(Path("data/qb_effects_v1.json"), hydrator)
+    effect_engine = EffectEngine(Path("data/qb_effects_v1.1.json"), hydrator)
     ids = [card_id] * 15
     state = GameState(
         player_deck=Deck(ids, seed=1),

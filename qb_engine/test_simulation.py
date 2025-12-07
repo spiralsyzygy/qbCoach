@@ -16,7 +16,7 @@ def _make_hydrator():
 
 def _make_effect_engine(hydrator):
     root = Path(__file__).resolve().parents[1]
-    return EffectEngine(root / "data" / "qb_effects_v1.json", hydrator)
+    return EffectEngine(root / "data" / "qb_effects_v1.1.json", hydrator)
 
 
 def _first_card_ids(hydrator, n=15):

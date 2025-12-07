@@ -8,6 +8,7 @@ Deterministic walkthrough:
 - Effective power overlays via EffectEngine
 - Lane + match scoring via compute_match_score
 - Phase E snapshot via PredictionEngine
+- Uses v1.1 effects (on_play, while_in_play, scaling, spawn/replace, expand, scoring bonuses)
 """
 
 from __future__ import annotations
@@ -70,6 +71,11 @@ def describe_match_score(board, effect_engine) -> None:
     )
 
 
+def describe_effect_state(board, effect_engine) -> None:
+    print("\nEffect state snapshot:")
+    effect_engine.pretty_print_effect_state(board)
+
+
 def find_first_play(board, side: str, hand):
     """
     Find the first playable (hand_index, lane, col) for the given side across the hand.
@@ -92,6 +98,31 @@ def find_first_play(board, side: str, hand):
     return None
 
 
+def find_first_play_preferring_effects(board, side: str, hand, hydrator: CardHydrator, effect_engine: EffectEngine):
+    """
+    Prefer a playable card that has an effect_id so the demo showcases runtime effects.
+    Falls back to any legal play.
+    """
+    # First pass: effect-bearing cards
+    for h_idx, card in enumerate(hand.cards):
+        if not getattr(card, "effect_id", None):
+            continue
+        for lane in range(3):
+            for col in range(5):
+                tile = board.tile_at(lane, col)
+                if side == "Y":
+                    if is_legal_placement(board, lane, col, card):
+                        return h_idx, lane, col
+                else:
+                    if (
+                        tile.card_id is None
+                        and tile.owner == "E"
+                        and tile.rank >= card.cost
+                    ):
+                        return h_idx, lane, col
+    return find_first_play(board, side, hand)
+
+
 def main() -> None:
     project_root = Path(__file__).resolve().parent
     data_dir = project_root / "data"
@@ -100,7 +131,7 @@ def main() -> None:
     print(f"Project root: {project_root}")
 
     hydrator = CardHydrator(str(data_dir / "qb_DB_Complete_v2.json"))
-    effect_engine = EffectEngine(data_dir / "qb_effects_v1.json", hydrator)
+    effect_engine = EffectEngine(data_dir / "qb_effects_v1.1.json", hydrator)
 
     # Build seeded decks so the walkthrough is reproducible
     demo_ids = card_ids_for_demo(hydrator)
@@ -141,14 +172,14 @@ def main() -> None:
     describe_hand("YOU", state.player_hand)
     describe_deck("YOU", state.player_deck)
 
-    header("Step 3 — YOU play first legal card from hand")
-    you_play = find_first_play(state.board, "Y", state.player_hand)
+    header("Step 3 — YOU play an effect-bearing card if possible")
+    you_play = find_first_play_preferring_effects(state.board, "Y", state.player_hand, hydrator, effect_engine)
     if you_play is None:
         # Ensure a legal placement by injecting a cheap card if needed for the demo
         fallback_card = hydrator.get_card("001")
         state.player_hand.cards.append(fallback_card)
         print("Injected fallback card 001 to hand for demo legality.")
-        you_play = find_first_play(state.board, "Y", state.player_hand)
+        you_play = find_first_play_preferring_effects(state.board, "Y", state.player_hand, hydrator, effect_engine)
         if you_play is None:
             print("No legal placement found for YOU; stopping demo.")
             return
@@ -156,6 +187,7 @@ def main() -> None:
     print(f"Placing YOU card hand[{hand_idx_y}] at {LANE_NAMES[lane_y]}-{col_y + 1}")
     state.play_card_from_hand("Y", hand_index=hand_idx_y, lane=lane_y, col=col_y)
     describe_board(state.board, effect_engine)
+    describe_effect_state(state.board, effect_engine)
     obs.update_from_game_state(state)
 
     # ------------------------------------------------------------------ #
@@ -170,8 +202,8 @@ def main() -> None:
     describe_hand("ENEMY", state.enemy_hand)
     describe_deck("ENEMY", state.enemy_deck)
 
-    header("Step 6 — ENEMY plays first legal card (mirrored projection)")
-    enemy_play = find_first_play(state.board, "E", state.enemy_hand)
+    header("Step 6 — ENEMY plays an effect-bearing card if possible")
+    enemy_play = find_first_play_preferring_effects(state.board, "E", state.enemy_hand, hydrator, effect_engine)
     if enemy_play is None:
         print("No legal placement found for ENEMY; stopping demo before scoring.")
         return
@@ -179,6 +211,7 @@ def main() -> None:
     print(f"Placing ENEMY card hand[{hand_idx_e}] at {LANE_NAMES[lane_e]}-{col_e + 1}")
     state.play_card_from_hand("E", hand_index=hand_idx_e, lane=lane_e, col=col_e)
     describe_board(state.board, effect_engine)
+    describe_effect_state(state.board, effect_engine)
     obs.update_from_game_state(state)
 
     # ------------------------------------------------------------------ #

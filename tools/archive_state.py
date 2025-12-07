@@ -23,7 +23,7 @@ import zipfile
 
 DEFAULT_INCLUDE_PATHS = [
     Path("data/qb_DB_Complete_v2.json"),
-    Path("data/qb_effects_v1.json"),
+    Path("data/qb_effects_v1.1.json"),
     Path("docs/qb_rules_v2.2.4.md"),
     Path("docs/qb_engine_v2.1.0.md"),
     Path("docs/scoring_design_spec.md"),

@@ -114,6 +114,14 @@ def compute_match_score(
         lane_score = compute_lane_power(board, effect_engine, lane_index)
         lanes.append(lane_score)
 
+    # Apply scoring modifiers (lane-win bonuses, lane_min_transfer) if supported.
+    if hasattr(effect_engine, "apply_score_modifiers"):
+        try:
+            effect_engine.apply_score_modifiers(board, lanes)  # type: ignore[attr-defined]
+        except Exception:
+            # Scoring modifiers are best-effort; fall back to base scoring on error.
+            pass
+
     total_you = sum(lane.lane_points for lane in lanes if lane.winner == "Y")
     total_enemy = sum(lane.lane_points for lane in lanes if lane.winner == "E")
 

@@ -10,7 +10,7 @@ def _make_engine_and_board():
     data_dir = root / "data"
 
     cards_path = data_dir / "qb_DB_Complete_v2.json"
-    effects_path = data_dir / "qb_effects_v1.json"
+    effects_path = data_dir / "qb_effects_v1.1.json"
 
     hydrator = CardHydrator(cards_path)
     engine = EffectEngine(effects_path, hydrator)

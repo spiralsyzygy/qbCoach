@@ -63,7 +63,8 @@ class CardHydrator:
             pattern=data.get("pattern"),
             grid=data["grid"],
             effect=data.get("effect"),
-            effect_id=data.get("effect_id"), # <-- NEW
+            effect_id=data.get("effect_id"),
+            effect_description=data.get("effect_description"),
         )
 
         self.cache[card_id] = card

@@ -129,6 +129,18 @@ def compute_projection_targets_for_enemy(
     )
 
 
+SPECIAL_PAWN_AMOUNT = {
+    # Supercharged P tiles: use these values instead of +1
+    "on_play_raise_positions_rank_2": 2,
+    "on_play_raise_positions_rank_3": 3,
+}
+
+
+def _pawn_amount_for_card(card: Card) -> int:
+    """Return pawn delta amount for P/X tiles (default 1, overrides for special cards)."""
+    return SPECIAL_PAWN_AMOUNT.get(getattr(card, "effect_id", None), 1)
+
+
 def apply_pawns_for_you(board: BoardState, proj: ProjectionResult, card: Card) -> None:
     """
     Apply pawn projections (P/X tiles) for YOU to the given board.
@@ -141,6 +153,8 @@ def apply_pawns_for_you(board: BoardState, proj: ProjectionResult, card: Card) -
       - Only apply pawn changes to EMPTY tiles (no hidden stacks under cards).
       - X is treated as including a P component here; E component is handled elsewhere.
     """
+
+    amount = _pawn_amount_for_card(card)
 
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("P", "X"):
@@ -156,7 +170,7 @@ def apply_pawns_for_you(board: BoardState, proj: ProjectionResult, card: Card) -
             lane_index=lane_index,
             col_index=col_index,
             card_id=card.id,
-            amount=1,
+            amount=amount,
         )
 
     board.recompute_influence_from_deltas()
@@ -168,6 +182,8 @@ def apply_pawns_for_enemy(board: BoardState, proj: ProjectionResult, card: Card)
 
     Mirrors apply_pawns_for_you but records negative deltas.
     """
+    amount = _pawn_amount_for_card(card)
+
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("P", "X"):
             continue
@@ -181,7 +197,7 @@ def apply_pawns_for_enemy(board: BoardState, proj: ProjectionResult, card: Card)
             lane_index=lane_index,
             col_index=col_index,
             card_id=card.id,
-            amount=1,
+            amount=amount,
         )
 
     board.recompute_influence_from_deltas()
@@ -201,7 +217,7 @@ def apply_effects_for_you(board: BoardState, proj: ProjectionResult, card: Card)
     (buff/debuff/destroy/etc.); it only records where the aura lives.
     """
 
-    description = getattr(card, "effect", "") or ""
+    description = getattr(card, "effect_description", None) or getattr(card, "effect", "") or ""
 
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("E", "X"):
@@ -221,7 +237,7 @@ def apply_effects_for_enemy(board: BoardState, proj: ProjectionResult, card: Car
 
     Mirrors apply_effects_for_you.
     """
-    description = getattr(card, "effect", "") or ""
+    description = getattr(card, "effect_description", None) or getattr(card, "effect", "") or ""
 
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("E", "X"):

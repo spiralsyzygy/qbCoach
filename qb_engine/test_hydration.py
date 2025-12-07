@@ -13,7 +13,9 @@ def test_hydrates_security_officer():
     assert card.cost == 1
     assert card.power == 1
     assert card.pattern == "B3P,C2P,C4P,D3P"
-    assert card.effect == ""
+    assert card.effect is None
+    assert card.effect_id is None
+    assert card.effect_description is None
 
     # Ensure the projected grid shape and key cells match the DB record.
     assert len(card.grid) == 5

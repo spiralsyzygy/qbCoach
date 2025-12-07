@@ -1,0 +1,1195 @@
+{
+  "_meta": {
+    "version": "1.1.0",
+    "notes": "Normalized effect registry for qbCoach deterministic engine + GPT layer alignment."
+  },
+  "aur_od_all_-3": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+  "aur_od_all_-4": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+  "aur_od_all_-5": {
+    "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+  "aur_od_all_raise_1": {
+    "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 1
+      }
+    ]
+  },
+  "aur_od_all_raise_2": {
+    "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 2
+      }
+    ]
+  },
+  "aur_od_all_raise_3": {
+    "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 3.",
+    "trigger": "on_destroy",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 3
+      }
+    ]
+  },
+  "aur_od_allies_raise_3": {
+    "description": "When destroyed, raise the power of allied cards on affected tiles by 3.",
+    "trigger": "on_destroy",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 3
+      }
+    ]
+  },
+  "aur_od_enemies_-1": {
+    "description": "When destroyed, lower the power of enemy cards on affected tiles by 1.",
+    "trigger": "on_destroy",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+  "aur_od_enemies_-5": {
+    "description": "When destroyed, lower the power of enemy cards on affected tiles by 5.",
+    "trigger": "on_destroy",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+  "aur_od_enemies_-9": {
+    "description": "When destroyed, lower the power of enemy cards on affected tiles by 9.",
+    "trigger": "on_destroy",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -9
+      }
+    ]
+  },
+  "aur_op_all_-1": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+  "aur_op_all_-2": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 2.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -2
+      }
+    ]
+  },
+  "aur_op_all_-3": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 3.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+  "aur_op_all_-4": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+  "aur_op_all_-5": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 5.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+  "aur_op_all_-6": {
+    "description": "When played, lower the power of allied and enemy cards on affected tiles by 6.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -6
+      }
+    ]
+  },
+  "aur_op_all_raise_1": {
+    "description": "When played, raise the power of allied and enemy cards on affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 1
+      }
+    ]
+  },
+  "aur_op_allies_-1": {
+    "description": "When played, lower the power of allied cards affected tiles by 1.",
+    "trigger": "on_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+  "aur_op_allies_-4": {
+    "description": "When played, lower the power of allied cards affected tiles by 4.",
+    "trigger": "on_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+  "aur_op_enemies_-3": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 3.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+  "aur_op_enemies_-4": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 4",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+  "aur_op_enemies_-5": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 5.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ]
+  },
+  "aur_op_enemies_-8": {
+    "description": "When played, lower the power of enemy cards on affected tiles by 8.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -8
+      }
+    ]
+  },
+  "aur_wip_all_-1": {
+    "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -1
+      }
+    ]
+  },
+  "aur_wip_all_-2": {
+    "description": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -2
+      }
+    ]
+  },
+  "aur_wip_all_raise_1": {
+    "description": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 1
+      }
+    ]
+  },
+  "aur_wip_all_raise_2": {
+    "description": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 2
+      }
+    ]
+  },
+  "aur_wip_all_raise_3": {
+    "description": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 3
+      }
+    ]
+  },
+  "aur_wip_allies_raise_1": {
+    "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 1
+      }
+    ]
+  },
+  "aur_wip_allies_raise_2": {
+    "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 2
+      }
+    ]
+  },
+  "aur_wip_allies_raise_3": {
+    "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 3
+      }
+    ]
+  },
+  "aur_wip_allies_raise_4": {
+    "description": "Raise the power of allied cards on affected tiles by 4 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 4
+      }
+    ]
+  },
+  "aur_wip_enemies_-3": {
+    "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -3
+      }
+    ]
+  },
+  "on_destroy_add_hand_galian_beast": {
+    "description": "When destroyed, add Galian Beast to your hand.",
+    "trigger": "on_destroy",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Galian Beast"
+        ]
+      }
+    ]
+  },
+  "on_destroy_add_hand_heatseeker_minion": {
+    "description": "When destroyed, add Heatseeker Minion to your hand.",
+    "trigger": "on_destroy",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Heatseeker Minion"
+        ]
+      }
+    ]
+  },
+  "on_destroy_add_hand_resurrected_amalgam": {
+    "description": "When destroyed add Resurrected Amalgam to your hand.",
+    "trigger": "on_destroy",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Resurrected Amalgam"
+        ]
+      }
+    ]
+  },
+  "on_enfeebled_enemies_-4": {
+    "description": "When enfeebled, lower their power by 4.",
+    "trigger": "on_enfeebled",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ]
+  },
+  "on_lane_win_bonus_10": {
+    "description": "When you win the lane, receive a score bonus of 10.",
+    "trigger": "on_lane_win",
+    "scope": "lane_owner",
+    "operations": [
+      {
+        "type": "score_bonus",
+        "amount": 10
+      }
+    ]
+  },
+  "on_lane_win_bonus_3": {
+    "description": "When you win the lane, receive a score bonus of 3.",
+    "trigger": "on_lane_win",
+    "scope": "lane_owner",
+    "operations": [
+      {
+        "type": "score_bonus",
+        "amount": 3
+      }
+    ]
+  },
+  "on_lane_win_bonus_5": {
+    "description": "When you win the lane, receive a score bonus of 5.",
+    "trigger": "on_lane_win",
+    "scope": "lane_owner",
+    "operations": [
+      {
+        "type": "score_bonus",
+        "amount": 5
+      }
+    ]
+  },
+  "on_play_add_hand_baby_grangalan": {
+    "description": "When played, add Baby Grangalan to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Baby Grangalan"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_cacneo_donberry": {
+    "description": "When played, add both Cacneo and Donberry to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Cacneo",
+          "Donberry"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_grangalan_junior": {
+    "description": "When played, add Grangalan Junior to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Grangalan Junior"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_mandragora_minion": {
+    "description": "When played, add Mandragora Minion to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Mandragora Minion"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_moogle": {
+    "description": "When played, add Moogle to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Moogle"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_moogle_mage_bard": {
+    "description": "When played, add both Moogle Mage and Moogle Bard to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Moogle Mage",
+          "Moogle Bard"
+        ]
+      }
+    ]
+  },
+  "on_play_add_hand_tiny_bronco": {
+    "description": "When played, add the Tiny Bronco to your hand.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "add_to_hand",
+        "card_ids": [
+          "Tiny Bronco"
+        ]
+      }
+    ]
+  },
+  "on_play_destroy_all": {
+    "description": "When played, destroy allied and enemy cards on affected tiles.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "destroy_cards",
+        "apply_to": "all_cards_on_affected_tiles"
+      }
+    ]
+  },
+  "on_play_destroy_ally_and_replace": {
+    "description": "Destroy an allied card and replace it.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "replace_ally",
+        "mode": "neutral"
+      }
+    ]
+  },
+  "on_play_destroy_enemies": {
+    "description": "When played, destroy enemy cards on affected tiles.",
+    "trigger": "on_play",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "destroy_cards",
+        "apply_to": "enemies_on_affected_tiles"
+      }
+    ]
+  },
+  "on_play_expand_positions": {
+    "description": "Creates a surfeit of positions around it when played.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "expand_positions",
+        "apply_to": "adjacent"
+      }
+    ]
+  },
+  "on_play_raise_positions_rank_2": {
+    "description": "When played, raise position ranks by 2.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_tile_ranks",
+        "amount": 2,
+        "apply_to": "affected_positions"
+      }
+    ]
+  },
+  "on_play_raise_positions_rank_3": {
+    "description": "When played, raise positions ranks by 3.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_tile_ranks",
+        "amount": 3,
+        "apply_to": "affected_positions"
+      }
+    ]
+  },
+  "on_play_replace_ally_lower_by_replaced": {
+    "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power.",
+    "trigger": "on_play",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "replace_ally",
+        "mode": "lower",
+        "apply_to": "all_cards_on_affected_tiles",
+        "adjustment": "replaced_ally_power"
+      }
+    ]
+  },
+  "on_play_replace_ally_raise_by_replaced": {
+    "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power.",
+    "trigger": "on_play",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "replace_ally",
+        "mode": "raise",
+        "apply_to": "allies_on_affected_tiles",
+        "adjustment": "replaced_ally_power"
+      }
+    ]
+  },
+  "on_play_spawn_diamond_dust": {
+    "description": "When played, spawn Diamond Dust in each of your empty positions.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "spawn_token",
+        "token_id": "Diamond Dust",
+        "apply_to": "empty_positions"
+      }
+    ]
+  },
+  "on_play_spawn_elementals": {
+    "description": "When played, for each of your empty position, spawn an Elementals matching the number of Pawns there.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "spawn_token",
+        "token_id": "Elementals",
+        "apply_to": "empty_positions",
+        "per_pawns": true
+      }
+    ]
+  },
+  "on_play_spawn_hype_johnnys": {
+    "description": "When played, for each of your empty position, spawn a Hype Johnnys matching the number of Pawns there.",
+    "trigger": "on_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "spawn_token",
+        "token_id": "Hype Johnnys",
+        "apply_to": "empty_positions",
+        "per_pawns": true
+      }
+    ]
+  },
+  "on_power_reaches_7_allies_raise_2": {
+    "description": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2.",
+    "trigger": "on_power_threshold",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 2
+      }
+    ],
+    "conditions": {
+      "threshold": {
+        "stat": "power",
+        "value": 7
+      },
+      "first_time": true
+    }
+  },
+  "on_round_end_lane_min_transfer": {
+    "description": "If this card is in play when the round ends, the lower of each lane's score is added to the victor's.",
+    "trigger": "on_round_end",
+    "scope": "lane_owner",
+    "operations": [
+      {
+        "type": "score_bonus",
+        "mode": "lane_min_transfer"
+      }
+    ]
+  },
+  "on_spawned_replaced_pawns_gain": {
+    "description": "When spawned, if this replaced 2 Pawns, this gains 2 power. If this replaced 3, this gains 4 power instead.",
+    "trigger": "on_spawned",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 2,
+        "conditions": {
+          "replaced_pawns": 2
+        }
+      },
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 4,
+        "conditions": {
+          "replaced_pawns": 3
+        }
+      }
+    ]
+  },
+  "scale_on_destroy_all_per1": {
+    "description": "When allied and enemy cards are destroyed, raise this card's power by 1.",
+    "trigger": "on_card_destroyed",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "destroyed_all",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_destroy_allies_per1": {
+    "description": "When allied cards are destroyed, raise this card's power by 1.",
+    "trigger": "on_card_destroyed",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "destroyed_ally",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_destroy_allies_per2": {
+    "description": "When allied cards are destroyed, raise this card's power by 2.",
+    "trigger": "on_card_destroyed",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "destroyed_ally",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_destroy_enemies_per1": {
+    "description": "When enemy cards are destroyed, raise this card's power by 1.",
+    "trigger": "on_card_destroyed",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "destroyed_enemy",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_destroy_enemies_per2": {
+    "description": "When enemy cards are destroyed, raise this card's power by 2.",
+    "trigger": "on_card_destroyed",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "destroyed_enemy",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_played_allies_per1": {
+    "description": "When allied cards are played from hand, raise this card's power by 1",
+    "trigger": "on_card_played",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "played_ally",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_on_played_enemies_per1": {
+    "description": "When enemy cards are played from hand, raise this card's power by 1.",
+    "trigger": "on_card_played",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "played_enemy",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enfeeb_all_per3": {
+    "description": "Raise power by 3 for each other enfeebled allied and enemy card while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enfeebled_all",
+        "amount_per": 3,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enfeeb_ally_per2": {
+    "description": "Raise power by 2 for each other enfeebled allied card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enfeebled_ally",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enfeeb_ally_per3": {
+    "description": "Raise power by 3 for each other enfeebled allied card while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enfeebled_ally",
+        "amount_per": 3,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enfeeb_enemy_per1": {
+    "description": "Raise power by 1 for each other enfeebled and enemy card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enfeebled_enemy",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enfeeb_enemy_per2": {
+    "description": "Raise power by 2 for each enfeebled enemy card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enfeebled_enemy",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_all_per1": {
+    "description": "Raise power by 1 for each other enhanced allied and enemy card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_all",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_ally_per1": {
+    "description": "Raise power by 1 for each other enhanced allied card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_ally",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_ally_per2": {
+    "description": "Raise power by 2 for each other enhanced allied card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_ally",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_enemy_per1": {
+    "description": "Raise power by 1 for each enhanced enemy card while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_enemy",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_enemy_per2": {
+    "description": "Raise power by 2 for each enhanced enemy card while this card is in play.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_enemy",
+        "amount_per": 2,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_enemy_per3": {
+    "description": "Raise power by 3 for each enhanced enemy card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_enemy",
+        "amount_per": 3,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "scale_wip_self_enh_or_enfeeb_all_per1": {
+    "description": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card.",
+    "trigger": "while_in_play",
+    "scope": "self",
+    "operations": [
+      {
+        "type": "modify_power_scale",
+        "stat": "power",
+        "per": "enhanced_or_enfeebled_all",
+        "amount_per": 1,
+        "apply_to": "self"
+      }
+    ]
+  },
+  "thr_first_enfeebled_all_-5": {
+    "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5.",
+    "trigger": "on_first_enfeebled",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enfeebled_all_-6": {
+    "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 6.",
+    "trigger": "on_first_enfeebled",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -6
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enfeebled_allies_raise_4": {
+    "description": "When first enfeebled, raise the power of allied cards on affected tiles by 4.",
+    "trigger": "on_first_enfeebled",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 4
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enfeebled_enemies_-2": {
+    "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2.",
+    "trigger": "on_first_enfeebled",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -2
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_all_-4": {
+    "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4.",
+    "trigger": "on_first_enhanced",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_all_-99": {
+    "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99.",
+    "trigger": "on_first_enhanced",
+    "scope": "all_cards_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -99
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_allies_raise_3": {
+    "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3.",
+    "trigger": "on_first_enhanced",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 3
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_allies_raise_4": {
+    "description": "The first time this card is enhanced raise the power of allied cards on affected tiles by 4.",
+    "trigger": "on_first_enhanced",
+    "scope": "allies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": 4
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_enemies_-2": {
+    "description": "When first enhanced, lower the power of enemy cards on affected tiles by 2.",
+    "trigger": "on_first_enhanced",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -2
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_enemies_-4": {
+    "description": "When first enhanced, lower the power of enemy cards on affected tiles by 4.",
+    "trigger": "on_first_enhanced",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -4
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  },
+  "thr_first_enhanced_enemies_-5": {
+    "description": "When first enhanced, lower the power of enemy cards on affected tiles by 5.",
+    "trigger": "on_first_enhanced",
+    "scope": "enemies_on_affected_tiles",
+    "operations": [
+      {
+        "type": "modify_power",
+        "stat": "power",
+        "amount": -5
+      }
+    ],
+    "conditions": {
+      "first_time": true
+    }
+  }
+}

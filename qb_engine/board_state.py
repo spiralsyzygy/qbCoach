@@ -6,7 +6,7 @@ from typing import Dict, Optional, List, Tuple, TYPE_CHECKING
 if TYPE_CHECKING:
     from qb_engine.effect_engine import EffectEngine, EffectOp
 
-from qb_engine.models import Card
+from qb_engine.models import Card, CardTriggerState, SpawnContext
 from qb_engine.pawn_delta import PawnDelta
 from qb_engine.effect_aura import EffectAura
 
@@ -38,6 +38,12 @@ class Tile:
     rank: int          # visible rank (0..3)
     card_id: Optional[str] = None
     base_influence: int = 0
+    origin: Optional[str] = None  # e.g., "deck", "token", "effect"
+    spawned_by: Optional[str] = None  # source card id if token/effect placed
+    power_delta: int = 0  # net modify_power applied
+    scale_delta: int = 0  # accumulated event-based scaling
+    trigger_state: Optional[CardTriggerState] = None
+    spawn_context: Optional[SpawnContext] = None
 
     def __str__(self) -> str:
         """
@@ -187,6 +193,10 @@ class BoardState:
 
         tile = self.tile_at(lane_index, col_index)
         tile.card_id = card.id
+        tile.power_delta = 0
+        tile.scale_delta = 0
+        tile.trigger_state = CardTriggerState()
+        tile.spawn_context = None
         # owner/rank are derived from influence; we don't change them here.
 
         if effect_engine is not None:
