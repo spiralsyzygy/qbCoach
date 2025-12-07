@@ -24,6 +24,11 @@ REQUIRED_PATHS = [
     Path("docs/roadmap.md"),
     Path("docs/qb_memory_primer_v1.0.0.md"),
     Path("docs/gpt_layer_design_overview.md"),
+    Path("docs/qbcoach_dev_workflow.md"),
+    Path("docs/phase_G_milestone_map.md"),
+    Path("docs/qb_effects_v1.1_status.md"),
+    Path("docs/GPT_layer/chatGPT+Codex_dual_initialization"),
+    Path("docs/GPT_layer/gpt_effects_layer_note.md"),
     Path("data/qb_DB_Complete_v2.json"),
     Path("data/qb_effects_v1.1.json"),
 ]

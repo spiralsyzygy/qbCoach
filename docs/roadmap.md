@@ -1,4 +1,4 @@
-# **qbCoach Roadmap (Refactored 2025-12-05)**
+# **qbCoach Roadmap (Refactored 2025-12-06)**
 
 *Authoritative Development Plan for the Deterministic Queen’s Blood Engine*
 
@@ -17,30 +17,22 @@ LLMs may assist in writing code, but **no part of engine logic may live in an LL
 
 # **0. Current State Summary**
 
-The following components are complete and validated:
+Engine v2.1.0 + Effects v1.1 are complete and fully tested (75/75). Key capabilities:
 
-### ✅ Core Architecture
+### ✅ Core & Simulation
+* BoardState/GameState deterministic 3×5 model; seeded decks/hands; mulligan; turn flow; draw safety on empty decks.
+* LegalityChecker (empty, owned, sufficient rank only).
+* ProjectionEngine (W/P/E/X with side mirroring), pawn deltas, destruction cleanup.
+* EffectEngine v1.1 (registry-driven on_play/while_in_play/on_destroy/on_card_destroyed/on_card_played/on_enfeebled/first_enhanced/first_enfeebled/threshold/on_spawned/on_lane_win/on_round_end; spawn_token/replace_ally/expand_positions; global/lane scopes; scoring hooks).
+* Scoring: effective power–based lane power, lane points, effect score modifiers (lane_win bonuses, lane_min_transfer), match totals.
+* Simulation/Prediction: deterministic cloning, 1-ply enemy projection, threat maps.
+* Coaching: legal move enumeration, evaluation via scoring/prediction, deterministic ranking with explanations.
+* Enemy Observation: factual tracking of enemy plays/tokens/destroyed, known-deck remaining IDs; consumed by prediction/projection tests.
 
-* BoardState (3×5 canonical model)
-* Tile state (owner, ranks, occupantCard, effect markers)
-* CardHydrator (hydrates from QB_DB_Complete_v2.json)
-* LegalityChecker (Epic B–accurate)
-* ProjectionEngine (P/E/X, W tile, coordinate mapping, multi-turn, destruction semantics)
-* Pawn model (Epic C)
-* Effect lifecycle (whileInPlay, onPlay, onDestroy)
-* ScoringEngine (Epic D laneScore & matchScore)
-* Serialization routines for debugging & visualization
-* Test Playbook (v1.0.0)
-
-### ✅ Engine Walkthrough Script (developer quickstart)
-
-* Working E2E demonstration of initialization → card placement → projection → scoring
-* Prints board at all major steps
-
-### Pending small fixes
-
-* Security Officer suboptimal placement in walkthrough (strategy issue, not legality issue)
-* Minor visualization additions (pawn deltas, effect markers)
+### ✅ Tooling & Docs
+* Engine walkthrough demo updated for v1.1 effects.
+* Export script bundles GPT-layer/Phase G docs.
+* Specs refreshed: `qb_engine_v2.1.0.md`, `qb_effects_v1.1_status.md`, `scoring_design_spec.md`, `enemy_observation_design_spec.md`, `qb_engine_test_playbook_v1.0.0.md`, Phase G/GPT-layer docs.
 
 ---
 
@@ -56,188 +48,41 @@ The following components are complete and validated:
 * Official reference for projection, legality, scoring
 * Engine logic must map 1:1 to this document
 
-**Status:** Complete.
-**Next actions:** Only update when new in-game observations require rule amendments.
+**Status:** Complete. Update only on real rule changes.
 
 ---
 
 # **2. Phase B — Deterministic Engine Core (Complete)**
-
-This phase produced:
-
-* BoardState
-* LegalityChecker
-* ProjectionEngine
-* PawnContribution bookkeeping
-* EffectEngine behavior
-* Destruction model
-* ScoringEngine
-
-**Status:** Complete & stable.
-This foundation should remain unchanged except for bugfixes.
+BoardState, legality, projection, pawn bookkeeping, destruction, base scoring established. Bugfix-only going forward.
 
 ---
 
-# **3. Phase C — Simulation Layer (IN PROGRESS, next major area)**
-
-This phase teaches the engine to “play a turn,” not intelligently, but mechanically.
-
-### 3.1 Turn Structure
-
-* Draw step (player, enemy)
-* Play step with legality enforcement
-* Apply projections
-* Resolve effects
-* Cleanup phase (destroyed cards, effect expiry)
-
-### 3.2 Hand Modeling
-
-* Player hand already partially supported in walkthrough
-* Enemy hand currently: **no model**
-
-Required additions:
-
-* A PlayerHand and EnemyHand model
-* Mulligan support
-* Draw counters
-* Each placement must decrement hand state and increase graveyard/destruction log
-
-### 3.3 Deck Modeling
-
-The engine must support deterministic or seeded-random deck generation.
-
-Requirements:
-
-* Represent 10-card decks (player & enemy)
-* Shuffle (seeded RNG)
-* Draw order tracking
-* Mulligan rules
-* Replacement after destruction (token creation, transform effects)
-
-### 3.4 Hand → Board Interface
-
-Currently the user provides placements via API call; engine must gain:
-
-* `playCardFromHand(handIndex, tile)`
-* Validation wrapper around LegalityChecker
-* Automatic hydration of card data from DB
-* Updates to history logs
-
-**Status:** 40% complete.
-
-This is our **next task once Option D restructuring is complete.**
+# **3. Phase C — Simulation Layer (Complete)**
+Deterministic turn loop with seeded decks/hands, mulligan, draw, play_card_from_hand, projections/effects, destruction, cleanup. Safe empty-deck draws. Cloneable GameState for prediction/simulation tests.
 
 ---
 
-# **4. Phase D — Enemy Observation Model (Upcoming)**
-
-This is not prediction — it is a passive observation system.
-
-### Required capabilities:
-
-* Track what the enemy has already played
-* Track visible tiles (enemy projections, effect markers)
-* Infer enemy card identities **only when deterministic** (e.g., via token summons or unique patterns)
-* Maintain an “observation state” separate from “prediction state”
-
-### Observation Data Stored:
-
-* Enemy board occupancy
-* Pawn ranks & ownership
-* Effect markers
-* Known enemy cards revealed through gameplay (e.g. spawning tokens)
-* Turn order of enemy actions
-
-**Status:** Not started.
-This becomes the foundation for prediction but must remain purely factual.
+# **4. Phase D — Enemy Observation (Complete)**
+Factual tracking of enemy plays/tokens/destroyed and known-deck remaining IDs. Deterministic updates from GameState; consumed by prediction/projection tests.
 
 ---
 
-# **5. Phase E — Prediction Engine (Epic E)**
-
-This is the phase you originally identified as “much bigger than A–D,” and that’s correct.
-Epic E introduces the computational reasoning required for coaching.
-
-### Three layers:
-
-#### **5.1 Enemy Deck Inference (probabilistic, not guaranteed)**
-
-* Based on early plays, tokens, cost distribution, patterns
-* Weighted likelihoods
-* Multiple plausible deck models
-
-#### **5.2 Enemy Hand Prediction**
-
-* Based on inferred deck + observed draws
-* Bayesian updating each turn
-* Must maintain a set of possible hand-states, not a single guess
-
-#### **5.3 Enemy Next-Move Projection**
-
-For each plausible enemy hand:
-
-* enumerate all legal placements
-* simulate resulting board states
-* score them
-* produce a probability-weighted threat map
-
-This gives the coaching layer something to evaluate against.
-
-**Status:** Not started.
-Epic E should not be attempted until Phase C is fully complete.
+# **5. Phase E — Prediction Engine (Complete)**
+Deterministic 1-ply enemy projection with threat maps; uses simulation clones and scoring. No probabilistic inference; follows implemented test coverage.
 
 ---
 
-# **6. Phase F — Coaching Layer (Final Phase)**
-
-This is the “AlphaGo-turned-Coach” layer that sits **on top of the deterministic engine**.
-
-### Requirements:
-
-#### **6.1 State Evaluation**
-
-* Identify winning vs losing positions
-* Evaluate tempo advantage
-* Evaluate lane pressure
-* Evaluate scoring threats
-* Rate the strength of future enemy moves
-* Provide a clear explanation for each evaluation
-
-#### **6.2 Recommendation Engine**
-
-Using full deterministic logic:
-
-* Enumerate all legal player moves
-* For each move, simulate enemy responses (from Epic E)
-* Provide best move recommendations
-* Offer readable strategy explanations
-* NEVER violate deterministic engine rules
-
-#### **6.3 User Coaching UX**
-
-* Turn-by-turn analysis
-* Highlight tiles
-* Explain legality failures
-* Explain why enemy plays were effective
-* Help users improve deckbuilding understanding
-
-**Status:** Planned.
-Must come ***after*** Phases C, D, and E.
+# **6. Phase F — Coaching Layer (Complete)**
+Deterministic recommendation engine: enumerates legal moves, scores via prediction+scoring, ranks with explanations/tags. Respects legality and effect/scoring semantics; validated by `test_coaching.py`.
 
 ---
 
-# **7. Phase G — Visualization & Tooling (Parallel Track)**
-
-(This is optional but recommended.)
-
-Includes:
-
-* Board printer v2 (with pawn deltas, effect markers, lane power, scoring preview)
-* Interactive replay debugger
-* Log visualizations
-* Notation standard (already partially defined in qb_visualization_conventions_v1.0.0.md)
-
-This phase can run alongside C–F.
+# **7. Phase G — GPT Layer & Tooling (In Progress)**
+Parallel track building GPT-facing UX and self-play:
+* Milestones in `phase_G_milestone_map.md` (core architecture, live coaching protocol, self-play, enemy profiles/memory, episode logging).
+* GPT layer docs: `GPT_layer/chatGPT+Codex_dual_initialization`, `GPT_layer/gpt_effects_layer_note.md`, `gpt_layer_design_overview.md`.
+* Export tooling includes GPT-layer docs (`tools/export_chatgpt_docs.py`).
+* Visualization/debugger/board printer remain optional improvements.
 
 ---
 
@@ -253,43 +98,16 @@ This phase can run alongside C–F.
 
 # **9. Test Strategy**
 
-### Unit Tests
-
-* Projection tests for every J-pattern class
-* Pawn math tests (flip chains, multi-turn sequences)
-* Effect lifetime tests (whileInPlay, onDestroy, spawn effects)
-* Legality enforcement tests
-* Scoring tests across randomized board states
-
-### Integration Tests
-
-* Simulation tests for full turns
-* Deck + draw sequence tests
-* Token generation tests
-* High-complexity pattern boards
-
-### Regression Tests
-
-* Must run after every patch to rules or engine
+* Unit, integration, and regression suites live under `qb_engine/test_*.py`; current status 75/75 passing.
+* Registry coverage ensures every `effect_id` in the DB has a registry entry and op types are known.
+* New features require corresponding spec updates and tests.
 
 ---
 
-# **10. Next Action Queue (2025-12-05)**
+# **10. Next Action Queue (2025-12-06)**
 
-*This is exactly what we do next, in order.*
-
-### **A. Completed (Option D) — Repo/Project Folder Restructure**
-
-The ChatGPT Project folder is now in optimal condition for fast access.
-
-### **B. Start Phase C (Simulation Layer)** **← We begin this next**
-
-Specifically:
-
-1. Implement PlayerHand & EnemyHand models
-2. Implement Deck model + seeded RNG
-3. Add mulligan logic
-4. Add draw-phase logic
-5. Add playCardFromHand() canonical interface
-
-Once this is done, we move to Observation Model → Prediction → Coaching Layer.
+* Focus on Phase G (GPT layer) per `phase_G_milestone_map.md`:
+  - Solidify GPT↔engine message grammar and turn-loop protocol.
+  - Build self-play/episode logging on top of deterministic engine.
+  - Extend coaching UX for GPT-facing interactions.
+* Maintain engine determinism and test coverage; effect/rules changes are bugfix-only.  
