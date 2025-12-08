@@ -133,6 +133,7 @@ Pattern strings (e.g. `B2P,B4P,D2P,D4P`) are understood relative to this grid.
 When showing **which tiles are affected** by a card’s pattern on the 3×5 board, use **stars**:
 
 * `★` → tile affected by the currently discussed card’s projection (`P`, `E`, or `X`).
+  - In live coaching `[BOARD]` snapshots, a `★` inside the brackets also marks any tile currently under one or more active effects (auras/direct effects) that would modify power for a card on that tile.
 
 Example: Zu @ BOT-2 (YOU), showing affected tiles only:
 

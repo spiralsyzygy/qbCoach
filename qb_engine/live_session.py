@@ -29,6 +29,9 @@ class LiveSessionEngineBridge:
         self.session_id = self._generate_session_id()
         self.enemy_deck_tag: Optional[str] = None
         self.log_path: Optional[Path] = None
+        self.phase: str = "YOU_TURN_READY_FOR_REC_OR_PLAY"
+        self.turn_counter: int = 1
+        self.side_to_act: str = "Y"
 
         # Hydrator is available immediately for card resolution prior to init_match.
         self._hydrator: Optional[CardHydrator] = CardHydrator()
@@ -77,6 +80,9 @@ class LiveSessionEngineBridge:
         self._enemy_obs = EnemyObservationState()
         self._prediction_engine = PredictionEngine(hydrator=self._hydrator, effect_engine=self._effect_engine)
         self._coaching_engine = CoachingEngine(hydrator=self._hydrator, prediction_engine=self._prediction_engine)
+        self.phase = "YOU_TURN_READY_FOR_REC_OR_PLAY"
+        self.turn_counter = 1
+        self.side_to_act = "Y"
 
     def get_state(self) -> Dict[str, Any]:
         """Return a minimal serializable snapshot for the CLI/logging."""
@@ -87,16 +93,19 @@ class LiveSessionEngineBridge:
         session_info = {
             "mode": self.session_mode,
             "session_id": self.session_id,
-            "turn": self._game_state.turn,
-            "side_to_act": self._game_state.side_to_act,
+            "turn": self.turn_counter,
+            "side_to_act": self.side_to_act,
+            "phase": self.phase,
             "enemy_deck_tag": self.enemy_deck_tag,
         }
+        effect_tiles = sorted(self._compute_effect_tiles())
         return {
             "session": session_info,
             "board": board_repr,
             "you_hand": hand_ids,
             "engine_output": {},
             "chosen_move": None,
+            "effect_tiles": effect_tiles,
         }
 
     def create_turn_snapshot(
@@ -116,6 +125,8 @@ class LiveSessionEngineBridge:
         if not self._game_state:
             raise RuntimeError("Session not initialized.")
         self._game_state.player_hand.sync_from_ids(card_ids)
+        # After a full-hand sync, keep phase unchanged but ensure side metadata reflects current state.
+        self.side_to_act = self._game_state.side_to_act
 
     def resolve_card_id(self, identifier: str) -> str:
         """
@@ -143,6 +154,14 @@ class LiveSessionEngineBridge:
             raise ValueError(f"Ambiguous card identifier '{identifier}'. Matches: {matches}")
         return matches[0]
 
+    def apply_draw(self, card_id: str) -> None:
+        if not self._game_state or not self._hydrator:
+            raise RuntimeError("Session not initialized.")
+        if self.phase != "YOU_TURN_AWAITING_DRAW":
+            raise ValueError("Cannot draw now; wait for the start of your turn.")
+        self._game_state.player_hand.add_card(card_id)
+        self.phase = "YOU_TURN_READY_FOR_REC_OR_PLAY"
+
     def register_enemy_play(self, card_id: str, row: int, col: int) -> None:
         """
         Mirror an enemy play onto the board. This is a placeholder that should
@@ -150,6 +169,8 @@ class LiveSessionEngineBridge:
         """
         if not self._game_state or not self._hydrator:
             raise RuntimeError("Session not initialized.")
+        if self.phase != "ENEMY_TURN_AWAITING_PLAY":
+            raise ValueError("Not enemy turn; cannot register enemy play now.")
         tile = self._game_state.board.tile_at(row, col)
         card = self._hydrator.get_card(card_id)
         if tile.card_id is not None or tile.owner != "E" or tile.rank < card.cost:
@@ -164,6 +185,11 @@ class LiveSessionEngineBridge:
             self._game_state.play_card_from_hand("E", hand_idx, row, col)
         finally:
             self._game_state.side_to_act = original_side
+        # Enemy turn complete -> back to YOU draw phase
+        self._game_state.side_to_act = "Y"
+        self.side_to_act = "Y"
+        self.phase = "YOU_TURN_AWAITING_DRAW"
+        self.turn_counter += 1
 
     def apply_you_move(self, card_id: str, row: int, col: int) -> Dict[str, Any]:
         """
@@ -172,6 +198,10 @@ class LiveSessionEngineBridge:
         """
         if not self._game_state:
             raise RuntimeError("Session not initialized.")
+        if self.phase == "YOU_TURN_AWAITING_DRAW":
+            raise ValueError("You must sync your draw before playing.")
+        if self.phase == "ENEMY_TURN_AWAITING_PLAY":
+            raise ValueError("It is currently the enemy's turn.")
 
         try:
             hand_index = self._game_state.player_hand.as_card_ids().index(card_id)
@@ -179,11 +209,18 @@ class LiveSessionEngineBridge:
             raise ValueError(f"Card id {card_id} not found in hand.") from exc
 
         self._game_state.play_card_from_hand("Y", hand_index, row, col)
+        self._game_state.side_to_act = "E"
+        self.side_to_act = "E"
+        self.phase = "ENEMY_TURN_AWAITING_PLAY"
         return self.get_state()
 
     def recommend_moves(self, top_n: int = 3) -> List[Dict[str, Any]]:
         if not self._coaching_engine or not self._game_state or not self._enemy_obs:
             raise RuntimeError("Session not initialized.")
+        if self.phase == "YOU_TURN_AWAITING_DRAW":
+            raise ValueError("You must draw before requesting recommendations.")
+        if self.phase == "ENEMY_TURN_AWAITING_PLAY":
+            raise ValueError("It is currently the enemy's turn.")
         rec = self._coaching_engine.recommend_moves(self._game_state, self._enemy_obs, top_n=top_n)
         moves: List[Dict[str, Any]] = []
         for mv in rec.moves:
@@ -206,6 +243,20 @@ class LiveSessionEngineBridge:
                 }
             )
         return moves
+
+    def legal_moves(self) -> List[Dict[str, Any]]:
+        if not self._coaching_engine or not self._game_state:
+            raise RuntimeError("Session not initialized.")
+        candidates = self._coaching_engine.enumerate_you_moves(self._game_state)
+        return [
+            {
+                "card_id": mc.card_id,
+                "hand_index": mc.hand_index,
+                "lane_index": mc.lane_index,
+                "col_index": mc.col_index,
+            }
+            for mc in candidates
+        ]
 
     def get_prediction(self) -> Dict[str, Any]:
         if not self._prediction_engine or not self._game_state or not self._enemy_obs:
@@ -245,9 +296,19 @@ class LiveSessionEngineBridge:
             board_rows.append(lane)
         return board_rows
 
+    def _compute_effect_tiles(self) -> set[tuple[int, int]]:
+        if not self._game_state:
+            return set()
+        positions: set[tuple[int, int]] = set()
+        for aura in self._game_state.board.effect_auras:
+            positions.add((aura.lane_index, aura.col_index))
+        for pos in self._game_state.board.direct_effects.keys():
+            positions.add(pos)
+        return positions
+
     @staticmethod
     def _generate_session_id() -> str:
-        return datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+        return datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%S")
 
     def _ensure_log_path(self) -> Path:
         """
@@ -255,7 +316,7 @@ class LiveSessionEngineBridge:
         """
         if self.log_path:
             return self.log_path
-        timestamp = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.datetime.now(datetime.UTC).strftime("%Y%m%d_%H%M%S")
         safe_tag = (self.enemy_deck_tag or "").replace(" ", "_") if self.enemy_deck_tag else ""
         filename = f"{timestamp}_live"
         if safe_tag:
@@ -294,6 +355,9 @@ def format_turn_snapshot_for_ux(snapshot: TurnSnapshot) -> str:
     lines.append(f"session_id: {session.get('session_id', '')}")
     lines.append(f"turn: {session.get('turn', '')}")
     lines.append(f"side_to_act: {session.get('side_to_act', '')}")
+    phase = session.get("phase")
+    if phase:
+        lines.append(f"phase: {phase}")
     enemy_tag = session.get("enemy_deck_tag")
     if enemy_tag is not None:
         lines.append(f"enemy_deck_tag: {enemy_tag}")
@@ -302,19 +366,30 @@ def format_turn_snapshot_for_ux(snapshot: TurnSnapshot) -> str:
     # BOARD
     lines.append("[BOARD]")
     board = snapshot.get("board", [])
+    effect_tiles = set()
+    for pos in snapshot.get("effect_tiles", []):
+        try:
+            lane_idx, col_idx = pos
+            effect_tiles.add((lane_idx, col_idx))
+        except Exception:
+            continue
     header = "      1        2        3        4        5"
     lines.append(header)
     row_labels = ["Top", "Mid", "Bot"]
     for row_idx, row in enumerate(board):
         cells: List[str] = []
-        for tile in row:
+        for col_idx, tile in enumerate(row):
             owner = tile.get("owner", "?")
             rank = tile.get("rank", 0)
             card_id = tile.get("card_id")
             if card_id:
-                cells.append(f"[{owner}{rank}:{card_id}]")
+                token = f"[{owner}{rank}:{card_id}]"
             else:
-                cells.append(f"[{owner}{rank}]")
+                token = f"[{owner}{rank}]"
+            if (row_idx, col_idx) in effect_tiles:
+                if token.endswith("]"):
+                    token = token[:-1] + "★]"
+            cells.append(token)
         lines.append(f"{row_labels[row_idx]:<4} " + " ".join(f"{c:<8}" for c in cells))
     lines.append("")
 

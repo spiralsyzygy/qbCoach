@@ -57,7 +57,8 @@ def _collect_deck_ids_from_input(bridge: LiveSessionEngineBridge) -> List[str]:
 def _print_help() -> None:
     print(
         "Commands:\n"
-        "  draw <ids/names...>           sync your current hand after drawing (TODO)\n"
+        "  draw <ids/names...>           sync your current draw (append)\n"
+        "  set_hand <ids/names...>       replace your hand (escape hatch)\n"
         "  enemy <id/name> <row> <col>   register enemy play\n"
         "  rec                           compute recommendations + prediction\n"
         "  play <id/name> <row> <col>    apply your move\n"
@@ -125,8 +126,22 @@ def main() -> None:
                 continue
             try:
                 ids = [bridge.resolve_card_id(tok) for tok in args]
+                if len(ids) != 1:
+                    print("Draw expects exactly one card. Use set_hand to overwrite.")
+                    continue
+                bridge.apply_draw(ids[0])
+                print("Draw applied. You can now request rec/play.")
+            except ValueError as exc:
+                print(f"Error: {exc}")
+            continue
+        if cmd == "set_hand":
+            if not args:
+                print("Usage: set_hand <ids/names...>")
+                continue
+            try:
+                ids = [bridge.resolve_card_id(tok) for tok in args]
                 bridge.sync_you_hand_from_ids(ids)
-                print("Hand synced.")
+                print("Hand replaced.")
             except ValueError as exc:
                 print(f"Error: {exc}")
             continue
@@ -138,7 +153,7 @@ def main() -> None:
                 cid = bridge.resolve_card_id(args[0])
                 row, col = _parse_row_col(args[1], args[2])
                 bridge.register_enemy_play(cid, row, col)
-                print("Enemy play registered.")
+                print(f"Enemy play registered. === YOUR TURN BEGINS (turn {bridge.turn_counter}) ===")
             except Exception as exc:  # noqa: BLE001
                 print(f"Error: {exc}")
             continue
@@ -148,7 +163,7 @@ def main() -> None:
                 pred = bridge.get_prediction()
                 state = bridge.get_state()
                 snapshot: TurnSnapshot = bridge.create_turn_snapshot(
-                    engine_output={"recommend_moves": recs, "prediction": pred}
+                    engine_output={"recommend_moves": recs, "prediction": pred, "legal_moves": bridge.legal_moves()}
                 )
                 bridge.append_turn_snapshot(snapshot)
                 print(format_turn_snapshot_for_ux(snapshot))
@@ -164,11 +179,11 @@ def main() -> None:
                 row, col = _parse_row_col(args[1], args[2])
                 bridge.apply_you_move(cid, row, col)
                 snapshot: TurnSnapshot = bridge.create_turn_snapshot(
-                    engine_output={},
+                    engine_output={"legal_moves": bridge.legal_moves()},
                     chosen_move={"card_id": cid, "row": row, "col": col},
                 )
                 bridge.append_turn_snapshot(snapshot)
-                print("Move applied.")
+                print("Move applied. === ENEMY TURN BEGINS ===")
             except Exception as exc:  # noqa: BLE001
                 print(f"Illegal move or error: {exc}")
             continue
