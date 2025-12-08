@@ -30,14 +30,16 @@ class LiveSessionEngineBridge:
         self.enemy_deck_tag: Optional[str] = None
         self.log_path: Optional[Path] = None
 
+        # Hydrator is available immediately for card resolution prior to init_match.
+        self._hydrator: Optional[CardHydrator] = CardHydrator()
+        self._card_index: Dict[str, dict] = self._hydrator.index if self._hydrator else {}
+
         # Core engine components are initialized in init_match.
-        self._hydrator: Optional[CardHydrator] = None
         self._effect_engine: Optional[EffectEngine] = None
         self._game_state: Optional[GameState] = None
         self._enemy_obs: Optional[EnemyObservationState] = None
         self._prediction_engine: Optional[PredictionEngine] = None
         self._coaching_engine: Optional[CoachingEngine] = None
-        self._card_index: Dict[str, dict] = {}
 
     # ------------------------------------------------------------------ #
     # Public API
@@ -54,7 +56,8 @@ class LiveSessionEngineBridge:
         first 15 card IDs in the DB when explicit decks are not provided.
         """
         self.enemy_deck_tag = enemy_deck_tag
-        self._hydrator = CardHydrator()
+        if self._hydrator is None:
+            self._hydrator = CardHydrator()
         self._card_index = self._hydrator.index
         self._effect_engine = EffectEngine(Path("data/qb_effects_v1.1.json"), self._hydrator)
 
@@ -182,28 +185,39 @@ class LiveSessionEngineBridge:
         if not self._coaching_engine or not self._game_state or not self._enemy_obs:
             raise RuntimeError("Session not initialized.")
         rec = self._coaching_engine.recommend_moves(self._game_state, self._enemy_obs, top_n=top_n)
-        # Basic serialization of move recommendations
-        return [
-            {
-                "move": {
-                    "card_id": move.card.id,
-                    "lane_index": move.lane,
-                    "col_index": move.col,
-                },
-                "expected_margin": move.expected_margin,
-            }
-            for move in rec.moves
-        ]
+        moves: List[Dict[str, Any]] = []
+        for mv in rec.moves:
+            mc = mv.move
+            moves.append(
+                {
+                    "move": {
+                        "card_id": mc.card_id,
+                        "hand_index": mc.hand_index,
+                        "lane_index": mc.lane_index,
+                        "col_index": mc.col_index,
+                    },
+                    "you_margin_after_move": mv.you_margin_after_move,
+                    "you_margin_after_enemy_best": mv.you_margin_after_enemy_best,
+                    "you_margin_after_enemy_expected": mv.you_margin_after_enemy_expected,
+                    "quality_rank": mv.quality_rank,
+                    "quality_label": mv.quality_label,
+                    "explanation_tags": mv.explanation_tags,
+                    "explanation_lines": mv.explanation_lines,
+                }
+            )
+        return moves
 
     def get_prediction(self) -> Dict[str, Any]:
         if not self._prediction_engine or not self._game_state or not self._enemy_obs:
             raise RuntimeError("Session not initialized.")
         threat_map = self._prediction_engine.full_enemy_prediction(self._game_state, self._enemy_obs)
+        lane_pressure = {str(k): v for k, v in threat_map.lane_pressure.items()}
+        tile_pressure = {f"{k[0]},{k[1]}": v for k, v in threat_map.tile_pressure.items()}
         return {
             "best_enemy_score": threat_map.best_enemy_score,
             "expected_enemy_score": threat_map.expected_enemy_score,
-            "lane_pressure": threat_map.lane_pressure,
-            "tile_pressure": threat_map.tile_pressure,
+            "lane_pressure": lane_pressure,
+            "tile_pressure": tile_pressure,
         }
 
     # ------------------------------------------------------------------ #
