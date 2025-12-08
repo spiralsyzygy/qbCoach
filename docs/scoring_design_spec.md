@@ -1,6 +1,6 @@
 # Scoring Design Specification — qbCoach Engine v3.0
 
-Deterministic, read-only lane/match scoring used by simulation, prediction, and coaching. Aligned with `qb_rules_v2.2.4.md` and implemented in `qb_engine/scoring.py` + `qb_engine/effect_engine.py`.
+Deterministic, read-only lane/match scoring used by simulation, prediction, and coaching. Aligned with `qb_rules_v2.2.4.md` and implemented in `qb_engine/scoring.py` + `qb_engine/effect_engine.py`. Tests 89/89 green (Last updated 2025-12-06).
 
 ---
 

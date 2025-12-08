@@ -1,4 +1,5 @@
-# **GPT Live Coaching Protocol — Phase G / Track A (v0.2)**
+# **GPT Live Coaching Protocol — Phase G / Track A (v0.2)**  
+_Last updated 2025-12-06; Engine v2.1.0 / Effects v1.1; Tests 89/89 green._
 
 ### *Real-Match Coaching, Turn Choreography, Session Modes, and UX Standards*
 

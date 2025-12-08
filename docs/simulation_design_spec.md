@@ -51,7 +51,7 @@ It must align exactly with:
 * board semantics from **qb_rules_v2.2.4.md**
 * engine operations from **qb_engine_v2.1.0.md**
 * scoring mechanics from **scoring_design_spec.md**
-* the developer workflows in **qb_developer_notes_v1.0.0.md**
+* the developer workflows in **docs_archive/qb_developer_notes_v1.0.0.md** (superseded by `qbcoach_gpt_primer.md`)
 
 ---
 

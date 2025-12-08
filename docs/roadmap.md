@@ -1,4 +1,4 @@
-# **qbCoach Roadmap (Refactored 2025-12-06)**
+# **qbCoach Roadmap (Refactored 2025-12-06; tests 89/89 green)**
 
 *Authoritative Development Plan for the Deterministic Queen’s Blood Engine*
 

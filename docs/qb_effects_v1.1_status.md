@@ -1,6 +1,6 @@
 # qb_effects_v1.1 — Status & Semantics
 
-_Engine v2.1.0 + Effects v1.1; all tests passing._
+_Engine v2.1.0 + Effects v1.1; tests 89/89 green (Last updated 2025-12-06)._
 
 This is the canonical reference for what the v1.1 effect runtime does today. It reflects `qb_engine/effect_engine.py`, `game_state.py`, `scoring.py`, and the corresponding tests.
 

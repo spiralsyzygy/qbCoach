@@ -1,4 +1,6 @@
-# qbCoach Development Workflow Primer
+# qbCoach Development Workflow Primer (Legacy)
+
+_Superseded by `qbcoach_gpt_primer.md`. Retained for historical reference. Engine v2.1.0 / Effects v1.1 / Tests 89/89 green._
 
 ## Three Roles
 
@@ -43,4 +45,3 @@
 - Use pytest test panel for rapid iteration.
 - Let Codex handle file edits; ChatGPT handles architecture.
 - Store snapshots of the repo after each stable milestone.
-

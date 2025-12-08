@@ -22,16 +22,11 @@
 - `gpt_layer_design_overview.md` — GPT-facing architecture overview
 - `GPT_layer/chatGPT+Codex_dual_initialization` — GPT/Codex startup prompt set
 - `GPT_layer/gpt_effects_layer_note.md` — GPT-layer effects guidance
+- `GPT_layer/gpt_live_coaching_protocol_v0.2.md` — live coaching protocol and session modes
+- `qbcoach_gpt_primer.md` — consolidated GPT/Codex workflow, safety, memory, and visualization pointers
 - `phase_G_milestone_map.md` — GPT Layer milestone plan
-- `qbcoach_dev_workflow.md` — dev workflow and conventions
-
-## Workflow & Reference
-- `qb_memory_primer_v1.0.0.md`
-- `workflow_primer.md`
-- `roadmap.md`
-- `qb_developer_notes_v1.0.0.md`
-- `qb_visualization_conventions_v1.0.0.md`
-
+- `roadmap.md` — orientation and milestones
+- `qb_visualization_conventions_v1.0.0.md` — symbols and diagrams (referenced by GPT primer)
 ## Tests / Playbook
 - `qb_engine_test_playbook_v1.0.0.md` — map of automated test coverage
 
@@ -41,3 +36,7 @@
 
 ## Archive
 - `docs_archive/` — historical docs and deprecated prompts
+- `docs_archive/qbcoach_dev_workflow.md` — superseded by `qbcoach_gpt_primer.md`
+- `docs_archive/workflow_primer.md` — superseded by `qbcoach_gpt_primer.md`
+- `docs_archive/qb_developer_notes_v1.0.0.md` — superseded by `qbcoach_gpt_primer.md`
+- `docs_archive/qb_memory_primer_v1.0.0.md` — superseded by `qbcoach_gpt_primer.md`

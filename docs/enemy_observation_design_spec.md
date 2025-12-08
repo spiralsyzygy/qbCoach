@@ -1,6 +1,6 @@
 # Enemy Observation Design Specification — Phase D
 
-Factual tracking of enemy cards and deck usage, as implemented in `qb_engine/enemy_observation.py`. No predictions or probabilities; outputs feed Prediction (Phase E) and Coaching (Phase F).
+Factual tracking of enemy cards and deck usage, as implemented in `qb_engine/enemy_observation.py`. No predictions or probabilities; outputs feed Prediction (Phase E) and Coaching (Phase F). Tests 89/89 green (Last updated 2025-12-06).
 
 ---
 

@@ -1,6 +1,6 @@
 # Queen’s Blood Engine Test Playbook
 ### Version: v1.0.0  
-_Map of automated tests that keep qbCoach deterministic and aligned with specs._
+_Map of automated tests that keep qbCoach deterministic and aligned with specs. Tests 89/89 green (Last updated 2025-12-06)._
 
 All tests live under `qb_engine/test_*.py`. Current status: **75/75 passing** (Engine v2.1.0 + Effects v1.1).
 

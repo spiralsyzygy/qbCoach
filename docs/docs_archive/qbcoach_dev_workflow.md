@@ -1,8 +1,8 @@
-# qbCoach Development Workflow (One-Page Summary)
+# qbCoach Development Workflow (One-Page Summary) — Legacy
 
-This document describes the full development workflow for the qbCoach project, covering GPT/LangChain-style orchestration, Codex-driven implementation, deterministic Python engine evolution, and safe iteration on new features.
+This legacy document describes the full development workflow for the qbCoach project, covering GPT/LangChain-style orchestration, Codex-driven implementation, deterministic Python engine evolution, and safe iteration on new features. It is superseded by `qbcoach_gpt_primer.md` but kept for historical context.
 
-Version: Engine v2.1.0 + Effects v1.1 + 75/75 tests green  
+Version: Engine v2.1.0 + Effects v1.1 + 89/89 tests green  
 Layer: GPT (Phase G) + Codex Integration
 
 ---

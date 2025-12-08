@@ -1,6 +1,6 @@
 # qb_engine_v2.1.0.md  
 Queen’s Blood Engine Specification  
-Engine v2.1.0 • Effects v1.1 • Tests green
+Engine v2.1.0 • Effects v1.1 • Tests 89/89 green (Last updated 2025-12-06)
 
 ---
 
