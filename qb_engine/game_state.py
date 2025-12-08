@@ -143,6 +143,42 @@ class GameState:
         # Any successful play resets pass counter
         self.consecutive_passes = 0
 
+    def apply_enemy_play_from_card_id(self, card_id: str, lane: int, col: int, origin: str = "deck") -> None:
+        """
+        Apply an enemy card directly to the board by card_id (live coaching sync).
+        Bypasses enemy hand/turn, but uses the same projection/effect flow.
+        """
+        card = self.effect_engine._card_hydrator.get_card(card_id)
+        tile = self.board.tile_at(lane, col)
+
+        if tile.card_id is not None or tile.owner != "E" or tile.rank < card.cost:
+            raise ValueError("Illegal placement for enemy.")
+
+        lane_name = LANE_INDEX_TO_NAME[lane]
+        col_number = col + 1
+
+        effect_def = self.effect_engine.get_effect_for_card(card)
+        replaced_ally_power = 0
+        if effect_def and any(op.type == "replace_ally" for op in effect_def.operations):
+            tile = self.board.tile_at(lane, col)
+            occupant_id = tile.card_id
+            if occupant_id and self.board.get_card_side(occupant_id) == "E":
+                replaced_ally_power = self.effect_engine.compute_effective_power(self.board, lane, col)
+                self.effect_engine._destroy_cards(self.board, [(lane, col)])
+
+        self.board.place_card(lane_name, col_number, card, self.effect_engine)
+
+        # Event-based scaling on card played
+        self.effect_engine.handle_card_played(self.board, lane, col, card)
+
+        proj = compute_projection_targets_for_enemy(lane, col, card)
+        apply_pawns_for_enemy(self.board, proj, card)
+        apply_effects_for_enemy(self.board, proj, card)
+
+        self.board.recompute_influence_from_deltas()
+        self._apply_stateful_on_play_effects(card, "E", replaced_ally_power=replaced_ally_power)
+        self.consecutive_passes = 0
+
     def cleanup(self) -> None:
         """Placeholder for destruction/effect cleanup; currently just recomputes influence."""
         self.board.recompute_influence_from_deltas()
