@@ -26,6 +26,7 @@
 - `qbcoach_gpt_primer.md` — consolidated GPT/Codex workflow, safety, memory, and visualization pointers
 - `phase_G_milestone_map.md` — GPT Layer milestone plan
 - `roadmap.md` — orientation and milestones
+- `docs/dev_notes/spec_phase_E_kickoff.md` — Phase E (Prediction v2) kickoff spec (active cycle)
 - `qb_visualization_conventions_v1.0.0.md` — symbols and diagrams (referenced by GPT primer)
 ## Tests / Playbook
 - `qb_engine_test_playbook_v1.0.0.md` — map of automated test coverage

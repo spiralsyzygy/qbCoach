@@ -88,8 +88,13 @@ def main() -> None:
     if not _prompt_yes_no("Start new live coaching session?"):
         print("Bye.")
         return
+    coaching_mode = input("Coaching mode [strict/strategy] (default strict): ").strip().lower() or "strict"
+    try:
+        bridge_coaching_mode = coaching_mode if coaching_mode else "strict"
+    except Exception:
+        bridge_coaching_mode = "strict"
 
-    bridge = LiveSessionEngineBridge(session_mode="live_coaching")
+    bridge = LiveSessionEngineBridge(session_mode="live_coaching", coaching_mode=bridge_coaching_mode)
     enemy_deck_tag = _prompt_enemy_deck_tag()
     deck_choice = _choose_deck_mode()
 
@@ -98,7 +103,7 @@ def main() -> None:
         you_deck_ids = _collect_deck_ids_from_input(bridge)
     # For deck tag path ("a"), we leave you_deck_ids as None for now.
 
-    bridge.init_match(you_deck_ids=you_deck_ids, enemy_deck_tag=enemy_deck_tag)
+    bridge.init_match(you_deck_ids=you_deck_ids, enemy_deck_tag=enemy_deck_tag, coaching_mode=bridge_coaching_mode)
 
     print("Session initialized. Enter 'help' for commands.")
     _print_help()

@@ -24,7 +24,7 @@ class LiveSessionEngineBridge:
     serializable snapshots.
     """
 
-    def __init__(self, session_mode: str = "live_coaching") -> None:
+    def __init__(self, session_mode: str = "live_coaching", coaching_mode: str = "strict") -> None:
         self.session_mode = session_mode
         self.session_id = self._generate_session_id()
         self.enemy_deck_tag: Optional[str] = None
@@ -32,6 +32,7 @@ class LiveSessionEngineBridge:
         self.phase: str = "YOU_TURN_READY_FOR_REC_OR_PLAY"
         self.turn_counter: int = 1
         self.side_to_act: str = "Y"
+        self.coaching_mode: str = self._validate_coaching_mode(coaching_mode)
 
         # Hydrator is available immediately for card resolution prior to init_match.
         self._hydrator: Optional[CardHydrator] = CardHydrator()
@@ -51,6 +52,7 @@ class LiveSessionEngineBridge:
         self,
         you_deck_ids: Optional[List[str]] = None,
         enemy_deck_tag: Optional[str] = None,
+        coaching_mode: Optional[str] = None,
     ) -> None:
         """
         Initialize engine components and start a session.
@@ -59,6 +61,8 @@ class LiveSessionEngineBridge:
         first 15 card IDs in the DB when explicit decks are not provided.
         """
         self.enemy_deck_tag = enemy_deck_tag
+        if coaching_mode is not None:
+            self.coaching_mode = self._validate_coaching_mode(coaching_mode)
         if self._hydrator is None:
             self._hydrator = CardHydrator()
         self._card_index = self._hydrator.index
@@ -92,6 +96,7 @@ class LiveSessionEngineBridge:
         hand_ids = self._game_state.player_hand.as_card_ids()
         session_info = {
             "mode": self.session_mode,
+            "coaching_mode": self.coaching_mode,
             "session_id": self.session_id,
             "turn": self.turn_counter,
             "side_to_act": self.side_to_act,
@@ -327,6 +332,13 @@ class LiveSessionEngineBridge:
         self.log_path = logs_dir / filename
         return self.log_path
 
+    @staticmethod
+    def _validate_coaching_mode(mode: str) -> str:
+        mode_norm = mode.strip().lower()
+        if mode_norm not in {"strict", "strategy"}:
+            raise ValueError("coaching_mode must be 'strict' or 'strategy'.")
+        return mode_norm
+
     def append_turn_snapshot(self, snapshot: TurnSnapshot) -> None:
         """
         Append a TurnSnapshot as a JSON line to the session log file.
@@ -352,6 +364,9 @@ def format_turn_snapshot_for_ux(snapshot: TurnSnapshot) -> str:
     session = snapshot.get("session", {})
     lines.append("[SESSION]")
     lines.append(f"mode: {session.get('mode', '')}")
+    coaching_mode = session.get("coaching_mode")
+    if coaching_mode:
+        lines.append(f"coaching_mode: {coaching_mode}")
     lines.append(f"session_id: {session.get('session_id', '')}")
     lines.append(f"turn: {session.get('turn', '')}")
     lines.append(f"side_to_act: {session.get('side_to_act', '')}")

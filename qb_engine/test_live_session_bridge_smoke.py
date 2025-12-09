@@ -46,6 +46,7 @@ def test_format_turn_snapshot_does_not_crash():
     assert "[SESSION]" in formatted
     assert "[BOARD]" in formatted
     assert "[YOU_HAND]" in formatted
+    assert "coaching_mode: strict" in formatted
 
 
 def test_append_turn_snapshot(tmp_path):

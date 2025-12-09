@@ -86,6 +86,18 @@ Parallel track building GPT-facing UX and self-play:
 
 ---
 
+# **7.5 Phase E — Prediction Engine (Current Cycle)**
+
+Active cycle to upgrade prediction from single-turn best reply to a deterministic, probabilistic multi-turn threat model (PredictionModel v2):
+
+* **Scope:** EnemyMoveDistribution (weighted deterministic enemy moves summing to 1.0), PathEvaluator (bounded 2–3 turn lookahead with pruning ≤20 branches and volatility metric), PredictionSynthesizer (expected/median/worst margins, lane threats/volatility, danger tiles ★, narrative-ready facts).
+* **Constraints:** Read-only on engine state; no changes to legality/effects/scoring; no stochastic rollouts/ML; backward-compatible with v1 outputs.
+* **Integration:** GPT strict mode = v2 facts only; strategy mode can discuss volatility/threat clusters; aligns with future live coaching protocol v0.4.
+* **Milestones:** E1 (EMD prototype/tests), E2 (PathEvaluator), E3 (Synthesizer), E4 (GPT narration updates), E5 (tuning/benchmarks; target ~120–140 tests).
+* **Status:** In progress (Phase E kickoff v0.1, prerequisites satisfied by Phase G v0.3). See `docs/dev_notes/spec_phase_E_kickoff.md` for full spec.
+
+---
+
 # **8. Development Philosophy**
 
 1. **Deterministic first, predictive second.**

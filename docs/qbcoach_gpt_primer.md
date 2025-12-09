@@ -1,5 +1,5 @@
 # qbCoach GPT Primer
-_Last updated 2025-12-06 — Engine v2.1.0 / Effects v1.1 — Tests 89/89 green_
+_Last updated 2025-12-08 — Engine v2.1.0 / Effects v1.1 — Tests 99/99 green_
 
 This primer collects the essential GPT-facing guidance for qbCoach: roles, workflow, memory rules, and visualization references. It supersedes the legacy workflow primers and developer notes for day-to-day GPT/Codex collaboration.
 

@@ -1,4 +1,4 @@
-# GPT Live Coaching Cheat Sheet (Engine v2.1.0 / Effects v1.1)
+# GPT Live Coaching Cheat Sheet (Engine v2.1.0 / Effects v1.1 — Tests 99/99 green, updated 2025-12-08)
 
 This guide is for GPT-layer agents interacting with the deterministic qbCoach engine via the live-coaching bridge/CLI. It summarizes how to read/write state, what to log, and how to keep the conversation consistent with the engine.
 
