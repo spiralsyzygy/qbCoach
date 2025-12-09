@@ -86,18 +86,6 @@ Parallel track building GPT-facing UX and self-play:
 
 ---
 
-# **7.5 Phase E — Prediction Engine (Current Cycle)**
-
-Active cycle to upgrade prediction from single-turn best reply to a deterministic, probabilistic multi-turn threat model (PredictionModel v2):
-
-* **Scope:** EnemyMoveDistribution (weighted deterministic enemy moves summing to 1.0), PathEvaluator (bounded 2–3 turn lookahead with pruning ≤20 branches and volatility metric), PredictionSynthesizer (expected/median/worst margins, lane threats/volatility, danger tiles ★, narrative-ready facts).
-* **Constraints:** Read-only on engine state; no changes to legality/effects/scoring; no stochastic rollouts/ML; backward-compatible with v1 outputs.
-* **Integration:** GPT strict mode = v2 facts only; strategy mode can discuss volatility/threat clusters; aligns with future live coaching protocol v0.4.
-* **Milestones:** E1 (EMD prototype/tests), E2 (PathEvaluator), E3 (Synthesizer), E4 (GPT narration updates), E5 (tuning/benchmarks; target ~120–140 tests).
-* **Status:** In progress (Phase E kickoff v0.1, prerequisites satisfied by Phase G v0.3). See `docs/dev_notes/spec_phase_E_kickoff.md` for full spec.
-
----
-
 # **8. Development Philosophy**
 
 1. **Deterministic first, predictive second.**
@@ -113,6 +101,183 @@ Active cycle to upgrade prediction from single-turn best reply to a deterministi
 * Unit, integration, and regression suites live under `qb_engine/test_*.py`; current status 75/75 passing.
 * Registry coverage ensures every `effect_id` in the DB has a registry entry and op types are known.
 * New features require corresponding spec updates and tests.
+
+Below is a clean **Phase G Roadmap Checkpoint Update** that fits directly into your existing `docs/roadmap.md` structure and maintains continuity with Phase G → Phase E handoff expectations.
+
+It’s written to slot into a “Milestone Status / Checkpoint” section verbatim.
+
+---
+
+# ✅ **Phase G — Development Roadmap Checkpoint (v0.3 Completion)**
+
+*(Ready to drop into `docs/roadmap.md` as a milestone update)*
+
+## **Summary**
+
+Phase G (Track A.5: Live Coaching UX + GPT Orchestration Layer) has reached a **stable v0.3 checkpoint**.
+This phase’s purpose was to unify:
+
+* Deterministic engine execution (rules, effects, scoring, projections, prediction)
+* Manual-turn-loop GPT coaching behavior
+* Human-facing UX in the CLI
+* Snapshot formatting standards & visualization conventions
+
+All core loop features and safety requirements have now been implemented, validated, and tested end-to-end.
+
+Testing reports: **99/99 tests green**, including newly added UX & visualization tests.
+
+---
+
+# **1. What Has Been Completed (Phase G v0.3)**
+
+### **1.1 Live Coaching Loop — Full Turn/Phase Control**
+
+* Correct YOU/ENEMY turn gating
+* Enforcement of draw-before-recommend/playing
+* Full legality access (no longer tied to recommended moves)
+* Correct turn increments + side_to_act resolution
+* Turn boundary messages in CLI
+* Accurate, stable snapshotting (SESSION, BOARD, YOU_HAND, ENGINE_OUTPUT)
+
+### **1.2 Hand Management — Fully Stable**
+
+* `draw` now **appends** instead of overwriting hand
+* Added `set_hand` for manual desync recovery
+* Deterministic updates in snapshots + logs
+* Hand sync is now completely predictable and safe under load
+
+### **1.3 Effect Overlay Visualization (ISSUE 9)**
+
+* Engine snapshot now emits `effect_tiles` overlay
+* Formatter adds `★` to any tile under active effects
+* Works for:
+
+  * empty effect tiles
+  * occupied effect tiles
+  * multi-effect tiles
+* Documentation updated to reflect unified semantics:
+
+  > `★` = tile is under one or more live effects (game-state actual)
+
+### **1.4 Coaching Mode (strict / strategy)**
+
+* Stored in LiveSessionEngineBridge
+* Echoed in `[SESSION]` header + logs
+* CLI prompts for mode and defaults to `strict`
+* Tests confirm correct behavior for both modes
+* Simplifies future UX work by separating:
+
+  * deterministic engine narration
+  * heuristic strategy overlays (non-mechanical)
+
+### **1.5 Logging & Stability Improvements**
+
+* Fix: timezone-aware datetime for snapshot/log filenames
+* Log entries now include `coaching_mode`
+* All turn, phase, and hand ops consistently logged
+* JSONL logs validated against new schema
+
+---
+
+# **2. What Was Explicitly *Not* Modified (Safe Invariants)**
+
+Phase G improvements did **not** touch:
+
+* **Rules engine** (legality, pawn deltas, projections)
+* **Scoring system**
+* **Effect semantics** (modify_tile_ranks, power_delta, scale_delta, etc.)
+* **Prediction mechanics** (E-mode, influence propagation)
+* **Card DB or card hydration**
+* **EnemyObservation inference logic**
+
+This preserves the entire deterministic foundation for Phase E work.
+
+---
+
+# **3. Phase G Remaining (Low Priority / Backlog)**
+
+These are *optional* polish items that may be incorporated later:
+
+* More robust enemy-play parsing (natural language → structured)
+* Replay log → episode artifact tooling (Track D)
+* Potential richer debug output (BOARD_DEBUG with b/p/e decomposition)
+* Additional CLI quality-of-life commands (undo, show_legality, show_effects, etc.)
+
+None of these block Phase E.
+
+---
+
+# **4. Phase E — Prerequisites Now Fully Satisfied**
+
+Phase E (Prediction Engine v2: probabilistic, multi-turn, shaped distributions) required several architectural guarantees:
+
+### ✔ Reliable, machine-readable snapshots
+
+### ✔ Correct turn-loop with enemy + player sequencing
+
+### ✔ Perfect hand sync
+
+### ✔ Correct effect-application visibility
+
+### ✔ Ability for GPT layer to choose coaching_mode (strict vs strategy)
+
+### ✔ Stabilized CLI + logs for training + debugging
+
+All prerequisites are now met.
+
+Phase E can begin without risk of needing major rework in Phase G foundations.
+
+---
+
+# **5. Phase E Preview — Next Steps (High Level)**
+
+Phase E objectives include:
+
+### **5.1 Prediction Model Upgrade**
+
+* From single-turn “best response” to multi-turn projected state values
+* Use influence maps, effect propagation, and probabilistic enemy responses
+* Integrate lane-power volatility models
+
+### **5.2 Threat Model Pipeline**
+
+* Progressive enemy-move distribution
+* Risk bands (safe, volatile, losing)
+* Conditioned predictions based on current + hypothetical board states
+
+### **5.3 Simulation Layer (Deterministic Core)**
+
+* N-step lookahead path evaluator
+* Local pruning strategies
+* Soft constraints preserving deterministic engine sanctity
+
+### **5.4 Data Structures**
+
+* PredictionDelta
+* ThreatClusters
+* Multi-turn Monte-like evaluators (strictly deterministic evaluation per branch)
+
+### **5.5 GPT Integration for UX (Track E.3)**
+
+* How prediction should be narrated
+* Interpretation rules: probability bands, risk classes
+* Strict-mode vs strategy-mode prediction phrasing
+
+The foundation Phase G provides—especially precise snapshotting and coaching-mode discipline—is essential for Phase E to succeed.
+
+---
+
+# **6. Phase G → Phase E Handoff Status**
+
+### **STATUS: COMPLETE AND STABLE**
+
+All critical path items for Phase G have been delivered and validated.
+
+The system is ready for Phase E development, with no known blockers.
+
+---
+
+# **End of Phase G Roadmap Checkpoint (v0.3)**
 
 ---
 
