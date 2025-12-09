@@ -126,6 +126,18 @@ class LiveSessionEngineBridge:
         base["chosen_move"] = chosen_move
         return base
 
+    def mulligan_output(self) -> Dict[str, Any]:
+        """Return a simple mulligan payload for the current hand (placeholder evaluator)."""
+        if not self._game_state:
+            raise RuntimeError("Session not initialized.")
+        hand_ids = self._game_state.player_hand.as_card_ids()
+        return {
+            "mulligan": {
+                "hand_ids": hand_ids,
+                "note": "Mulligan evaluation not implemented; hand is authoritative input.",
+            }
+        }
+
     def sync_you_hand_from_ids(self, card_ids: List[str]) -> None:
         if not self._game_state:
             raise RuntimeError("Session not initialized.")
@@ -417,6 +429,14 @@ def format_turn_snapshot_for_ux(snapshot: TurnSnapshot) -> str:
     # ENGINE_OUTPUT
     lines.append("[ENGINE_OUTPUT]")
     engine_output = snapshot.get("engine_output", {})
+    mull = engine_output.get("mulligan")
+    if mull:
+        lines.append("mulligan:")
+        hand_ids = mull.get("hand_ids", [])
+        note = mull.get("note")
+        lines.append(f"- hand_ids: {', '.join(hand_ids)}")
+        if note:
+            lines.append(f"- note: {note}")
     recs = engine_output.get("recommend_moves", [])
     if recs:
         lines.append("recommend_moves:")

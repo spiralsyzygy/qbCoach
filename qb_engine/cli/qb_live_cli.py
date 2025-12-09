@@ -69,6 +69,56 @@ def _print_help() -> None:
     )
 
 
+def _parse_id_tokens(args: List[str]) -> List[str]:
+    """
+    Normalize tokens that may include commas or quoted names into a clean list of identifiers.
+    """
+    if not args:
+        return []
+    raw = " ".join(args)
+    return _parse_identifiers_line(raw)
+
+
+def _handle_opening_hand(bridge: LiveSessionEngineBridge) -> None:
+    """
+    Turn 0 helper: prompt for opening hand, suggest mulligan path, confirm start of turn 1.
+    """
+    gs = bridge._game_state
+    dealt = []
+    if gs:
+        dealt = gs.player_hand.as_card_ids()
+    if dealt:
+        print(f"Engine dealt opening hand (for reference): {', '.join(dealt)}")
+    user_raw = input("Enter your opening hand (IDs/names, comma/space separated), or press Enter to accept engine hand: ").strip()
+    if user_raw:
+        tokens = _parse_identifiers_line(user_raw)
+        try:
+            ids = [bridge.resolve_card_id(tok) for tok in tokens]
+            bridge.sync_you_hand_from_ids(ids)
+            print(f"Opening hand synced to: {', '.join(ids)}")
+        except ValueError as exc:
+            print(f"Error syncing opening hand: {exc}. Keeping engine hand.")
+    # Mulligan suggestion
+    mulligan_raw = input("If you mulliganed, enter your post-mulligan hand now (or press Enter to keep current): ").strip()
+    if mulligan_raw:
+        tokens = _parse_identifiers_line(mulligan_raw)
+        try:
+            ids = [bridge.resolve_card_id(tok) for tok in tokens]
+            bridge.sync_you_hand_from_ids(ids)
+            print(f"Post-mulligan hand set to: {', '.join(ids)}")
+        except ValueError as exc:
+            print(f"Error syncing mulligan hand: {exc}. Keeping current hand.")
+    # Emit a mulligan snapshot for logs/GPT
+    try:
+        mull_snapshot = bridge.create_turn_snapshot(engine_output=bridge.mulligan_output())
+        bridge.append_turn_snapshot(mull_snapshot)
+        print("ENGINE_OUTPUT (mulligan):")
+        print(format_turn_snapshot_for_ux(mull_snapshot))
+    except Exception:
+        print("Note: Mulligan evaluation not available.")
+    print("=== TURN 1 BEGINS (side_to_act=YOU) ===")
+
+
 def _parse_row_col(row_token: str, col_token: str) -> Tuple[int, int]:
     row_map = {"top": 0, "t": 0, "mid": 1, "m": 1, "bot": 2, "b": 2}
     row = row_map.get(row_token.lower())
@@ -105,6 +155,8 @@ def main() -> None:
 
     bridge.init_match(you_deck_ids=you_deck_ids, enemy_deck_tag=enemy_deck_tag, coaching_mode=bridge_coaching_mode)
 
+    _handle_opening_hand(bridge)
+
     print("Session initialized. Enter 'help' for commands.")
     _print_help()
     while True:
@@ -130,7 +182,7 @@ def main() -> None:
                 print("Usage: draw <ids/names...>")
                 continue
             try:
-                ids = [bridge.resolve_card_id(tok) for tok in args]
+                ids = [bridge.resolve_card_id(tok) for tok in _parse_id_tokens(args)]
                 if len(ids) != 1:
                     print("Draw expects exactly one card. Use set_hand to overwrite.")
                     continue
@@ -144,7 +196,7 @@ def main() -> None:
                 print("Usage: set_hand <ids/names...>")
                 continue
             try:
-                ids = [bridge.resolve_card_id(tok) for tok in args]
+                ids = [bridge.resolve_card_id(tok) for tok in _parse_id_tokens(args)]
                 bridge.sync_you_hand_from_ids(ids)
                 print("Hand replaced.")
             except ValueError as exc:

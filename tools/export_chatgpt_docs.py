@@ -23,10 +23,11 @@ REQUIRED_PATHS = [
     Path("docs/qbcoach_gpt_primer.md"),
     Path("docs/roadmap.md"),
     Path("docs/phase_G_milestone_map.md"),
-    Path("docs/gpt_layer_design_overview.md"),
+    Path("docs/GPT_layer/gpt_layer_design_overview.md"),
     Path("docs/GPT_layer/chatGPT+Codex_dual_initialization.md"),
-    Path("docs/GPT_layer/gpt_live_coaching_protocol_v0.2.md"),
+    Path("docs/GPT_layer/gpt_live_coaching_protocol_v0.3.md"),
     Path("docs/GPT_layer/gpt_effects_layer_note.md"),
+    Path("docs/GPT_layer/README_gpt_live_coaching.md"),
     Path("data/qb_DB_Complete_v2.json"),
     Path("data/qb_effects_v1.1.json"),
 ]
