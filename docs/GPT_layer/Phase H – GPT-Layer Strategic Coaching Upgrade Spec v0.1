@@ -1,0 +1,367 @@
+Below is the **Phase H – GPT-Layer Strategic Coaching Upgrade Spec v0.1**, written in the same style as your Phase C/D/G specs: structured, implementable, and ready to hand to Codex in pieces.
+
+This spec **assumes the deterministic engine is now fully trustworthy** for legality, projections, effects, scoring, prediction, and end-to-end state management (Phase G success).
+
+---
+
+# **Phase H – GPT-Layer Strategic Coaching Upgrade Spec v0.1**
+
+### **Purpose of Phase H**
+
+Phase H enhances the GPT-layer’s capacity to act as a *true strategic coach* by leveraging:
+
+* The engine’s authoritative prediction hooks
+* The engine’s legality + projection + scoring models
+* The newly robust naming, pattern, and DB systems
+* The live session bridge
+* Structured strategic heuristics
+
+Phase H upgrades the GPT-layer from *legality + tactical guidance* toward full **strategic reasoning**, **turn-loop planning**, and **explainable coaching**.
+
+This remains GPT-driven, but constrained by deterministic engine outputs so the GPT layer never hallucinates rules, effects, or board behaviors.
+
+---
+
+# **H.0 Architectural Overview**
+
+### The GPT layer is responsible for:
+
+1. **Interpreting game states in strategic terms, not mechanical ones**
+
+   * The engine provides raw, perfect information.
+   * GPT converts this into *meaning*: lane pressure, tempo, inevitability, card utilization windows, etc.
+
+2. **Producing coaching outputs that are:**
+
+   * **Legal** (engine-filtered)
+   * **High-signal** (not exhaustive or noisy)
+   * **Explainable** (grounded in real projections/margins)
+   * **Actionable** (prioritized recommendations)
+
+3. **Providing multi-tier coaching:**
+
+   * **Strict:** engine-priority moves, minimal narrative
+   * **Strategic:** explanation-rich, pattern-aware
+   * **Reflective:** analysis, what-ifs, counterfactual reasoning, post-turn evaluation
+
+4. **Integrating prediction signals**
+
+   * Probability-to-win or lane power deltas
+   * A “move strength score” for recommended actions
+   * Risk indicators and synergy markers
+
+5. **Supporting user-led exploration**
+
+   * “Why not this move?”
+   * “Show me its projected outcome.”
+   * “Explain the tile pattern interaction.”
+   * “What future threats does the enemy have?”
+
+6. **Maintaining strategic continuity across turns**
+
+   * Past decisions matter, and GPT must tie them into a coherent plan.
+
+Phase H **does not modify engine logic**.
+It upgrades the GPT layer into a stable, interpretable strategic system.
+
+---
+
+# **H.1 Required Enhancements to GPT-Layer Inputs & Interfaces**
+
+### **H.1.1 Engine → GPT Snapshot Enrichment**
+
+Add (or confirm presence of) the following fields in the JSON snapshot:
+
+1. **Lane power breakdowns**
+
+   * For each lane:
+
+     * You power
+     * Enemy power
+     * Net power
+     * Activation state (neutral / contested / ours / theirs)
+
+2. **Predicted outcome metrics**
+
+   * Engine already supports prediction hooks. GPT needs:
+
+     * `move_strength` or `expected_lane_delta` per recommended move
+     * `global_win_expectancy` per move if available
+     * Optional: a normalized score (0–1)
+
+3. **Projection overlays (for explanations)**
+
+   * Per recommended move, attach:
+
+     * A tile-delta map
+     * Which tiles change owner
+     * Which tiles gain or lose rank
+     * Which effects are newly triggered
+
+4. **Threat indexes**
+
+   * For each lane or tile:
+
+     * Enemy threat level (how easily the enemy could flip/control)
+     * Our vulnerability on next turn
+
+5. **Card metadata bundle**
+
+   * Full ability text
+   * Pattern text
+   * Cost
+   * Power
+   * Tags (e.g., “tempo”, “spike”, “stabilizer” if you want to add classification later)
+
+These enrichments are *metadata only* and do not alter engine behavior.
+
+---
+
+# **H.2 Strategic Reasoning Framework (GPT Behavior)**
+
+GPT must adopt a multi-layered reasoning stack that is:
+
+* Deterministic in structure
+* Non-hallucinatory
+* Explainable
+* Consistent with Queen’s Blood fundamentals
+
+### GPT must evaluate moves through 5 lenses:
+
+### **1. Lane Dynamics**
+
+* Who currently controls each lane?
+* How stable is control?
+* What is the activation potential this turn and next?
+* How does this move shift lane momentum?
+
+### **2. Tempo & Resource Efficiency**
+
+* Cost efficiency of the move
+* Does it advance board presence faster than the enemy?
+* Does it force suboptimal responses?
+
+### **3. Projection Quality**
+
+* How many tiles does this card influence?
+* Are those tiles high-value (near activators)?
+* Does the move enable upcoming plays?
+
+### **4. Threat Management**
+
+* Does this move:
+
+  * Close off enemy opportunities?
+  * Stabilize a contested lane?
+  * Prevent a flip or setback next turn?
+
+### **5. Strategic Synergy**
+
+* Does this move enable:
+
+  * A two-turn setup?
+  * The use of another high-value card?
+  * Efficient use of pattern chains?
+
+GPT should *explicitly score or comment on each aspect* for top 1–3 candidate plays.
+
+---
+
+# **H.3 Coaching Modes**
+
+### **H.3.1 Strict Mode (default)**
+
+* Minimal narrative
+* Return:
+
+  * Best move + reason
+  * One alternative if needed
+  * Risk note if applicable
+
+### **H.3.2 Strategic Mode**
+
+* Provide:
+
+  * Ranked list of recommended moves
+  * Explanation of:
+
+    * Lane shifts
+    * Projection deltas
+    * Threat / tempo tradeoffs
+  * Short-term plan for next 1–2 turns
+
+### **H.3.3 Reflective Mode**
+
+For analysis after a turn or match:
+
+* Identify:
+
+  * Best move that turn
+  * What the user actually did
+  * The resulting delta
+* Provide:
+
+  * “If you had played X instead…” simulation narrative
+  * Lessons + tactical patterns to watch for
+
+Reflective Mode helps players *learn*, not just win.
+
+---
+
+# **H.4 GPT-Layer Output Schema**
+
+### Each recommendation output should include:
+
+1. **MoveSummary**
+
+   ```
+   {
+     "card_id": "020",
+     "card_name": "Archdragon",
+     "row": "mid",
+     "col": 2,
+     "move_strength": 0.89,
+     "expected_lane_delta": { "top": +3, "mid": 0, "bot": -1 }
+   }
+   ```
+
+2. **ReasoningSummary**
+
+   * 2–4 bullet points max in Strict Mode
+   * Up to 6–8 in Strategic Mode
+
+3. **ProjectionSummary**
+
+   * A compact tile-delta list:
+
+     * Gains, losses, flips
+     * Which tiles become activators
+     * Aura interactions
+
+4. **TurnPlan (Strategic Mode only)**
+
+   * “This sets you up to…”
+
+5. **RiskProfile**
+
+   * “Enemy can counter here by…”
+   * “This move is tempo-negative but high payoff…”
+
+6. **ConfidenceBand**
+
+   * GPT admits uncertainty when predictions are close:
+
+     * “Engine margin difference < 2 → moves are near-equivalent.”
+
+This schema ensures explainability without hallucination.
+
+---
+
+# **H.5 Strict Constraints on GPT Behavior**
+
+1. **Never invent rules, projections, card abilities, or scoring mechanics.**
+
+2. **Never simulate the board internally** — always request or rely on engine snapshots.
+
+3. **Never invent card names** — use engine metadata only.
+
+4. **Never suggest illegal moves** — GPT recommendations must reference engine legality.
+
+5. **Always ground strategic interpretation in:**
+
+   * Engine’s tile deltas
+   * Engine’s lane power
+   * Engine’s legality/predictions
+
+6. If something is unclear:
+
+   * **GPT asks the user for clarification instead of guessing.**
+
+---
+
+# **H.6 Implementation Tasks for Codex**
+
+### **Phase H Implementation (Engine-side metadata only)**
+
+1. Add enriched prediction fields to engine → GPT snapshot:
+
+   * Move strength
+   * Lane deltas
+   * Risk flags
+   * Projection overlays
+
+2. Add a consistent GPT-facing schema:
+
+   * MoveSummary, ProjectionSummary, etc.
+
+3. Confirm GPT can request:
+
+   * “Explain move X”
+   * “Compare Y vs Z”
+   * “What-if scenario?”
+
+### **Phase H Implementation (GPT-layer behavior)**
+
+Update:
+
+* `gpt_live_coaching_protocol` → v0.4
+* `qbcoach_gpt_primer` → add strategic reasoning section
+* Provide:
+
+  * Templates for Strict / Strategic / Reflective outputs
+  * Decision tree for evaluation
+  * Safety + anti-hallucination constraints
+
+---
+
+# **H.7 Test Plan (GPT-Layer Behavioral Tests)**
+
+These are **doc tests**, not Python tests:
+
+1. Test **strict mode**:
+
+   * Ask GPT to provide top move only.
+   * Ensure output is concise and grounded in snapshot.
+
+2. Test **strategic mode**:
+
+   * Ask for deeper reasoning.
+   * Ensure GPT cites:
+
+     * Lane pressure
+     * Projections
+     * Threats
+   * Ensure no hallucinated rules.
+
+3. Test **reflective mode**:
+
+   * Provide a turn and ask “what did I miss?”
+   * Ensure GPT analyzes engine data, not invented scenarios.
+
+4. Test **conflict scenarios**:
+
+   * Recommend between two moves with similar margin.
+   * GPT must acknowledge closeness.
+
+5. Test **card name handling**:
+
+   * Ask GPT questions with fuzzy card names.
+   * Ensure GPT routes resolution through the resolver.
+
+---
+
+# **H.8 Deliverables**
+
+* `docs/GPT_layer/gpt_live_coaching_protocol_v0.4.md`
+* `docs/qbcoach_gpt_primer.md` (Phase H section)
+* Updated snapshot schema in:
+
+  * `live_session.py`
+  * `format_turn_snapshot_for_ux`
+  * `predictor.py`
+* Codex-ready implementation patches for metadata enrichment
+* A strategic coaching template block
+
+---
+
+# **End of Phase H v0.1 Spec**

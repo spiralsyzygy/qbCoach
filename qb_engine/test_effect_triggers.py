@@ -101,7 +101,16 @@ def test_on_destroy_then_on_card_destroyed_order(tmp_path: Path):
     # W watches destroyed_ally and gains +1 scale
     grid_r = _grid(right="E")
     cards = [
-        {"id": "R", "name": "Rattle", "category": "Test", "cost": 0, "power": 1, "pattern": "", "grid": grid_r, "effect_id": "death_rattle"},
+        {
+            "id": "R",
+            "name": "Rattle",
+            "category": "Test",
+            "cost": 0,
+            "power": 1,
+            "pattern": "B3E",
+            "grid": grid_r,
+            "effect_id": "death_rattle",
+        },
         {"id": "W", "name": "Watcher", "category": "Test", "cost": 0, "power": 1, "pattern": "", "grid": _grid(), "effect_id": "watch_destroy"},
     ]
     effects = {

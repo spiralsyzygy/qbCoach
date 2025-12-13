@@ -74,20 +74,16 @@ def compute_projection_targets(
 
     targets: List[ProjectionTarget] = []
 
-    # card.grid is a 5x5 list of strings like ".", "P", "E", "X", "W"
-    for p_row_index, row in enumerate(card.grid):
-        for p_col_index, cell in enumerate(row):
-            if cell not in ("P", "E", "X"):
-                continue
+    # Use pattern-derived projection cells as the authoritative source.
+    for cell in card.projection_cells:
+        if cell.symbol not in ("P", "E", "X"):
+            continue
 
-            row_offset, col_offset = _pattern_index_to_offsets(p_row_index, p_col_index)
+        lane_prime = root_lane_index + cell.row_offset
+        col_prime = root_col_index + cell.col_offset
 
-            lane_prime = root_lane_index + row_offset
-            col_prime = root_col_index + col_offset
-
-            # Keep only tiles that land on the 3x5 board
-            if 0 <= lane_prime < 3 and 0 <= col_prime < 5:
-                targets.append((lane_prime, col_prime, cell))
+        if 0 <= lane_prime < 3 and 0 <= col_prime < 5:
+            targets.append((lane_prime, col_prime, cell.symbol))
 
     return ProjectionResult(
         root_lane_index=root_lane_index,
@@ -109,18 +105,15 @@ def compute_projection_targets_for_enemy(
     """
     targets: List[ProjectionTarget] = []
 
-    for p_row_index, row in enumerate(card.grid):
-        for p_col_index, cell in enumerate(row):
-            if cell not in ("P", "E", "X"):
-                continue
+    for cell in card.projection_cells:
+        if cell.symbol not in ("P", "E", "X"):
+            continue
 
-            row_offset, col_offset = _pattern_index_to_offsets(p_row_index, p_col_index)
+        lane_prime = root_lane_index + cell.row_offset
+        col_prime = root_col_index - cell.col_offset  # mirrored horizontally
 
-            lane_prime = root_lane_index + row_offset
-            col_prime = root_col_index - col_offset  # mirrored horizontally
-
-            if 0 <= lane_prime < 3 and 0 <= col_prime < 5:
-                targets.append((lane_prime, col_prime, cell))
+        if 0 <= lane_prime < 3 and 0 <= col_prime < 5:
+            targets.append((lane_prime, col_prime, cell.symbol))
 
     return ProjectionResult(
         root_lane_index=root_lane_index,
@@ -160,12 +153,6 @@ def apply_pawns_for_you(board: BoardState, proj: ProjectionResult, card: Card) -
         if kind not in ("P", "X"):
             continue  # ignore pure effect-only tiles here
 
-        tile = board.tiles[lane_index][col_index]
-
-        # No hidden pawn stack under occupied tiles
-        if tile.card_id is not None:
-            continue
-
         board.add_pawn_delta_for_you(
             lane_index=lane_index,
             col_index=col_index,
@@ -186,11 +173,6 @@ def apply_pawns_for_enemy(board: BoardState, proj: ProjectionResult, card: Card)
 
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("P", "X"):
-            continue
-
-        tile = board.tiles[lane_index][col_index]
-
-        if tile.card_id is not None:
             continue
 
         board.add_pawn_delta_for_enemy(

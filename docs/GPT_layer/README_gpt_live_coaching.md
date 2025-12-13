@@ -52,3 +52,13 @@ Use `format_turn_snapshot_for_ux(snapshot)` to ensure consistent formatting and 
 ## Logging
 - JSONL in `logs/live/<timestamp>_live_[enemy_tag].jsonl`.
 - Each line = TurnSnapshot; use for replay/training/evaluation.
+
+### Debugging desyncs
+- To trace a specific board tile across a log, run:
+  - `python tools/analyze_live_jsonl_tile_timeline.py logs/live/<file>.jsonl --tile BOT-3 --show-delta --show-events`
+- Output: timeline of only the snapshots where the tile changed (or all snapshots with `--show-all`), plus a summary block. Switch to `--format json` for machine parsing.
+- To diff whole-board changes between snapshots and find divergence points:
+  - `python tools/analyze_live_jsonl_board_diff.py logs/live/<file>.jsonl`
+  - Focus BOT-3 only: `--focus-tile BOT-3`
+  - Show no-ops and hand/session deltas: `--show-all --include-nonboard`
+  - Use `--format json` for filtering/automation; `--limit N` to cap output.

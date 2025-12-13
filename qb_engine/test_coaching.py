@@ -158,6 +158,60 @@ def test_recommend_moves_handles_no_legal_moves():
     assert "No legal moves" in reco.primary_message
 
 
+def test_recommend_moves_includes_pass_when_allowed():
+    state = _make_state(ids=["001"] * 15)
+    # Fill your tiles to block plays
+    for lane in range(3):
+        state.board.tile_at(lane, 0).card_id = "001"
+    obs = EnemyObservation()
+    engine = CoachingEngine()
+    reco = engine.recommend_moves(state, obs, allow_pass=True)
+    assert any(me.move.card_id == "_PASS_" for me in reco.moves)
+    assert reco.moves[0].quality_rank == 1
+
+
+def test_pass_ranks_above_worsening_move(monkeypatch):
+    state = _make_state(ids=["001"] * 15)
+    obs = EnemyObservation()
+    engine = CoachingEngine()
+
+    bad_move = MoveEvaluation(
+        move=MoveCandidate("001", 0, 0, 0),
+        you_margin_after_move=-5.0,
+        you_margin_after_enemy_best=-5.0,
+        you_margin_after_enemy_expected=-5.0,
+        position_after_move=None,
+        enemy_threat_after_move=None,
+        quality_rank=0,
+        quality_label="",
+        explanation_tags=[],
+        explanation_lines=[],
+    )
+
+    def fake_rank(state_param, obs_param, moves):
+        return [bad_move]
+
+    pass_eval = MoveEvaluation(
+        move=MoveCandidate("_PASS_", -1, -1, -1),
+        you_margin_after_move=0.0,
+        you_margin_after_enemy_best=0.0,
+        you_margin_after_enemy_expected=0.0,
+        position_after_move=None,
+        enemy_threat_after_move=None,
+        quality_rank=0,
+        quality_label="",
+        explanation_tags=["pass"],
+        explanation_lines=["pass"],
+    )
+
+    monkeypatch.setattr(engine, "rank_moves", fake_rank)
+    monkeypatch.setattr(engine, "_evaluate_pass", lambda *args, **kwargs: pass_eval)
+
+    reco = engine.recommend_moves(state, obs, allow_pass=True)
+    assert reco.moves[0].move.card_id == "_PASS_"
+    assert reco.moves[0].quality_label == "best"
+
+
 def test_margin_tags_respect_expected_margin():
     state = _make_state(ids=["001"] * 15)
     obs = EnemyObservation()

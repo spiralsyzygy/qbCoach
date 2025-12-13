@@ -148,7 +148,7 @@ class EngineBridge:
         state_clone = session.game_state.clone()
         obs_clone = copy.deepcopy(session.enemy_obs)
 
-        rec = session.coaching_engine.recommend_moves(state_clone, obs_clone, top_n=top_n)
+        rec = session.coaching_engine.recommend_moves(state_clone, obs_clone, top_n=top_n, allow_pass=True)
         coaching_json = serialize_coaching_recommendation(rec)
 
         return {

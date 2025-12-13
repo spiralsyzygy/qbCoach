@@ -42,16 +42,16 @@ def test_archdragon_on_play_applies_enemy_debuff():
     archdragon = hydrator.get_card("020")
     target = hydrator.get_card("001")  # base power 1
 
-    target_tile = board.tile_at(0, 1)  # TOP-2 (aligned with pattern X)
+    target_tile = board.tile_at(1, 1)  # MID-2 (aligned with Archdragon pattern X)
     target_tile.owner = "E"
     target_tile.rank = 1
     target_tile.card_id = target.id
 
     board.place_card("MID", 1, archdragon, effect_engine=engine)
 
-    effective = board.effective_power_at(0, 1, engine)
+    effective = board.effective_power_at(1, 1, engine)
     assert effective == target.power - 3
-    assert board.direct_effects[(0, 1)]
+    assert board.direct_effects[(1, 1)]
 
 
 def test_toxirat_on_play_applies_to_all_affected_tiles():

@@ -2,6 +2,12 @@ from __future__ import annotations
 
 from typing import List, Tuple
 
+from qb_engine.card_resolver import (
+    CardResolveError,
+    parse_card_list,
+    resolve_card_identifier,
+)
+from qb_engine.card_resolver import _QUANTITY_RE  # type: ignore
 from qb_engine.live_session import LiveSessionEngineBridge
 from qb_engine.live_session import TurnSnapshot, format_turn_snapshot_for_ux
 
@@ -37,21 +43,64 @@ def _parse_identifiers_line(line: str) -> List[str]:
     return tokens
 
 
+def _resolve_hand_with_corrections(user_raw: str) -> List[str]:
+    """
+    Resolve a hand entry with interactive correction on unknown tokens.
+    If a suggestion is offered, allow the user to accept it; otherwise prompt
+    for a replacement until resolved (or aborts if blank).
+    """
+    tokens = _parse_identifiers_line(user_raw)
+    resolved_ids: List[str] = []
+    for tok in tokens:
+        qty = 1
+        tok_clean = tok.strip()
+        m = _QUANTITY_RE.match(tok_clean)
+        if m:
+            tok_clean = m.group("name").strip()
+            qty = int(m.group("count"))
+
+        while True:
+            try:
+                card = resolve_card_identifier(tok_clean)
+                resolved_ids.extend([card.id] * qty)
+                break
+            except CardResolveError as exc:
+                msg = str(exc)
+                suggestion = None
+                if "Did you mean:" in msg:
+                    suggestion_part = msg.split("Did you mean:", 1)[1].strip().rstrip("?")
+                    suggestion = suggestion_part.split(",")[0].strip() if suggestion_part else None
+                if suggestion:
+                    resp = input(f"{msg} Accept '{suggestion}'? [y/N]: ").strip().lower()
+                    if resp.startswith("y"):
+                        card = resolve_card_identifier(suggestion)
+                        resolved_ids.extend([card.id] * qty)
+                        break
+                replacement = input(f"Enter replacement for '{tok_clean}' (or leave blank to cancel hand entry): ").strip()
+                if not replacement:
+                    raise CardResolveError(msg)
+                tok_clean = replacement
+    return resolved_ids
+
+
 def _collect_deck_ids_from_input(bridge: LiveSessionEngineBridge) -> List[str]:
     while True:
         raw = input(
             "Enter your 15-card deck as IDs and/or names, separated by commas or spaces:\n"
             "Example: 003, 005, Levrikon, \"Grasslands Wolf\", 018, ...\nDeck: "
         )
-        tokens = _parse_identifiers_line(raw)
-        if len(tokens) != 15:
-            print("Deck must have exactly 15 entries. Please try again.")
-            continue
         try:
-            return [bridge.resolve_card_id(tok) for tok in tokens]
-        except ValueError as exc:
+            cards = parse_card_list(raw)
+        except CardResolveError as exc:
             print(f"Error: {exc}")
             continue
+        if len(cards) != 15:
+            print("Deck must have exactly 15 entries. Please try again.")
+            continue
+        ids = [c.id for c in cards]
+        names = ", ".join(f"{c.name} ({c.id})" for c in cards)
+        print(f"Parsed deck: {names}")
+        return ids
 
 
 def _print_help() -> None:
@@ -59,9 +108,11 @@ def _print_help() -> None:
         "Commands:\n"
         "  draw <ids/names...>           sync your current draw (append)\n"
         "  set_hand <ids/names...>       replace your hand (escape hatch)\n"
+        "  resolve <name/id>             resolve a card to its canonical id/name\n"
         "  enemy <id/name> <row> <col>   register enemy play\n"
         "  rec                           compute recommendations + prediction\n"
         "  play <id/name> <row> <col>    apply your move\n"
+        "  pass                          skip your turn and hand off to enemy\n"
         "  state                         show board & your hand\n"
         "  log                           print the current session log path\n"
         "  help                          show this menu again\n"
@@ -79,6 +130,14 @@ def _parse_id_tokens(args: List[str]) -> List[str]:
     return _parse_identifiers_line(raw)
 
 
+def _resolve_card_interactive(token: str) -> None:
+    try:
+        card = resolve_card_identifier(token)
+        print(f"{card.name} ({card.id})")
+    except CardResolveError as exc:
+        print(f"Could not resolve '{token}': {exc}")
+
+
 def _handle_opening_hand(bridge: LiveSessionEngineBridge) -> None:
     """
     Turn 0 helper: prompt for opening hand, suggest mulligan path, confirm start of turn 1.
@@ -91,26 +150,27 @@ def _handle_opening_hand(bridge: LiveSessionEngineBridge) -> None:
         print(f"Engine dealt opening hand (for reference): {', '.join(dealt)}")
     user_raw = input("Enter your opening hand (IDs/names, comma/space separated), or press Enter to accept engine hand: ").strip()
     if user_raw:
-        tokens = _parse_identifiers_line(user_raw)
         try:
-            ids = [bridge.resolve_card_id(tok) for tok in tokens]
+            ids = _resolve_hand_with_corrections(user_raw)
             bridge.sync_you_hand_from_ids(ids)
             print(f"Opening hand synced to: {', '.join(ids)}")
-        except ValueError as exc:
+        except CardResolveError as exc:
             print(f"Error syncing opening hand: {exc}. Keeping engine hand.")
     # Mulligan suggestion
     mulligan_raw = input("If you mulliganed, enter your post-mulligan hand now (or press Enter to keep current): ").strip()
     if mulligan_raw:
-        tokens = _parse_identifiers_line(mulligan_raw)
         try:
-            ids = [bridge.resolve_card_id(tok) for tok in tokens]
+            ids = _resolve_hand_with_corrections(mulligan_raw)
             bridge.sync_you_hand_from_ids(ids)
             print(f"Post-mulligan hand set to: {', '.join(ids)}")
-        except ValueError as exc:
+        except CardResolveError as exc:
             print(f"Error syncing mulligan hand: {exc}. Keeping current hand.")
     # Emit a mulligan snapshot for logs/GPT
     try:
-        mull_snapshot = bridge.create_turn_snapshot(engine_output=bridge.mulligan_output())
+        mull_snapshot = bridge.create_turn_snapshot(
+            engine_output=bridge.mulligan_output(),
+            last_event="mulligan_snapshot",
+        )
         bridge.append_turn_snapshot(mull_snapshot)
         print("ENGINE_OUTPUT (mulligan):")
         print(format_turn_snapshot_for_ux(mull_snapshot))
@@ -182,24 +242,36 @@ def main() -> None:
                 print("Usage: draw <ids/names...>")
                 continue
             try:
-                ids = [bridge.resolve_card_id(tok) for tok in _parse_id_tokens(args)]
-                if len(ids) != 1:
+                cards = parse_card_list(" ".join(args))
+                if len(cards) != 1:
                     print("Draw expects exactly one card. Use set_hand to overwrite.")
                     continue
-                bridge.apply_draw(ids[0])
+                bridge.apply_draw(cards[0].id)
+                snapshot: TurnSnapshot = bridge.create_turn_snapshot(
+                    engine_output={"legal_moves": bridge.legal_moves()},
+                    last_event="you_draw",
+                )
+                bridge.append_turn_snapshot(snapshot)
                 print("Draw applied. You can now request rec/play.")
-            except ValueError as exc:
+            except CardResolveError as exc:
                 print(f"Error: {exc}")
+            continue
+        if cmd == "resolve":
+            if not args:
+                print("Usage: resolve <id/name>")
+                continue
+            _resolve_card_interactive(" ".join(args))
             continue
         if cmd == "set_hand":
             if not args:
                 print("Usage: set_hand <ids/names...>")
                 continue
             try:
-                ids = [bridge.resolve_card_id(tok) for tok in _parse_id_tokens(args)]
+                cards = parse_card_list(" ".join(args))
+                ids = [c.id for c in cards]
                 bridge.sync_you_hand_from_ids(ids)
                 print("Hand replaced.")
-            except ValueError as exc:
+            except CardResolveError as exc:
                 print(f"Error: {exc}")
             continue
         if cmd == "enemy":
@@ -210,6 +282,11 @@ def main() -> None:
                 cid = bridge.resolve_card_id(args[0])
                 row, col = _parse_row_col(args[1], args[2])
                 bridge.register_enemy_play(cid, row, col)
+                snapshot: TurnSnapshot = bridge.create_turn_snapshot(
+                    engine_output={"legal_moves": bridge.legal_moves()},
+                    last_event="enemy_play_registered",
+                )
+                bridge.append_turn_snapshot(snapshot)
                 print(f"Enemy play registered. === YOUR TURN BEGINS (turn {bridge.turn_counter}) ===")
             except Exception as exc:  # noqa: BLE001
                 print(f"Error: {exc}")
@@ -220,7 +297,8 @@ def main() -> None:
                 pred = bridge.get_prediction()
                 state = bridge.get_state()
                 snapshot: TurnSnapshot = bridge.create_turn_snapshot(
-                    engine_output={"recommend_moves": recs, "prediction": pred, "legal_moves": bridge.legal_moves()}
+                    engine_output={"recommend_moves": recs, "prediction": pred, "legal_moves": bridge.legal_moves()},
+                    last_event="recommend",
                 )
                 bridge.append_turn_snapshot(snapshot)
                 print(format_turn_snapshot_for_ux(snapshot))
@@ -238,14 +316,28 @@ def main() -> None:
                 snapshot: TurnSnapshot = bridge.create_turn_snapshot(
                     engine_output={"legal_moves": bridge.legal_moves()},
                     chosen_move={"card_id": cid, "row": row, "col": col},
+                    last_event="you_play",
                 )
                 bridge.append_turn_snapshot(snapshot)
                 print("Move applied. === ENEMY TURN BEGINS ===")
             except Exception as exc:  # noqa: BLE001
                 print(f"Illegal move or error: {exc}")
             continue
+        if cmd == "pass":
+            try:
+                bridge.pass_you_turn()
+                snapshot: TurnSnapshot = bridge.create_turn_snapshot(
+                    engine_output={"legal_moves": bridge.legal_moves()},
+                    chosen_move={"action": "PASS"},
+                    last_event="you_pass",
+                )
+                bridge.append_turn_snapshot(snapshot)
+                print("Turn passed. === ENEMY TURN BEGINS ===")
+            except Exception as exc:  # noqa: BLE001
+                print(f"Error: {exc}")
+            continue
         if cmd == "state":
-            snapshot: TurnSnapshot = bridge.create_turn_snapshot()
+            snapshot: TurnSnapshot = bridge.create_turn_snapshot(last_event="state")
             print(format_turn_snapshot_for_ux(snapshot))
             continue
         if cmd == "log":

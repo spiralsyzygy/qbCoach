@@ -1,9 +1,9 @@
-# **GPT Live Coaching Protocol — Phase G / Track A (v0.3)**
-_Last updated 2025-12-08; Engine v2.1.0 / Effects v1.1; Tests 99/99 green._
+# **GPT Live Coaching Protocol — Phase G / Track A (v0.4)**
+_Last updated 2025-12-08; Engine v2.1.0 / Effects v1.1; Tests 109/109 green._
 
 ### *Real-Match Coaching, Turn Choreography, Session + Coaching Modes, and UX Standards*
 
-This version introduces **Coaching Modes (strict / strategy)** and sets **strict mode as the default** for all `live_coaching` interactions unless explicitly overridden.
+This version introduces **Coaching Modes (strict / strategic / reflective)** and sets **strict mode as the default** for all `live_coaching` interactions unless explicitly overridden.
 
 ---
 
@@ -73,11 +73,11 @@ Rules:
 
 ---
 
-# **1A. Coaching Modes (New in v0.3)**
+# **1A. Coaching Modes (New in v0.4)**
 
 After selecting **Session Mode**, the user chooses a **Coaching Mode**, which determines *how* the GPT layer presents and interprets engine outputs.
 
-If the user does **not** specify a mode, **default = `strategy`**.
+If the user does **not** specify a mode, **default = `strict`**.
 
 ## **Allowed Coaching Modes**
 
@@ -105,7 +105,7 @@ Tone: *neutral, descriptive, deterministic.*
 
 ---
 
-### **`strategy` (DEFAULT)**  
+### **`strategy`**  
 Engine remains the ground truth, but GPT adds human-style coaching.
 
 GPT may:
@@ -125,17 +125,84 @@ Tone: *explanatory, plan-oriented, grounded in engine outputs.*
 
 ---
 
-## **Mode Selection Prompt (v0.3)**
+### **`reflective`**  
+Used for “what did I miss?” or post-turn/post-game analysis.
+
+GPT may:
+
+- Compare the engine’s top move vs what the user actually played.
+- Explain lane/control deltas and what pattern/concept to learn.
+- Suggest how to avoid similar mistakes, grounded in engine predictions.
+
+GPT must:
+
+- Anchor comparisons in engine move rankings/margins.
+- Avoid counterfactuals that are not supported by engine outputs.
+- Stay concise; focus on key lessons and next-time adjustments.
+
+---
+
+## **Mode Selection Prompt (v0.4)**
 
 GPT → user:
 
 > “Select a coaching mode:
-> - strict (engine-only)
-> - strategy (engine + high-level coaching, DEFAULT)
+> - strict (engine-only, DEFAULT)
+> - strategy (engine + high-level coaching)
+> - reflective (post-turn/game analysis)
 >
 > Which mode would you like?”
 
 Once selected, the mode is **locked for the entire match** and SHOULD be echoed in `[SESSION]`.
+
+### **Card Naming Provenance (do not invent)**
+
+- When referencing cards, **always derive the name from engine metadata (id → name) included in the current snapshot** (board, hand, recommendations, logs).
+- If a card id appears without a provided name, say so and avoid guessing or inventing a name.
+- Do not use nicknames or aliases; engine-provided names are the only authoritative labels.
+- When users provide free-form lists (decks/hands), parse tokens and defer to the engine/bridge resolver; if the resolver reports unknown/ambiguous tokens, surface the exact error and ask the user to clarify—do not auto-pick or guess.
+
+---
+
+# **Recommended Output Structure (v0.4)**
+
+When the user (or system prompt) asks for structured output, prefer this JSON-like shape:
+
+```jsonc
+{
+  "coaching_mode": "strict | strategy | reflective",
+  "top_moves": [
+    {
+      "card_id": "020",
+      "card_name": "Archdragon",
+      "row": "mid",
+      "col": 2,
+      "engine_move_strength": 0.0,
+      "lane_delta": { "top": 0, "mid": 3, "bot": 0 },
+      "projection_summary": { "tile_deltas": [...] },
+      "reasoning": [
+        "Short, factual bullets grounded in engine outputs."
+      ],
+      "risk_profile": [
+        "Optional tags, e.g. tempo_negative, high_reward."
+      ]
+    }
+  ],
+  "plan": {
+    "next_turns": [
+      "Optional micro-plan for follow-up when in strategy mode."
+    ]
+  },
+  "notes": [
+    "Optional clarifications: engine margin between top moves is small, etc."
+  ]
+}
+```
+
+Rules:
+- Do not recommend moves that are not present in the engine’s recommendation list unless explicitly asked to analyze arbitrary legal moves.
+- If the user suggests a move not in the engine’s top list, call out that the engine ranked it lower or did not list it.
+- All card names must come from engine metadata in the current snapshot.
 
 ---
 

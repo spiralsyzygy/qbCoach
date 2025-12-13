@@ -2,9 +2,51 @@
 
 import json
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
-from qb_engine.models import Card
+from qb_engine.models import Card, ProjectionCell
+
+
+# Mapping from column letter to grid index (left→right): E,D,C,B,A
+COL_TO_INDEX = {"E": 0, "D": 1, "C": 2, "B": 3, "A": 4}
+
+
+def parse_pattern(pattern: str | None) -> List[ProjectionCell]:
+    """
+    Parse pattern notation like 'B3X,D2P,D4P' into projection cells.
+    Placement tile is (0,0) with symbol 'W'.
+    """
+    cells: List[ProjectionCell] = [ProjectionCell(0, 0, "W")]
+    if not pattern:
+        return cells
+
+    for token in pattern.split(","):
+        token = token.strip()
+        if not token:
+            continue
+        if len(token) < 3:
+            raise ValueError(f"Invalid pattern token: {token}")
+        col_letter = token[0].upper()
+        symbol = token[-1].upper()
+        row_part = token[1:-1]
+
+        if col_letter not in COL_TO_INDEX:
+            raise ValueError(f"Invalid column letter in token: {token}")
+        try:
+            row_number = int(row_part)
+        except ValueError as exc:
+            raise ValueError(f"Invalid row number in token: {token}") from exc
+        if symbol not in ("P", "E", "X"):
+            raise ValueError(f"Invalid projection symbol in token: {token}")
+
+        row_index = row_number - 1  # rows 1..5 -> 0..4
+        col_index = COL_TO_INDEX[col_letter]
+        row_offset = row_index - 2
+        col_offset = col_index - 2
+
+        cells.append(ProjectionCell(row_offset=row_offset, col_offset=col_offset, symbol=symbol))
+
+    return cells
 
 
 class CardHydrator:
@@ -65,6 +107,7 @@ class CardHydrator:
             effect=data.get("effect"),
             effect_id=data.get("effect_id"),
             effect_description=data.get("effect_description"),
+            projection_cells=parse_pattern(data.get("pattern")),
         )
 
         self.cache[card_id] = card

@@ -174,6 +174,20 @@ class BoardState:
         col_index = col_number - 1
         return self.tile_at(lane_index, col_index)
 
+    def describe_tile(self, lane_index: int, col_index: int) -> Dict[str, object]:
+        """
+        Canonical tile descriptor used by legality/rendering paths.
+        """
+        tile = self.tile_at(lane_index, col_index)
+        return {
+            "lane": lane_index,
+            "col": col_index,
+            "owner": tile.owner,
+            "rank": tile.rank,
+            "card_id": tile.card_id,
+            "has_auras": bool(self.auras_at(lane_index, col_index)),
+        }
+
     # ------------------------------------------------------------------ #
     # Placing cards
     # ------------------------------------------------------------------ #

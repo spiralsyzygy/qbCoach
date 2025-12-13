@@ -376,10 +376,15 @@ class EffectEngine:
         else:
             proj = compute_projection_targets(source_lane, source_col, source_card)
 
+        # If the pattern yields no explicit targets (e.g., scope=self with no P/E/X),
+        # operate on the source tile so self-scoped effects still fire.
+        if not proj.targets:
+            proj.targets.append((source_lane, source_col, "SELF"))
+
         to_destroy: List[Tuple[int, int]] = []
 
         for t_lane, t_col, kind in proj.targets:
-            if kind not in ("P", "E", "X"):
+            if kind not in ("P", "E", "X", "SELF"):
                 continue
 
             tile = board.tile_at(t_lane, t_col)

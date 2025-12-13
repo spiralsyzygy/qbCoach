@@ -11,4 +11,7 @@
     "python.testing.pytestArgs": [
         "qb_engine"
     ]
+    ,"python.testing.pytestPath": "/Users/matthew/Documents/GitHub/qbCoach/.venv/bin/pytest",
+    "python.defaultInterpreterPath": "/Users/matthew/Documents/GitHub/qbCoach/.venv/bin/python",
+    "python.testing.autoTestDiscoverOnSaveEnabled": true
 }

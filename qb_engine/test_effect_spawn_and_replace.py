@@ -86,9 +86,18 @@ def test_spawn_token_on_spawned(tmp_path: Path):
 def test_replace_ally(tmp_path: Path):
     grid_repl = _grid(center="P", right="E")
     cards = [
-        {"id": "ALLY", "name": "Ally", "category": "Test", "cost": 0, "power": 2, "pattern": "", "grid": _grid()},
-        {"id": "REPL", "name": "Replacer", "category": "Test", "cost": 0, "power": 1, "pattern": "", "grid": grid_repl, "effect_id": "replace_eff"},
-        {"id": "TARGET", "name": "Target", "category": "Test", "cost": 0, "power": 1, "pattern": "", "grid": _grid()},
+            {"id": "ALLY", "name": "Ally", "category": "Test", "cost": 0, "power": 2, "pattern": "", "grid": _grid()},
+            {
+                "id": "REPL",
+                "name": "Replacer",
+                "category": "Test",
+                "cost": 0,
+                "power": 1,
+                "pattern": "B3E",
+                "grid": grid_repl,
+                "effect_id": "replace_eff",
+            },
+            {"id": "TARGET", "name": "Target", "category": "Test", "cost": 0, "power": 1, "pattern": "", "grid": _grid()},
     ]
     effects = {
         "_meta": {"version": "test"},

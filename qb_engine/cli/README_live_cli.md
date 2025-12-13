@@ -25,6 +25,8 @@ After init, you land in a REPL. Enter `help` to see commands.
 - `play <id/name> <row> <col>` — Apply your move, log the snapshot. Reports errors for illegal moves.
 - `state` — Print the current snapshot (A.5-style).
 - `log` — Show the current JSONL log path (created on first append).
+- `resolve <id/name>` — Resolve a card to its canonical name + id (helps fix typos quickly).
+- `pass` — Skip your turn and hand off to the enemy.
 - `help` — Show the command menu.
 - `quit` — Exit the session.
 

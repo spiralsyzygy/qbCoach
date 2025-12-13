@@ -8,7 +8,8 @@ def test_effect_overlay_on_empty_tile():
     # Add an aura to a neutral tile (MID, col 2 => indices 1,2)
     gs = bridge._game_state
     assert gs is not None
-    gs.board.effect_auras.append(EffectAura(lane_index=1, col_index=2, card_id="TEST", description="buff"))
+    card_id = gs.player_hand.as_card_ids()[0]
+    gs.board.effect_auras.append(EffectAura(lane_index=1, col_index=2, card_id=card_id, description="buff"))
     snapshot = bridge.create_turn_snapshot()
     rendered = format_turn_snapshot_for_ux(snapshot)
     assert "[N0★]" in rendered
@@ -24,7 +25,7 @@ def test_effect_overlay_on_occupied_tile():
     tile.owner = "Y"
     tile.rank = 1
     tile.card_id = gs.player_hand.as_card_ids()[0]
-    gs.board.effect_auras.append(EffectAura(lane_index=1, col_index=2, card_id="TEST", description="buff"))
+    gs.board.effect_auras.append(EffectAura(lane_index=1, col_index=2, card_id=tile.card_id, description="buff"))
     snapshot = bridge.create_turn_snapshot()
     rendered = format_turn_snapshot_for_ux(snapshot)
     assert "★" in rendered

@@ -166,6 +166,8 @@ class CoachingEngine:
         use_enemy_prediction: bool = True,
         baseline_eval: Optional[PositionEvaluation] = None,
     ) -> MoveEvaluation:
+        if move.card_id == "_PASS_":
+            return self._evaluate_pass(state, enemy_obs, baseline_eval=baseline_eval, use_enemy_prediction=use_enemy_prediction)
         # Pre-eval for explanations
         pre_eval = baseline_eval or self.evaluate_position(state, enemy_obs)
         baseline_you_margin = pre_eval.you_margin
@@ -231,18 +233,50 @@ class CoachingEngine:
             explanation_lines=explanation_lines,
         )
 
-    # ------------------------------------------------------------------ #
-    # Ranking
-    # ------------------------------------------------------------------ #
-    def rank_moves(
+    def _evaluate_pass(
         self,
         state: GameState,
         enemy_obs: EnemyObservation,
-        moves: List[MoveCandidate],
-    ) -> List[MoveEvaluation]:
-        baseline = self.evaluate_position(state, enemy_obs)
-        evals = [self.evaluate_move(state, enemy_obs, m, baseline_eval=baseline) for m in moves]
+        baseline_eval: Optional[PositionEvaluation] = None,
+        use_enemy_prediction: bool = True,
+    ) -> MoveEvaluation:
+        pre_eval = baseline_eval or self.evaluate_position(state, enemy_obs)
+        clone = state.clone()
+        clone.pass_turn()
 
+        post_eval = self.evaluate_position(clone, enemy_obs)
+        you_margin_after_move = post_eval.you_margin
+        enemy_threat = None
+        you_margin_after_enemy_best = you_margin_after_move
+        you_margin_after_enemy_expected = you_margin_after_move
+
+        if use_enemy_prediction:
+            try:
+                enemy_threat = self.prediction_engine.full_enemy_prediction(clone, enemy_obs.state)
+                you_margin_after_enemy_best = you_margin_after_move + (-float(enemy_threat.best_enemy_score))
+                you_margin_after_enemy_expected = you_margin_after_move + (-float(enemy_threat.expected_enemy_score))
+            except Exception:
+                enemy_threat = None
+
+        explanation_lines = [
+            "Pass: avoid overcommitting; preserve current margin.",
+            f"Margin after pass: {you_margin_after_move:.1f} (was {pre_eval.you_margin:.1f})",
+        ]
+
+        return MoveEvaluation(
+            move=MoveCandidate(card_id="_PASS_", hand_index=-1, lane_index=-1, col_index=-1),
+            you_margin_after_move=you_margin_after_move,
+            you_margin_after_enemy_best=you_margin_after_enemy_best,
+            you_margin_after_enemy_expected=you_margin_after_enemy_expected,
+            position_after_move=post_eval,
+            enemy_threat_after_move=enemy_threat,
+            quality_rank=0,
+            quality_label="pass",
+            explanation_tags=["pass"],
+            explanation_lines=explanation_lines,
+        )
+
+    def _sort_and_label_moves(self, evals: List[MoveEvaluation]) -> List[MoveEvaluation]:
         evals.sort(
             key=lambda m: (
                 m.you_margin_after_enemy_expected,
@@ -251,7 +285,6 @@ class CoachingEngine:
             ),
             reverse=True,
         )
-
         best_expected = evals[0].you_margin_after_enemy_expected if evals else 0.0
 
         for idx, me in enumerate(evals, start=1):
@@ -267,19 +300,36 @@ class CoachingEngine:
                 me.quality_label = "risky"
             else:
                 me.quality_label = "losing"
-
         return evals
+
+    # ------------------------------------------------------------------ #
+    # Ranking
+    # ------------------------------------------------------------------ #
+    def rank_moves(
+        self,
+        state: GameState,
+        enemy_obs: EnemyObservation,
+        moves: List[MoveCandidate],
+    ) -> List[MoveEvaluation]:
+        baseline = self.evaluate_position(state, enemy_obs)
+        evals = [self.evaluate_move(state, enemy_obs, m, baseline_eval=baseline) for m in moves]
+        return self._sort_and_label_moves(evals)
 
     # ------------------------------------------------------------------ #
     # Recommend
     # ------------------------------------------------------------------ #
     def recommend_moves(
-        self, state: GameState, enemy_obs: EnemyObservation, top_n: int = 3
+        self, state: GameState, enemy_obs: EnemyObservation, top_n: int = 3, allow_pass: bool = False
     ) -> CoachingRecommendation:
         position_eval = self.evaluate_position(state, enemy_obs)
         candidates = self.enumerate_you_moves(state)
 
-        if not candidates:
+        evals: List[MoveEvaluation] = []
+        if candidates:
+            evals = self.rank_moves(state, enemy_obs, candidates)
+        if allow_pass:
+            evals.append(self._evaluate_pass(state, enemy_obs, baseline_eval=position_eval))
+        if not evals:
             return CoachingRecommendation(
                 position=position_eval,
                 moves=[],
@@ -288,7 +338,7 @@ class CoachingEngine:
                 secondary_messages=[],
             )
 
-        evals = self.rank_moves(state, enemy_obs, candidates)
+        evals = self._sort_and_label_moves(evals)
         primary = "Top move improves margin" if evals else "No moves evaluated"
         secondary: List[str] = []
         if evals and evals[0].explanation_lines:

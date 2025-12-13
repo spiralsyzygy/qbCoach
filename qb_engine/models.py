@@ -21,6 +21,7 @@ class Card:
     effect: Optional[str] = None
     effect_id: Optional[str] = None
     effect_description: Optional[str] = None  # mirror of DB text for human readability
+    projection_cells: Optional[List["ProjectionCell"]] = None
 
 
 @dataclass
@@ -43,3 +44,12 @@ class SpawnContext:
         Simplified human-readable representation.
         """
         return f"<Card {self.id} {self.name} (cost={self.cost}, power={self.power})>"
+
+
+@dataclass
+class ProjectionCell:
+    """Represents a single projection cell relative to placement (0,0)."""
+
+    row_offset: int
+    col_offset: int
+    symbol: str  # "W", "P", "E", or "X"

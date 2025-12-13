@@ -34,12 +34,12 @@ def test_apply_effects_for_p_only_card_adds_no_auras():
 
     proj = compute_projection_targets(lane_index, col_index, card)
 
-    expected_targets = [
+    expected_targets = {
         (0, 0, "P"),
         (1, 1, "P"),
         (2, 0, "P"),
-    ]
-    assert proj.targets == expected_targets
+    }
+    assert set(proj.targets) == expected_targets
 
     apply_pawns_for_you(board, proj, card)
     apply_effects_for_you(board, proj, card)

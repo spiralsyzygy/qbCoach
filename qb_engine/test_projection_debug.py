@@ -23,19 +23,17 @@ def test_projection_targets_for_security_officer():
 
     proj_result = compute_projection_targets(lane_index, col_index, card)
 
-    expected_targets = [
+    expected_targets = {
         (0, 0, "P"),  # TOP-1
         (1, 1, "P"),  # MID-2
         (2, 0, "P"),  # BOT-1
-    ]
-    assert proj_result.targets == expected_targets
+    }
+    assert set(proj_result.targets) == expected_targets
     assert proj_result.root_lane_index == lane_index
     assert proj_result.root_col_index == col_index
 
-    for (t_lane_index, t_col_index, kind), (exp_lane, exp_col, exp_kind) in zip(
-        proj_result.targets, expected_targets
-    ):
-        assert (t_lane_index, t_col_index, kind) == (exp_lane, exp_col, exp_kind)
+    for (t_lane_index, t_col_index, kind) in proj_result.targets:
+        assert (t_lane_index, t_col_index, kind) in expected_targets
         assert LANE_INDEX_TO_NAME[t_lane_index] in ("TOP", "MID", "BOT")
 
 
