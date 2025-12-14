@@ -15,6 +15,168 @@ from qb_engine.enemy_observation import EnemyObservationState
 from qb_engine.game_state import GameState
 from qb_engine.prediction import PredictionEngine
 from qb_engine.scoring import compute_lane_power, compute_match_score
+from qb_engine.board_state import BoardState
+from qb_engine.pawn_delta import PawnDelta
+
+MANUAL_RESYNC_CARD_ID = "manual_resync_board"
+
+
+def _parse_resync_token(
+    token_raw: str,
+    lane_index: int,
+    col_index: int,
+    existing_tile,
+    hydrator: CardHydrator,
+) -> Tuple[str, int, Optional[str], Optional[str]]:
+    """
+    Parse a single bracketed token into (owner, rank, card_id, placed_by).
+
+    Supported tokens (inside []):
+      - Y1 / E2 / N0  (empty tiles)
+      - Y:001 / E:048 (occupied, explicit side)
+      - Y2:001        (occupied, explicit side and rank hint)
+      - 001 / 001:5   (occupied; side inferred from current tile if non-neutral)
+    Stars (★) and trailing :power are ignored.
+    """
+    if not token_raw.startswith("[") or not token_raw.endswith("]"):
+        raise ValueError(f"Invalid token at {lane_index+1},{col_index+1}: {token_raw}")
+
+    inner = token_raw[1:-1].strip()
+    inner = inner.replace("★", "")
+    if not inner:
+        raise ValueError(f"Empty token at {lane_index+1},{col_index+1}")
+
+    # Empty tile form: Y1 / E2 / N0
+    if inner[0].upper() in {"Y", "E", "N"} and len(inner) >= 2 and inner[1].isdigit():
+        owner = inner[0].upper()
+        digits = ""
+        for ch in inner[1:]:
+            if ch.isdigit():
+                digits += ch
+            else:
+                break
+        rank = int(digits) if digits else 0
+        if rank < 0 or rank > 3:
+            raise ValueError(f"Rank must be between 0 and 3 at {lane_index+1},{col_index+1}")
+        return owner, rank, None, None
+
+    placed_by: Optional[str] = None
+    rank_hint: Optional[int] = None
+    card_section = inner
+
+    # Allow Y:001 or Y2:001
+    if ":" in inner:
+        left, right = inner.split(":", 1)
+        if left and left[0] in {"Y", "E"}:
+            placed_by = left[0]
+            rank_digits = left[1:]
+            if rank_digits and rank_digits.isdigit():
+                rank_hint = int(rank_digits)
+            card_section = right
+            if ":" in card_section:
+                card_section = card_section.split(":", 1)[0]
+        else:
+            card_section = left
+
+    card_id = card_section.split(":", 1)[0].strip()
+    if not card_id:
+        raise ValueError(f"Missing card id at {lane_index+1},{col_index+1}")
+    try:
+        hydrator.get_card(card_id)
+    except KeyError as exc:  # noqa: BLE001
+        raise ValueError(f"Unknown card id '{card_id}' at {lane_index+1},{col_index+1}") from exc
+
+    if placed_by is None:
+        inferred = existing_tile.owner if existing_tile.owner in {"Y", "E"} else None
+        if inferred is None:
+            raise ValueError(
+                f"Occupied tile requires side at {lane_index+1},{col_index+1}; "
+                "use [Y:ID] or [E:ID]."
+            )
+        placed_by = inferred
+
+    owner = placed_by
+    rank = rank_hint if rank_hint is not None else max(1, existing_tile.rank if existing_tile.owner == placed_by else 1)
+    rank = min(max(rank, 1), 3)
+    return owner, rank, card_id, placed_by
+
+
+def parse_resync_board_lines(
+    lines: List[str],
+    current_board: BoardState,
+    hydrator: CardHydrator,
+) -> BoardState:
+    """
+    Parse three board lines (TOP/MID/BOT) into a new BoardState.
+
+    Validation:
+      - exactly 3 lines, 5 tokens each
+      - occupied tiles must specify side explicitly or infer from current_board owner
+      - ranks must be 0..3
+      - occupied tiles cannot be neutral
+    """
+    if len(lines) != 3:
+        raise ValueError("Expected exactly 3 lines for resync_board (TOP, MID, BOT).")
+
+    new_board = BoardState.create_initial_board()
+    new_board.pawn_deltas = []
+    new_board.effect_auras = []
+    new_board.direct_effects = {}
+
+    for lane_index, line in enumerate(lines):
+        tokens = [t for t in line.strip().split() if t]
+        if len(tokens) != 5:
+            raise ValueError(f"Line {lane_index+1} must have exactly 5 tokens.")
+        for col_index, tok in enumerate(tokens):
+            existing_tile = current_board.tile_at(lane_index, col_index)
+            owner, rank, card_id, placed_by = _parse_resync_token(tok, lane_index, col_index, existing_tile, hydrator)
+
+            tile = new_board.tile_at(lane_index, col_index)
+            tile.owner = owner
+            tile.rank = rank
+            tile.card_id = card_id
+            tile.placed_by = placed_by
+            tile.power_delta = 0
+            tile.scale_delta = 0
+            tile.trigger_state = None
+            tile.spawn_context = None
+
+            target_influence = 0
+            if owner == "Y":
+                target_influence = rank
+            elif owner == "E":
+                target_influence = -rank
+            delta_val = target_influence - tile.base_influence
+            if delta_val != 0:
+                new_board.pawn_deltas.append(
+                    PawnDelta(
+                        lane_index=lane_index,
+                        col_index=col_index,
+                        card_id=card_id or MANUAL_RESYNC_CARD_ID,
+                        delta=delta_val,
+                    )
+                )
+
+    new_board.validate_invariants()
+    return new_board
+
+
+def _diff_boards(before: BoardState, after: BoardState) -> List[Dict[str, Any]]:
+    diffs: List[Dict[str, Any]] = []
+    for lane_index, row in enumerate(before.tiles):
+        for col_index, _ in enumerate(row):
+            b_desc = before.describe_tile(lane_index, col_index)
+            a_desc = after.describe_tile(lane_index, col_index)
+            if b_desc != a_desc:
+                diffs.append(
+                    {
+                        "lane": lane_index,
+                        "col": col_index,
+                        "before": b_desc,
+                        "after": a_desc,
+                    }
+                )
+    return diffs
 
 _UX_HYDRATOR = CardHydrator()
 
@@ -246,6 +408,24 @@ class LiveSessionEngineBridge:
         self.turn_counter = self._game_state.turn
         self.phase = "ENEMY_TURN_AWAITING_PLAY" if self.side_to_act == "E" else self.phase
         return self.get_state()
+
+    def manual_resync_board(self, board_lines: List[str]) -> "TurnSnapshot":
+        """
+        Manual debug override: replace the engine board with a user-supplied snapshot.
+        """
+        if not self._game_state or not self._hydrator:
+            raise RuntimeError("Session not initialized.")
+        new_board = parse_resync_board_lines(board_lines, self._game_state.board, self._hydrator)
+        diff = _diff_boards(self._game_state.board, new_board)
+        self._game_state.board = new_board
+        snapshot: TurnSnapshot = self.create_turn_snapshot(
+            last_event="manual_resync_board",
+            chosen_move={"action": "manual_resync_board"},
+        )
+        snapshot["manual_override"] = True
+        snapshot["resync_payload"] = {"lines": board_lines, "diff": diff}
+        self.append_turn_snapshot(snapshot)
+        return snapshot
 
     def recommend_moves(self, top_n: int = 3) -> List[Dict[str, Any]]:
         if not self._coaching_engine or not self._game_state or not self._enemy_obs:

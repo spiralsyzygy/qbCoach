@@ -23,12 +23,34 @@ After init, you land in a REPL. Enter `help` to see commands.
 - `enemy <id/name> <row> <col>` — Register an enemy play on the board. Rows: `top/mid/bot` or `t/m/b`. Cols: `1..5`.
 - `rec` — Compute recommendations + prediction, build a TurnSnapshot, append to JSONL log, and print the A.5 block.
 - `play <id/name> <row> <col>` — Apply your move, log the snapshot. Reports errors for illegal moves.
+- `pass` — First-class action: skip your turn, log `last_event="you_pass"`, and hand off to the enemy.
+- `resync_board` — Debug escape hatch to overwrite the board (see below).
 - `state` — Print the current snapshot (A.5-style).
 - `log` — Show the current JSONL log path (created on first append).
 - `resolve <id/name>` — Resolve a card to its canonical name + id (helps fix typos quickly).
-- `pass` — Skip your turn and hand off to the enemy.
 - `help` — Show the command menu.
 - `quit` — Exit the session.
+
+### Ambiguous / unknown card tokens (stateful resolution)
+- Any command that accepts card tokens (`draw`, `set_hand`, `play`, `enemy`) enters a resolution mode when a token is unknown/ambiguous.
+- Prompt shows ordered candidates (deterministic: exact, prefix, substring, then close matches). Respond with:
+  - `y` / `yes` — accept candidate 1
+  - `1..N` — pick a specific candidate
+  - `n` / `cancel` — abort the command; nothing is executed
+- While resolving, other commands are blocked until you finish/cancel.
+- Examples:
+  - `draw Quetzalcoatl?` → `y` accepts `Quetzalcoatl (014)`
+  - `play grasslands wlf top 2` → `1` chooses the first suggestion, then applies the play
+
+### Manual board resync (debug)
+- `resync_board` prompts for three lines (TOP, MID, BOT), each with 5 bracketed tokens:
+  - Empty: `[Y1] [E2] [N0]`
+  - Occupied: `[Y:001]` or `[E:048]` (side required if current tile is neutral); `[001:5★]` is accepted (power/star ignored)
+- Before applying, the CLI shows a diff. Confirm with `y` to proceed.
+- Effect of apply:
+  - Overwrites board tiles, rebuilds pawn deltas, clears auras/direct_effects
+  - Preserves turn/phase/hand
+  - Logs a snapshot with `last_event="manual_resync_board"` and `manual_override=True`
 
 ## What Gets Logged
 
@@ -37,7 +59,10 @@ Every `rec`/`play` appends a **TurnSnapshot** JSON line to `logs/live/<timestamp
 - `board`: canonical board snapshot
 - `you_hand`: your current hand (IDs)
 - `engine_output`: recommend_moves, prediction (when requested)
-- `chosen_move`: the move you applied (for `play`)
+- `chosen_move`: the move you applied (for `play`/`pass` or `manual_resync_board` marker)
+- `last_event`: event tag such as `you_play`, `you_draw`, `you_pass`, `enemy_play_registered`, `recommend`, `manual_resync_board`
+- `manual_override`: present/true when a manual board override was applied
+- `card_resolution`: lightweight note when a token was resolved interactively
 
 ## Notes & Caveats
 

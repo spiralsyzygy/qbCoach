@@ -120,7 +120,7 @@ class GameState:
                 replaced_ally_power = self.effect_engine.compute_effective_power(self.board, lane, col)
                 self.effect_engine._destroy_cards(self.board, [(lane, col)])
 
-        self.board.place_card(lane_name, col_number, card, self.effect_engine)
+        self.board.place_card(lane_name, col_number, card, placed_by=side, effect_engine=self.effect_engine)
 
         # Event-based scaling on card played
         self.effect_engine.handle_card_played(self.board, lane, col, card)
@@ -136,6 +136,7 @@ class GameState:
 
         # Ensure influence recompute after projections
         self.board.recompute_influence_from_deltas()
+        self.board.validate_invariants()
 
         # Handle stateful on_play effects (hands/tokens and replace follow-ups)
         self._apply_stateful_on_play_effects(card, side, replaced_ally_power=replaced_ally_power)
@@ -166,7 +167,7 @@ class GameState:
                 replaced_ally_power = self.effect_engine.compute_effective_power(self.board, lane, col)
                 self.effect_engine._destroy_cards(self.board, [(lane, col)])
 
-        self.board.place_card(lane_name, col_number, card, self.effect_engine)
+        self.board.place_card(lane_name, col_number, card, placed_by="E", effect_engine=self.effect_engine)
 
         # Event-based scaling on card played
         self.effect_engine.handle_card_played(self.board, lane, col, card)
@@ -176,12 +177,14 @@ class GameState:
         apply_effects_for_enemy(self.board, proj, card)
 
         self.board.recompute_influence_from_deltas()
+        self.board.validate_invariants()
         self._apply_stateful_on_play_effects(card, "E", replaced_ally_power=replaced_ally_power)
         self.consecutive_passes = 0
 
     def cleanup(self) -> None:
         """Placeholder for destruction/effect cleanup; currently just recomputes influence."""
         self.board.recompute_influence_from_deltas()
+        self.board.validate_invariants()
 
     def mulligan(self, side: Literal["Y", "E"], indices_to_replace: list[int]) -> None:
         """

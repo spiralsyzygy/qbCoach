@@ -52,6 +52,8 @@ Use `format_turn_snapshot_for_ux(snapshot)` to ensure consistent formatting and 
 ## Logging
 - JSONL in `logs/live/<timestamp>_live_[enemy_tag].jsonl`.
 - Each line = TurnSnapshot; use for replay/training/evaluation.
+- `last_event` tags: `you_play`, `you_draw`, `you_pass`, `enemy_play_registered`, `recommend`, `manual_resync_board`, `state`, `mulligan_snapshot`, plus `card_resolution` metadata when interactive resolution ran.
+- `manual_override=True` marks snapshots produced by a manual board resync (debug safety valve).
 
 ### Debugging desyncs
 - To trace a specific board tile across a log, run:
@@ -62,3 +64,13 @@ Use `format_turn_snapshot_for_ux(snapshot)` to ensure consistent formatting and 
   - Focus BOT-3 only: `--focus-tile BOT-3`
   - Show no-ops and hand/session deltas: `--show-all --include-nonboard`
   - Use `--format json` for filtering/automation; `--limit N` to cap output.
+
+### Live CLI behavior (Phase H updates)
+- Token resolution is stateful: on unknown/ambiguous card tokens, the CLI prompts with candidates (deterministic ordering: exact → prefix → substring → close match). Accept with `y`/`1..N`, cancel with `n`; other commands are blocked until resolved/cancelled.
+- `pass` is a first-class action: engine can recommend it, CLI executes and logs `last_event="you_pass"`, and `legal_moves` includes `_PASS_`.
+- `resync_board` debug escape hatch: prompts for three lines (TOP/MID/BOT) of bracketed tokens (`[Y1]`, `[E2]`, `[Y:001]`, `[001:5★]`), requires side for occupied tiles when not inferable, clears auras/direct_effects, rebuilds pawn deltas, preserves turn/phase/hand, logs `manual_override=True` + `last_event="manual_resync_board"` with a diff payload.
+
+### Board invariants (occupied tiles)
+- Tiles track `placed_by`; `recompute_influence_from_deltas` preserves underlay influence but forces any occupied tile to remain owned by `placed_by` with rank ≥1.
+- `validate_invariants()` is invoked after plays/cleanup to assert occupied tiles are never neutral and `placed_by` is set; `get_card_side` prefers `placed_by`.
+- Destruction clears `placed_by` alongside `card_id`, so underlay pawns are revealed on the next recompute.

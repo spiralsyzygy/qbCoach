@@ -44,6 +44,7 @@ class Tile:
     scale_delta: int = 0  # accumulated event-based scaling
     trigger_state: Optional[CardTriggerState] = None
     spawn_context: Optional[SpawnContext] = None
+    placed_by: Optional[str] = None  # "Y" or "E" indicating who placed the card
 
     def __str__(self) -> str:
         """
@@ -197,6 +198,7 @@ class BoardState:
         lane_name: str,
         col_number: int,
         card: Card,
+        placed_by: Optional[str] = None,
         effect_engine: Optional["EffectEngine"] = None,
     ) -> None:
         lane_index = LANE_NAME_TO_INDEX[lane_name.upper()]
@@ -207,6 +209,7 @@ class BoardState:
 
         tile = self.tile_at(lane_index, col_index)
         tile.card_id = card.id
+        tile.placed_by = placed_by
         tile.power_delta = 0
         tile.scale_delta = 0
         tile.trigger_state = CardTriggerState()
@@ -290,6 +293,16 @@ class BoardState:
                     tile.owner = "N"
                     tile.rank = 0
 
+                if tile.card_id and tile.placed_by in ("Y", "E"):
+                    if tile.placed_by == "Y":
+                        mag = max(influence, 0)
+                        tile.owner = "Y"
+                        tile.rank = max(1, min(mag, 3))
+                    else:
+                        mag = max(-influence, 0)
+                        tile.owner = "E"
+                        tile.rank = max(1, min(mag, 3))
+
     # ------------------------------------------------------------------ #
     # Effect aura helpers
     # ------------------------------------------------------------------ #
@@ -353,6 +366,8 @@ class BoardState:
             for col in range(num_cols):
                 tile = self.tile_at(lane, col)
                 if tile.card_id == card_id:
+                    if tile.placed_by in ("Y", "E"):
+                        return tile.placed_by
                     if tile.owner == "Y":
                         return "Y"
                     if tile.owner == "E":
@@ -363,6 +378,14 @@ class BoardState:
             return "N"
 
         return None
+
+    def validate_invariants(self) -> None:
+        for lane in self.tiles:
+            for tile in lane:
+                if tile.card_id is not None:
+                    assert tile.placed_by in ("Y", "E")
+                    assert tile.owner in ("Y", "E")
+                    assert tile.rank >= 1
 
     # ------------------------------------------------------------------ #
     # Effective power helper

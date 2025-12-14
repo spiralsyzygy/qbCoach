@@ -174,7 +174,7 @@ class PredictionEngine:
             return clone, compute_match_score(clone.board, clone.effect_engine), 0.0  # type: ignore[arg-type]
 
         lane_name = LANE_INDEX_TO_NAME[lane]
-        clone.board.place_card(lane_name, col + 1, card, clone.effect_engine)
+        clone.board.place_card(lane_name, col + 1, card, placed_by="E", effect_engine=clone.effect_engine)
         proj = compute_projection_targets_for_enemy(lane, col, card)
         apply_pawns_for_enemy(clone.board, proj, card)
         apply_effects_for_enemy(clone.board, proj, card)

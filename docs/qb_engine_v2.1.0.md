@@ -24,8 +24,10 @@ See also:
 - Provides cached `Card` objects (id, name, category, cost, power, pattern, grid, effect fields).
 
 ## 2.2 BoardState / Tile
-- 3×5 grid; each `Tile` stores `owner` (Y/E/N), `rank` (0..3), `card_id`, `origin`, `spawned_by`, `power_delta`, `scale_delta`, `trigger_state`, `spawn_context`.
+- 3×5 grid; each `Tile` stores `owner` (Y/E/N), `rank` (0..3), `card_id`, `origin`, `spawned_by`, `power_delta`, `scale_delta`, `trigger_state`, `spawn_context`, and `placed_by` (who put the card there).
 - Helper methods for printing, tile access, and effective power lookup via EffectEngine.
+- Influence recomputation: `recompute_influence_from_deltas` derives underlay owner/rank from base + pawn_deltas but, if a tile is occupied, forces `owner=placed_by` and `rank>=1` so occupied tiles are never neutral. `get_card_side` prefers `placed_by`; destruction clears `placed_by`.
+- Invariants: `validate_invariants` asserts occupied tiles always have `placed_by` and non-neutral owner/rank; called after play/enemy play/cleanup.
 
 ## 2.3 GameState
 - Holds `BoardState`, `Deck`/`Hand` for both sides, RNG seed, and manages turn flow (draw, mulligan, play, end turn, pass).
@@ -34,7 +36,7 @@ See also:
 ## 2.4 Deck / Hand / PawnDelta
 - `Deck`: deterministic draw with seed, 15-card decks, opening hand of 5, single mulligan to 5, first-turn draw skipped for each side.
 - `Hand`: convenience for card collections with stable ordering.
-- Pawn deltas are represented on tiles (rank changes) and cleared when a card leaves play.
+- Pawn deltas are cumulative for the match; recomputation uses base influence + all pawn_deltas to reveal underlay when a card is destroyed.
 
 ---
 

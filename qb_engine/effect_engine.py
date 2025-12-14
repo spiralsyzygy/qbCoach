@@ -623,6 +623,7 @@ class EffectEngine:
                 continue
             card_id = tile.card_id
             tile.card_id = None
+            tile.placed_by = None
             tile.power_delta = 0
             tile.scale_delta = 0
             tile.trigger_state = None
