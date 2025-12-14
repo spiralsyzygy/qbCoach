@@ -110,7 +110,8 @@ def compute_projection_targets_for_enemy(
             continue
 
         lane_prime = root_lane_index + cell.row_offset
-        col_prime = root_col_index - cell.col_offset  # mirrored horizontally
+        effective_col_offset = -cell.col_offset  # mirror horizontally, then apply like YOU
+        col_prime = root_col_index + effective_col_offset
 
         if 0 <= lane_prime < 3 and 0 <= col_prime < 5:
             targets.append((lane_prime, col_prime, cell.symbol))

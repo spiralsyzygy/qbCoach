@@ -287,14 +287,18 @@ class LiveSessionEngineBridge:
         engine_output: Optional[Dict[str, Any]] = None,
         chosen_move: Optional[Dict[str, Any]] = None,
         last_event: Optional[str] = None,
+        card_resolution: Optional[Any] = None,
     ) -> TurnSnapshot:
         """
         Build a TurnSnapshot from current state plus optional engine_output and chosen_move.
+        card_resolution is an optional metadata list describing interactive token resolution.
         """
         base = self.get_state()
         base["engine_output"] = engine_output or {}
         base["chosen_move"] = chosen_move
         base["last_event"] = last_event
+        if card_resolution:
+            base["card_resolution"] = card_resolution
         return base
 
     def mulligan_output(self) -> Dict[str, Any]:

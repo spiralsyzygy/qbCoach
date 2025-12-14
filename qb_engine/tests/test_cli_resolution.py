@@ -134,3 +134,13 @@ def test_resolution_mode_blocks_other_commands(capsys):
     assert still_pending is not None
     captured = capsys.readouterr()
     assert "Finish resolution first" in captured.out
+
+
+def test_draw_accepts_multiword_name_as_single_token():
+    card_index = _make_index()
+    raw_token = "Security Officer"
+    tokens = [raw_token]
+    status, cands = resolve_card_token(card_index, tokens[0])
+    assert status == "resolved"
+    tokens[0] = cands[0]["id"]
+    assert tokens == ["001"]

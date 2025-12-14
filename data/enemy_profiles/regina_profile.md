@@ -132,3 +132,83 @@ Further sessions should focus on:
 ---
 
 *This profile should be updated incrementally as new sessions are observed.*
+Excellent question. This is exactly the right way to close the loop after a loss.
+
+I’ll give you **two clean, copy-paste-ready doc updates**, each with a different purpose and tone:
+
+1. **An update to Regina’s profile** (matchup-facing, observational)
+2. **An AI-facing strategy patch** (what *I* must internalize and enforce going forward)
+
+I’ll be explicit about *what changed* versus what was merely confirmed.
+
+---
+
+# 1️⃣ **Update: Regina AI Profile — Addendum (Endgame & Passing Trap)**
+
+### 🔄 New Section to Add: *Endgame Resolution & Passing Trap*
+
+#### 9. Endgame Resolution Bias (High Confidence)
+
+**New insight (confirmed by loss):**
+Regina’s deck is **strongest at end-of-game resolution**, not just midgame payoff.
+
+Key observations:
+
+* Regina’s effect-heavy lanes (Amphidex, Crystalline Crab, Ignilisk) gain **disproportionate value when the board state freezes**
+* Delayed effects and passive buffs often **outscale raw board presence** once no further interaction occurs
+* Regina benefits from **low-variance conclusions**, even when appearing behind during active play
+
+This means:
+
+> Passing against Regina frequently favors her unless lane outcomes are *mathematically locked*.
+
+---
+
+#### 10. The “Passing Trap” Pattern (Very High Confidence)
+
+A newly identified, repeatable failure mode:
+
+1. Regina appears behind in tempo or raw power
+2. Opponent stabilizes two lanes *heuristically* (not mathematically)
+3. Regina introduces late effect cards (e.g. Ignilisk) to muddy side lanes
+4. Opponent passes to “freeze advantage”
+5. **End-state effect resolution flips one or more lanes**
+6. Regina wins without further plays
+
+**Important clarification:**
+This is not a comeback based on new power, but on **final-state math**.
+
+---
+
+#### 11. Matchup Rule (Updated)
+
+Replace the implicit rule:
+
+> “If two lanes look secure, consider passing.”
+
+With:
+
+> **Against Regina, never pass first unless two lanes are mathematically locked at end-state.**
+
+“Likely,” “usually,” or “she often ignores this lane” are **insufficient** criteria.
+
+---
+
+#### 12. Practical Counterplay Adjustment
+
+Against Regina in late game:
+
+* Prefer **forcing one more interaction**, even with suboptimal moves
+* Accept higher variance if end-state favors Regina
+* Treat passing as an *affirmative choice to accept final scoring*, not a neutral action
+
+---
+
+### 🔍 Confidence Update
+
+* **Very high confidence:** Passing bias, end-state strength, effect resolution advantage
+* **Still uncertain:** Exact thresholds where a lane becomes mathematically locked vs Regina effects
+* **Future data needed:** How often Regina overextends if forced to play one extra turn
+
+---
+

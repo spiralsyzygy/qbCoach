@@ -453,7 +453,13 @@ def main() -> None:
             if not args:
                 print("Usage: draw <ids/names...>")
                 continue
-            tokens = _parse_identifiers_line(" ".join(args))
+            # Draw always expects a single card token; keep the full arg string intact
+            # so multiword names like "Security Officer" resolve as one token.
+            raw_token = " ".join(args).strip()
+            if not raw_token:
+                print("Usage: draw <ids/names...>")
+                continue
+            tokens = [raw_token]
             unresolved_idx = None
             for idx, tok in enumerate(tokens):
                 status, cands = resolve_card_token(card_index, tok)

@@ -63,6 +63,33 @@ def test_enemy_effect_auras_marked():
     assert set(aura_tiles) == expected
 
 
+def test_enemy_chocobo_moogle_projects_left_from_mid_4():
+    board, hydrator = _make_board_and_hydrator()
+    card = hydrator.get_card("107")  # Chocobo & Moogle, pattern B3P,C2P,C4P
+
+    # Make MID-4 (col_index=3) legal for enemy placement.
+    target_tile = board.tile_at(1, 3)
+    target_tile.owner = "E"
+    target_tile.rank = 3
+
+    # Apply enemy placement via the same flow used for live sync.
+    from qb_engine.game_state import GameState
+    from qb_engine.effect_engine import EffectEngine
+    from qb_engine.deck import Deck
+
+    effect_engine = EffectEngine(Path("data/qb_effects_v1.1.json"), hydrator)
+    dummy_ids = [cid for cid in sorted(hydrator.index.keys()) if cid != "_meta"][:15]
+    gs = GameState(Deck(dummy_ids), Deck(dummy_ids), hydrator, effect_engine)
+    gs.board = board
+
+    gs.apply_enemy_play_from_card_id("107", lane=1, col=3)
+
+    # Expect the mirrored left projection to land on MID-3 (col_index=2).
+    pawn_tile = gs.board.tile_at(1, 2)
+    assert pawn_tile.owner == "E"
+    assert pawn_tile.rank >= 1, "Pawn projection should raise enemy rank on MID-3"
+
+
 if __name__ == "__main__":
     test_enemy_projection_symmetry()
     test_enemy_pawns_influence_tiles()
