@@ -12,7 +12,7 @@ from qb_engine.prediction import (
     ThreatMap,
 )
 from qb_engine.effect_engine import EffectEngine
-from qb_engine.scoring import compute_match_score
+from qb_engine.scoring import compute_match_score, calculate_territory_score
 
 
 def _make_engine():
@@ -108,9 +108,10 @@ def test_simulate_enemy_move_updates_scores_correctly():
     state = _make_state_with_decks(ids)
     engine = PredictionEngine()
     move = ("001", 1, 4)
-    _, mscore, eval_scalar = engine.simulate_enemy_move(state, move)
+    clone, mscore, eval_scalar = engine.simulate_enemy_move(state, move)
     assert mscore.total_enemy > mscore.total_you
-    assert eval_scalar == mscore.margin
+    terr_you, terr_enemy = calculate_territory_score(clone.board)
+    assert eval_scalar == mscore.margin + (terr_you - terr_enemy)
 
 
 def test_compute_threat_map_basic():

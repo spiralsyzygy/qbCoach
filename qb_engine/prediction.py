@@ -16,7 +16,7 @@ from qb_engine.projection import (
     apply_pawns_for_enemy,
     compute_projection_targets_for_enemy,
 )
-from qb_engine.scoring import MatchScore, compute_match_score
+from qb_engine.scoring import MatchScore, compute_match_score, calculate_territory_score
 
 Origin = Literal["deck", "token", "effect", "unknown"]
 LANE_INDEX_TO_NAME = {v: k for k, v in LANE_NAME_TO_INDEX.items()}
@@ -181,7 +181,8 @@ class PredictionEngine:
         clone.board.recompute_influence_from_deltas()
 
         match_score = compute_match_score(clone.board, clone.effect_engine)  # type: ignore[arg-type]
-        resulting_score: float = float(match_score.margin)
+        territory_you, territory_enemy = calculate_territory_score(clone.board)
+        resulting_score: float = float(match_score.margin + (territory_you - territory_enemy))
         return clone, match_score, resulting_score
 
     # ------------------------------------------------------------------ #
@@ -195,7 +196,8 @@ class PredictionEngine:
         hand_belief: EnemyHandBelief,
     ) -> ThreatMap:
         base_score = compute_match_score(state.board, state.effect_engine)
-        base_margin = base_score.margin
+        base_territory_you, base_territory_enemy = calculate_territory_score(state.board)
+        base_margin = float(base_score.margin + (base_territory_you - base_territory_enemy))
 
         outcomes: List[EnemyMoveOutcome] = []
         lane_pressure: Dict[int, float] = {}

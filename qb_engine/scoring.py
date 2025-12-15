@@ -141,3 +141,45 @@ def compute_match_score(
         winner=winner,
         margin=margin,
     )
+
+
+def calculate_territory_score(board: BoardState) -> tuple[float, float]:
+    """
+    Heuristic, non-rules scoring for board control:
+      - Only counts empty tiles owned by a side (no occupants).
+      - Lane must not be full (5 occupied tiles) to contribute.
+      - Rank weighting:
+          rank 1 -> +1.0
+          rank 2 -> +3.0
+          rank 3+ -> +4.0
+
+    Returns:
+      (you_territory_score, enemy_territory_score)
+    """
+
+    def _rank_value(rank: int) -> float:
+        if rank <= 0:
+            return 0.0
+        if rank == 1:
+            return 1.0
+        if rank == 2:
+            return 3.0
+        return 4.0
+
+    you_score = 0.0
+    enemy_score = 0.0
+
+    for lane_tiles in board.tiles:
+        lane_full = all(tile.card_id is not None for tile in lane_tiles)
+        if lane_full:
+            continue
+
+        for tile in lane_tiles:
+            if tile.card_id is not None:
+                continue
+            if tile.owner == "Y":
+                you_score += _rank_value(tile.rank)
+            elif tile.owner == "E":
+                enemy_score += _rank_value(tile.rank)
+
+    return you_score, enemy_score

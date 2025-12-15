@@ -8,7 +8,7 @@ from qb_engine.enemy_observation import EnemyObservation
 from qb_engine.game_state import GameState
 from qb_engine.legality import is_legal_placement
 from qb_engine.prediction import PredictionEngine, ThreatMap
-from qb_engine.scoring import MatchScore, compute_match_score
+from qb_engine.scoring import MatchScore, calculate_territory_score, compute_match_score
 
 # Thresholds/constants for labeling
 CLEAR_MARGIN = 5.0
@@ -81,6 +81,34 @@ class CoachingEngine:
         )
 
     # ------------------------------------------------------------------ #
+    # Internal helpers
+    # ------------------------------------------------------------------ #
+    def _compute_territory_margin(self, state: GameState) -> float:
+        territory_you, territory_enemy = calculate_territory_score(state.board)
+        return float(territory_you - territory_enemy)
+
+    @staticmethod
+    def _apply_margin_override(position: PositionEvaluation, new_margin: float) -> PositionEvaluation:
+        position.you_margin = new_margin
+        position.is_clearly_winning = new_margin >= CLEAR_MARGIN
+        position.is_clearly_losing = new_margin <= -CLEAR_MARGIN
+        position.is_even = abs(new_margin) < 0.5
+        return position
+
+    @staticmethod
+    def _calculate_pawn_flip_bonus(board_before, board_after) -> float:
+        """
+        Tempo bonus for flipping any enemy-owned tile to YOU.
+        """
+        for lane_index in range(len(board_before.tiles)):
+            for col_index in range(len(board_before.tiles[0])):
+                before_tile = board_before.tile_at(lane_index, col_index)
+                after_tile = board_after.tile_at(lane_index, col_index)
+                if before_tile.owner == "E" and after_tile.owner == "Y":
+                    return 2.0
+        return 0.0
+
+    # ------------------------------------------------------------------ #
     # Move enumeration
     # ------------------------------------------------------------------ #
     def enumerate_you_moves(self, state: GameState) -> List[MoveCandidate]:
@@ -107,6 +135,7 @@ class CoachingEngine:
         self, state: GameState, enemy_obs: EnemyObservation
     ) -> PositionEvaluation:
         match_score = compute_match_score(state.board, state.effect_engine)
+        territory_margin = self._compute_territory_margin(state)
         lanes: List[LaneStatus] = []
         for lane_score in match_score.lanes:
             winner = None
@@ -124,7 +153,7 @@ class CoachingEngine:
                 )
             )
 
-        you_margin = float(match_score.total_you - match_score.total_enemy)
+        you_margin = float(match_score.margin + territory_margin)
 
         enemy_best_margin: Optional[float] = None
         enemy_expected_margin: Optional[float] = None
@@ -173,17 +202,25 @@ class CoachingEngine:
         baseline_you_margin = pre_eval.you_margin
 
         # Clone and apply
+        board_before = state.board
         clone = state.clone()
         card = self.hydrator.get_card(move.card_id)
-        lane_name = list(state.board.LANE_NAME_TO_INDEX.keys()) if hasattr(state.board, "LANE_NAME_TO_INDEX") else ["TOP", "MID", "BOT"]  # type: ignore[attr-defined]
         clone.play_card_from_hand("Y", move.hand_index, move.lane_index, move.col_index)
 
         post_eval = self.evaluate_position(clone, enemy_obs)
         you_margin_after_move = post_eval.you_margin
+        pawn_flip_bonus = self._calculate_pawn_flip_bonus(board_before, clone.board)
+        if pawn_flip_bonus:
+            you_margin_after_move += pawn_flip_bonus
+            post_eval = self._apply_margin_override(post_eval, you_margin_after_move)
 
         enemy_threat = None
         you_margin_after_enemy_best = you_margin_after_move
         you_margin_after_enemy_expected = you_margin_after_move
+        # Tag comparisons use match-only margin so heuristic layers do not mask worsened outcomes.
+        baseline_tag_margin = pre_eval.match_score.margin
+        post_tag_margin = post_eval.match_score.margin + pawn_flip_bonus
+        tag_margin_after_enemy_expected = post_tag_margin
 
         if use_enemy_prediction:
             try:
@@ -196,27 +233,33 @@ class CoachingEngine:
                 you_margin_after_enemy_expected = you_margin_after_move + (
                     -float(enemy_threat.expected_enemy_score)
                 )
+                tag_margin_after_enemy_expected = post_tag_margin - float(enemy_threat.expected_enemy_score)
             except Exception:
                 enemy_threat = None
 
         explanation_tags: List[str] = []
         explanation_lines: List[str] = []
 
+        if pawn_flip_bonus:
+            explanation_tags.append("tempo_pawn_flip")
+            explanation_lines.append("Flips enemy pawn for +2.0 tempo bonus")
+
         # Tag lane wins
+        lane_names = ("TOP", "MID", "BOT")
         for before, after in zip(pre_eval.lanes, post_eval.lanes):
             if before.winner != "YOU" and after.winner == "YOU":
                 explanation_tags.append(f"wins_lane_{after.lane_index}")
-                explanation_lines.append(f"Secures {lane_name[after.lane_index]} lane")
+                explanation_lines.append(f"Secures {lane_names[after.lane_index]} lane")
             if before.winner == "YOU" and after.winner != "YOU":
                 explanation_tags.append(f"loses_lane_{after.lane_index}")
                 explanation_lines.append(
-                    f"Loses {lane_name[after.lane_index]} lane advantage"
+                    f"Loses {lane_names[after.lane_index]} lane advantage"
                 )
 
-        if you_margin_after_enemy_expected > baseline_you_margin + MARGIN_EPSILON:
+        if tag_margin_after_enemy_expected > baseline_tag_margin + MARGIN_EPSILON:
             explanation_tags.append("improves_margin")
             explanation_lines.append("Improves overall margin (after enemy reply)")
-        elif you_margin_after_enemy_expected < baseline_you_margin - MARGIN_EPSILON:
+        elif tag_margin_after_enemy_expected < baseline_tag_margin - MARGIN_EPSILON:
             explanation_tags.append("worsens_margin")
             explanation_lines.append("Worsens overall margin (after enemy reply)")
 
