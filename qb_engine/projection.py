@@ -153,12 +153,31 @@ def apply_pawns_for_you(board: BoardState, proj: ProjectionResult, card: Card) -
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("P", "X"):
             continue  # ignore pure effect-only tiles here
-
+        target_tile = board.tile_at(lane_index, col_index)
+        # Compute existing signed influence at target; infer from owner/rank if present.
+        if target_tile.owner == "Y":
+            net_before = target_tile.rank
+        elif target_tile.owner == "E":
+            net_before = -target_tile.rank
+        else:
+            net_before = target_tile.base_influence
+            for delta in board.pawn_deltas:
+                if delta.lane_index == lane_index and delta.col_index == col_index:
+                    net_before += delta.delta
+        d = amount
+        net_after = net_before + d
+        if (
+            target_tile.card_id is None
+            and target_tile.owner == "E"
+            and net_after >= 0
+        ):
+            # Boundary flip: instead of neutralizing or crossing zero, flip to attacker with rank=amount
+            d = amount + abs(net_before)
         board.add_pawn_delta_for_you(
             lane_index=lane_index,
             col_index=col_index,
             card_id=card.id,
-            amount=amount,
+            amount=d,
         )
 
     board.recompute_influence_from_deltas()
@@ -175,12 +194,30 @@ def apply_pawns_for_enemy(board: BoardState, proj: ProjectionResult, card: Card)
     for lane_index, col_index, kind in proj.targets:
         if kind not in ("P", "X"):
             continue
-
+        target_tile = board.tile_at(lane_index, col_index)
+        if target_tile.owner == "Y":
+            net_before = target_tile.rank
+        elif target_tile.owner == "E":
+            net_before = -target_tile.rank
+        else:
+            net_before = target_tile.base_influence
+            for delta in board.pawn_deltas:
+                if delta.lane_index == lane_index and delta.col_index == col_index:
+                    net_before += delta.delta
+        d = amount
+        net_after = net_before - d
+        if (
+            target_tile.card_id is None
+            and target_tile.owner == "Y"
+            and net_after <= 0
+        ):
+            # Boundary flip: flip to enemy instead of neutralizing
+            d = amount + net_before  # ensure net_after becomes -amount
         board.add_pawn_delta_for_enemy(
             lane_index=lane_index,
             col_index=col_index,
             card_id=card.id,
-            amount=amount,
+            amount=d,
         )
 
     board.recompute_influence_from_deltas()

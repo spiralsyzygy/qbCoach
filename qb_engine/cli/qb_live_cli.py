@@ -31,7 +31,7 @@ class PendingResolution:
 
 
 def _print_header() -> None:
-    print("qb_live_cli — Phase G / Track A.5 Live Coaching")
+    print("qb_live_cli — Phase G / Track A.5 Live Coaching (default mode: strategy)")
 
 
 def _prompt_yes_no(prompt: str) -> bool:
@@ -42,6 +42,13 @@ def _prompt_yes_no(prompt: str) -> bool:
 def _prompt_enemy_deck_tag() -> str | None:
     tag = input("Enter enemy deck tag (optional): ").strip()
     return tag or None
+
+
+def _prompt_deck_tags() -> List[str]:
+    raw = input("Enter deck tags (comma-separated, optional): ").strip()
+    if not raw:
+        return []
+    return [t.strip() for t in raw.split(",") if t.strip()]
 
 
 def _choose_deck_mode() -> str:
@@ -361,15 +368,16 @@ def main() -> None:
     if not _prompt_yes_no("Start new live coaching session?"):
         print("Bye.")
         return
-    coaching_mode = input("Coaching mode [strict/strategy] (default strict): ").strip().lower() or "strict"
+    coaching_mode = input("Coaching mode [strict/strategy] (default strategy): ").strip().lower() or "strategy"
     try:
-        bridge_coaching_mode = coaching_mode if coaching_mode else "strict"
+        bridge_coaching_mode = coaching_mode if coaching_mode else "strategy"
     except Exception:
-        bridge_coaching_mode = "strict"
+        bridge_coaching_mode = "strategy"
 
     bridge = LiveSessionEngineBridge(session_mode="live_coaching", coaching_mode=bridge_coaching_mode)
     card_index = _build_card_index()
     enemy_deck_tag = _prompt_enemy_deck_tag()
+    deck_tags = _prompt_deck_tags()
     deck_choice = _choose_deck_mode()
 
     you_deck_ids: List[str] | None = None
@@ -377,7 +385,12 @@ def main() -> None:
         you_deck_ids = _collect_deck_ids_from_input(bridge)
     # For deck tag path ("a"), we leave you_deck_ids as None for now.
 
-    bridge.init_match(you_deck_ids=you_deck_ids, enemy_deck_tag=enemy_deck_tag, coaching_mode=bridge_coaching_mode)
+    bridge.init_match(
+        you_deck_ids=you_deck_ids,
+        enemy_deck_tag=enemy_deck_tag,
+        coaching_mode=bridge_coaching_mode,
+        deck_tags=deck_tags,
+    )
 
     _handle_opening_hand(bridge)
 
@@ -419,7 +432,11 @@ def main() -> None:
             row = p.extra["row"]
             col = p.extra["col"]
             cid = p.tokens[0]
-            bridge.register_enemy_play(cid, row, col)
+            try:
+                bridge.register_enemy_play(cid, row, col)
+            except ValueError as exc:
+                print(f"Cannot register enemy play: {exc}")
+                return
             snapshot: TurnSnapshot = bridge.create_turn_snapshot(
                 engine_output={"legal_moves": bridge.legal_moves()},
                 last_event="enemy_play_registered",
@@ -540,6 +557,9 @@ def main() -> None:
             if len(args) < 3:
                 print("Usage: enemy <id/name> <row> <col>")
                 continue
+            if bridge.side_to_act != "E":
+                print("Cannot register enemy play: it is currently your turn.")
+                continue
             tok = " ".join(args[:-2])
             row_tok, col_tok = args[-2], args[-1]
             try:
@@ -628,8 +648,10 @@ def main() -> None:
                 continue
             print(
                 "Enter three rows (TOP, MID, BOT) with 5 bracketed tokens each.\n"
-                "Examples: [Y1] [N0] [Y:001] [N0] [E1] or [001:5★].\n"
-                "Occupied neutral tiles must specify side using [Y:ID] or [E:ID]."
+                "Empty tiles: [Y1] [E2] [N0]\n"
+                "Occupied tiles: [Y2:011] [E:013★] (★ optional; effects are recomputed)\n"
+                "Tokens without :card_id clear occupants; include :card_id to keep/set one.\n"
+                "Occupied tiles must have an explicit side (Y/E); neutral occupied tokens are rejected."
             )
             row_labels = ["TOP", "MID", "BOT"]
             lines: List[str] = []

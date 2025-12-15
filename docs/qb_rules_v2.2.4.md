@@ -68,6 +68,15 @@ visibleRank = max(playerRank, enemyRank)
 
 Only empty tiles use visibleRank for placement legality.
 
+**Boundary flip (FF7-aligned)**  
+When a pawn projection (P or the pawn component of X) hits an **unoccupied but owned** opponent tile:
+- Ranks are reduced by the pawn amount until 1.
+- At rank 1, the next pawn hit **flips ownership to the attacker** with rank = pawn amount (respects SPECIAL_PAWN_AMOUNT).
+- Neutralizing to N0 on an owned, unoccupied tile is **not** intended.  
+Examples:  
+`Y3 → Y2 → Y1 → E1` (enemy pawn hits)  
+`E2 → E1 → Y1` (player pawn hits)
+
 ---
 
 # 5. Occupied Tiles

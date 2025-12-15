@@ -76,3 +76,25 @@ def test_resync_cancel_leaves_board_unchanged():
     parse_resync_board_lines(lines, bridge._game_state.board, bridge._hydrator)  # type: ignore[arg-type]
     after = [[(t.owner, t.rank, t.card_id) for t in row] for row in bridge._game_state.board.tiles]  # type: ignore[union-attr]
     assert after == before
+
+
+def test_resync_empty_token_clears_occupant():
+    bridge = LiveSessionEngineBridge()
+    bridge.init_match()
+    board = bridge._game_state.board  # type: ignore[union-attr]
+    tile = board.tile_at(1, 2)
+    tile.owner = "Y"
+    tile.rank = 2
+    tile.card_id = "001"
+    tile.placed_by = "Y"
+
+    lines = [
+        "[Y1] [N0] [N0] [N0] [E1]",
+        "[Y1] [N0] [N0] [N0] [E1]",
+        "[Y1] [N0] [N0] [N0] [E1]",
+    ]
+    bridge.manual_resync_board(lines)
+    cleared_tile = bridge._game_state.board.tile_at(1, 2)  # type: ignore[union-attr]
+    assert cleared_tile.card_id is None
+    assert cleared_tile.owner == "N"
+    assert cleared_tile.rank == 0

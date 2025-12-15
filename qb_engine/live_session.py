@@ -78,17 +78,21 @@ def _parse_resync_token(
         else:
             card_section = left
 
-    card_id = card_section.split(":", 1)[0].strip()
-    if not card_id:
-        raise ValueError(f"Missing card id at {lane_index+1},{col_index+1}")
-    try:
-        hydrator.get_card(card_id)
-    except KeyError as exc:  # noqa: BLE001
-        raise ValueError(f"Unknown card id '{card_id}' at {lane_index+1},{col_index+1}") from exc
+    card_section = card_section.strip()
+    if card_section.lower() == "clear":
+        card_id = None
+    else:
+        card_id = card_section.split(":", 1)[0].strip()
+        if not card_id:
+            raise ValueError(f"Missing card id at {lane_index+1},{col_index+1}")
+        try:
+            hydrator.get_card(card_id)
+        except KeyError as exc:  # noqa: BLE001
+            raise ValueError(f"Unknown card id '{card_id}' at {lane_index+1},{col_index+1}") from exc
 
     if placed_by is None:
         inferred = existing_tile.owner if existing_tile.owner in {"Y", "E"} else None
-        if inferred is None:
+        if inferred is None and card_id is not None:
             raise ValueError(
                 f"Occupied tile requires side at {lane_index+1},{col_index+1}; "
                 "use [Y:ID] or [E:ID]."
@@ -96,8 +100,12 @@ def _parse_resync_token(
         placed_by = inferred
 
     owner = placed_by
-    rank = rank_hint if rank_hint is not None else max(1, existing_tile.rank if existing_tile.owner == placed_by else 1)
-    rank = min(max(rank, 1), 3)
+    rank = rank_hint if rank_hint is not None else existing_tile.rank
+    rank = min(max(rank, 0), 3)
+    if card_id is not None:
+        # Occupied tiles must never be neutral and must show rank >=1
+        owner = placed_by or owner
+        rank = max(rank, 1)
     return owner, rank, card_id, placed_by
 
 
@@ -132,6 +140,8 @@ def parse_resync_board_lines(
             owner, rank, card_id, placed_by = _parse_resync_token(tok, lane_index, col_index, existing_tile, hydrator)
 
             tile = new_board.tile_at(lane_index, col_index)
+            if owner is None:
+                owner = tile.owner
             tile.owner = owner
             tile.rank = rank
             tile.card_id = card_id
@@ -165,17 +175,14 @@ def _diff_boards(before: BoardState, after: BoardState) -> List[Dict[str, Any]]:
     diffs: List[Dict[str, Any]] = []
     for lane_index, row in enumerate(before.tiles):
         for col_index, _ in enumerate(row):
-            b_desc = before.describe_tile(lane_index, col_index)
-            a_desc = after.describe_tile(lane_index, col_index)
-            if b_desc != a_desc:
-                diffs.append(
-                    {
-                        "lane": lane_index,
-                        "col": col_index,
-                        "before": b_desc,
-                        "after": a_desc,
-                    }
-                )
+            b_tile = before.describe_tile(lane_index, col_index)
+            a_tile = after.describe_tile(lane_index, col_index)
+            changes: Dict[str, Any] = {}
+            for field in ("owner", "rank", "card_id"):
+                if b_tile.get(field) != a_tile.get(field):
+                    changes[field] = {"from": b_tile.get(field), "to": a_tile.get(field)}
+            if changes:
+                diffs.append({"lane": lane_index, "col": col_index, "changes": changes})
     return diffs
 
 _UX_HYDRATOR = CardHydrator()
@@ -190,10 +197,11 @@ class LiveSessionEngineBridge:
     serializable snapshots.
     """
 
-    def __init__(self, session_mode: str = "live_coaching", coaching_mode: str = "strict") -> None:
+    def __init__(self, session_mode: str = "live_coaching", coaching_mode: str = "strategy") -> None:
         self.session_mode = session_mode
         self.session_id = self._generate_session_id()
         self.enemy_deck_tag: Optional[str] = None
+        self.deck_tags: List[str] = []
         self.log_path: Optional[Path] = None
         self.phase: str = "YOU_TURN_READY_FOR_REC_OR_PLAY"
         self.turn_counter: int = 1
@@ -219,6 +227,7 @@ class LiveSessionEngineBridge:
         you_deck_ids: Optional[List[str]] = None,
         enemy_deck_tag: Optional[str] = None,
         coaching_mode: Optional[str] = None,
+        deck_tags: Optional[List[str]] = None,
     ) -> None:
         """
         Initialize engine components and start a session.
@@ -229,6 +238,8 @@ class LiveSessionEngineBridge:
         self.enemy_deck_tag = enemy_deck_tag
         if coaching_mode is not None:
             self.coaching_mode = self._validate_coaching_mode(coaching_mode)
+        if deck_tags:
+            self.deck_tags = deck_tags
         if self._hydrator is None:
             self._hydrator = CardHydrator()
         self._card_index = self._hydrator.index
@@ -268,6 +279,7 @@ class LiveSessionEngineBridge:
             "side_to_act": self.side_to_act,
             "phase": self.phase,
             "enemy_deck_tag": self.enemy_deck_tag,
+            "deck_tags": self.deck_tags,
         }
         effect_tiles = sorted(self._compute_effect_tiles())
         lanes_snapshot, global_snapshot = self._compute_lane_and_global_snapshot()
@@ -728,6 +740,9 @@ def format_turn_snapshot_for_ux(snapshot: TurnSnapshot) -> str:
     enemy_tag = session.get("enemy_deck_tag")
     if enemy_tag is not None:
         lines.append(f"enemy_deck_tag: {enemy_tag}")
+    deck_tags = session.get("deck_tags") or []
+    if deck_tags:
+        lines.append(f"deck_tags: {', '.join(deck_tags)}")
     lines.append("")
 
     # BOARD

@@ -30,6 +30,7 @@ After init, you land in a REPL. Enter `help` to see commands.
 - `resolve <id/name>` — Resolve a card to its canonical name + id (helps fix typos quickly).
 - `help` — Show the command menu.
 - `quit` — Exit the session.
+  - Defaults: coaching_mode is `strategy`; deck tags are optional free-form labels captured at session start and displayed in `[SESSION]`.
 
 ### Ambiguous / unknown card tokens (stateful resolution)
 - Any command that accepts card tokens (`draw`, `set_hand`, `play`, `enemy`) enters a resolution mode when a token is unknown/ambiguous.
@@ -45,10 +46,11 @@ After init, you land in a REPL. Enter `help` to see commands.
 ### Manual board resync (debug)
 - `resync_board` prompts for three lines (TOP, MID, BOT), each with 5 bracketed tokens:
   - Empty: `[Y1] [E2] [N0]`
-  - Occupied: `[Y:001]` or `[E:048]` (side required if current tile is neutral); `[001:5★]` is accepted (power/star ignored)
-- Before applying, the CLI shows a diff. Confirm with `y` to proceed.
+  - Occupied: `[Y2:011]` or `[E:048★]` (★ optional; effects are recomputed)
+  - Tokens without `:card_id` clear occupants; include `:card_id` to keep/set one.
+- Before applying, the CLI shows a structured diff. Confirm with `y` to proceed.
 - Effect of apply:
-  - Overwrites board tiles, rebuilds pawn deltas, clears auras/direct_effects
+  - Overwrites board tiles, rebuilds pawn deltas, clears auras/direct_effects (recomputed)
   - Preserves turn/phase/hand
   - Logs a snapshot with `last_event="manual_resync_board"` and `manual_override=True`
 
